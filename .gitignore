@@ -97,3 +97,7 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# 외부 에셋(Plugins/ExternalAsset)은 깃에 포함하지 않음
+/Assets/Plugins/ExternalAsset/
+/Assets/10_ThirdParty/

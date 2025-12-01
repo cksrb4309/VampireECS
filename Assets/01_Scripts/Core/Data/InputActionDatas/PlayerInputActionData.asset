@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f9f08448e7e0d242b15fa348eb422dd, type: 3}
+  m_Name: PlayerInputActionData
+  m_EditorClassIdentifier: Assembly-CSharp::InputActionData
+  inputActionEntries:
+  - inputType: 0
+    inputActionReference: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - inputType: 1
+    inputActionReference: {fileID: -1464490587493231581, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - inputType: 2
+    inputActionReference: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}

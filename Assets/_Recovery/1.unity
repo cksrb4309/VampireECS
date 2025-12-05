@@ -167,6 +167,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4863986158732759187, guid: e5d0af7e885d51740aa89250430c1263, type: 3}
+      propertyPath: FireRate
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 7550494689332373404, guid: e5d0af7e885d51740aa89250430c1263, type: 3}
       propertyPath: m_Name
       value: Player
@@ -225,7 +229,7 @@ MonoBehaviour:
     StartTime: 0
   - Prefab: {fileID: 1158322686220326406, guid: 75b71315a6f754947adeb88b8820ead6, type: 3}
     StartTime: 5
-  SpawnInterval: 0.25
+  SpawnInterval: 0.2
   Radius: 50
   BatchCount: 1
 --- !u!1660057539 &9223372036854775807

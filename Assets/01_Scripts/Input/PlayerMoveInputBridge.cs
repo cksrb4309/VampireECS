@@ -70,23 +70,19 @@ public class PlayerMoveInputBridge : IDisposable
         // EntityManager 초기화
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        EntityQuery query = new EntityQuery();
-
-        NativeArray<Entity> players = default;
-
         // PlayerTag 가진 엔티티가 여러 개 생성될 때까지 기다리기
         await UniTask.WaitUntil(() =>
         {
-            query = entityManager.CreateEntityQuery(typeof(PlayerTag));
+            var query = entityManager.CreateEntityQuery(typeof(PlayerTag));
 
             int count = query.CalculateEntityCount();
-            if (count >= 1)
-            {
-                players = query.ToEntityArray(Unity.Collections.Allocator.Temp);
-                return true;
-            }
-            return false;
+
+            return count >= 1;
         });
+
+        EntityQuery query = entityManager.CreateEntityQuery(typeof(PlayerTag));
+        NativeArray<Entity> players = default;
+        players = query.ToEntityArray(Unity.Collections.Allocator.Temp);
 
         // 여러 플레이어 엔티티 저장
         multiplePlayers = players.ToArray();

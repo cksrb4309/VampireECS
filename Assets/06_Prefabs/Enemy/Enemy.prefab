@@ -9,15 +9,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4884238907763819728}
-  - component: {fileID: 3386691065903465003}
-  - component: {fileID: 4181868418830612926}
-  - component: {fileID: 8138162036415836270}
   - component: {fileID: 2994805603007221485}
+  - component: {fileID: 3386691065903465003}
   - component: {fileID: 8415646082041460163}
   - component: {fileID: 3850684231075852984}
+  - component: {fileID: -8051325678495402895}
+  - component: {fileID: 5605308649769651154}
+  - component: {fileID: 4181868418830612926}
+  - component: {fileID: 8138162036415836270}
   - component: {fileID: 7811966613571380328}
   - component: {fileID: 4476551268119020166}
-  - component: {fileID: -8051325678495402895}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -40,6 +41,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2994805603007221485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1158322686220326406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16fdd5411b1f964abf5fa0b35c8c3eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAuthoring
+  Speed: 20
 --- !u!114 &3386691065903465003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,13 +68,79 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShooterAuthoring
   OwnerFaction: 2
   ProjectilePrefab: {fileID: 6152799522437821885, guid: 0adc6836e6e42534fa5f6948635c8b5c, type: 3}
-  MuzzleOffset: {x: 0, y: 1, z: 0}
+  MuzzleOffset: {x: 0, y: 0, z: 0}
   MuzzleDistance: 2
   Damage: 5
-  FireRate: 1
+  FireRate: 0.1
   Speed: 30
-  Lifetime: 1
+  Lifetime: 2
   StartCanFire: 1
+--- !u!114 &8415646082041460163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1158322686220326406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f101b7fa78986894e83325f0ab381e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthAuthoring
+  Health: 10
+--- !u!114 &3850684231075852984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1158322686220326406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb6b00a72dd0d6d4fa43defe5d1f1a72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DynamicRotationAuthoring
+--- !u!114 &-8051325678495402895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1158322686220326406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2e96665eada8dc42981d17fcfd9a7e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RenderTrailAuthoring
+  Prefab: {fileID: 8461939300367149402, guid: d7ba596294bd7d54a8eb022257083d9b, type: 3}
+  SpawnDistance: 1.5
+  Lifetime: 1
+  Scale: 0.75
+  KeyTimes:
+  - 0
+  - 0.5
+  - 1
+  KeyScales:
+  - 0.75
+  - 0.20000002
+  - 0
+--- !u!114 &5605308649769651154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1158322686220326406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee22b29608a73245b2062d1765520f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RandomRotationAuthoring
+  RotationSpeed: 360
+  MinDirectionChangeInterval: 0.7
+  MaxDirectionChangeInterval: 1.5
+  DirectionLerpSpeed: 2
+  RandomInitialDirection: 1
 --- !u!114 &4181868418830612926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,49 +340,6 @@ MonoBehaviour:
     Tag05: 0
     Tag06: 0
     Tag07: 0
---- !u!114 &2994805603007221485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1158322686220326406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a16fdd5411b1f964abf5fa0b35c8c3eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyAuthoring
-  Speed: 20
---- !u!114 &8415646082041460163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1158322686220326406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f101b7fa78986894e83325f0ab381e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthAuthoring
-  Health: 10
---- !u!114 &3850684231075852984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1158322686220326406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb6b00a72dd0d6d4fa43defe5d1f1a72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DynamicRotationAuthoring
-  RotationSpeed: 360
-  MinDirectionChangeInterval: 1
-  MaxDirectionChangeInterval: 3
-  DirectionLerpSpeed: 2
-  RandomInitialDirection: 1
 --- !u!23 &7811966613571380328
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -311,14 +348,14 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1158322686220326406}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
-  m_LightProbeUsage: 1
+  m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
+  m_RayTracingMode: 0
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
@@ -359,27 +396,3 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1158322686220326406}
   m_Mesh: {fileID: -2432090755550338912, guid: 7e5c7b98c04008e46a98aeb99169c23f, type: 3}
---- !u!114 &-8051325678495402895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1158322686220326406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2e96665eada8dc42981d17fcfd9a7e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RenderTrailAuthoring
-  Prefab: {fileID: 8461939300367149402, guid: d7ba596294bd7d54a8eb022257083d9b, type: 3}
-  SpawnDistance: 1.5
-  Lifetime: 1
-  Scale: 0.75
-  KeyTimes:
-  - 0
-  - 0.5
-  - 1
-  KeyScales:
-  - 0.75
-  - 0.20000002
-  - 0

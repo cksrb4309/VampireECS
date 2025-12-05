@@ -1,7 +1,9 @@
-﻿using Unity.Collections;
+﻿using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 
+[BurstCompile]
 public struct ProjectileTriggerJob : ITriggerEventsJob
 {
     [ReadOnly] public ComponentLookup<HealthData> HasHealthLookup;

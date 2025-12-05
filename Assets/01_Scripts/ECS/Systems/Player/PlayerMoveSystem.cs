@@ -7,37 +7,52 @@ using Unity.Transforms;
 [BurstCompile]
 public partial struct PlayerMoveSystem : ISystem
 {
-    [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<PlayerStats>();
+        state.RequireForUpdate<PlayerTag>();
     }
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         float deltaTime = SystemAPI.Time.DeltaTime;
 
         foreach (var
             (inputRO,
-            statsRO,
+            moveDataRW,
             transformRW,
             velocityRW) in SystemAPI.Query<
                 RefRO<PlayerInputData>,
-                RefRO<PlayerStats>,
+                RefRW<PlayerMoveData>,
                 RefRW<LocalTransform>,
                 RefRW<PhysicsVelocity>>())
         {
-            // 읽기 전용
-            ref readonly var input = ref inputRO.ValueRO;
-            ref readonly var stats = ref statsRO.ValueRO;
+            ref readonly PlayerInputData input = ref inputRO.ValueRO;
+            ref PlayerMoveData moveData        = ref moveDataRW.ValueRW;
+            ref LocalTransform transform       = ref transformRW.ValueRW;
+            ref PhysicsVelocity velocity       = ref velocityRW.ValueRW;
 
-            // 읽기/쓰기 가능
-            ref var transform = ref transformRW.ValueRW;
-            ref var velocity = ref velocityRW.ValueRW;
+            float3 targetDir = math.normalize(new float3(input.Move.x, 0f, input.Move.y));
 
-            float3 dir = new float3(input.Move.x, 0f, input.Move.y);
+            if (input.Move.x == 0f && input.Move.y == 0f)
+            {
+                float3 decelerationDelta = math.normalize(moveData.Velocity) * (moveData.Deceleration * deltaTime);
 
-            transform.Position += dir * stats.MoveSpeed * SystemAPI.Time.DeltaTime;
+                if (math.length(moveData.Velocity) > math.length(decelerationDelta))
+                {
+                    moveData.Velocity = moveData.Velocity - math.normalize(moveData.Velocity) * (moveData.Deceleration * deltaTime);
+                }
+            }
+            else
+            {
+                moveData.Velocity = moveData.Velocity + targetDir * (moveData.Acceleration * deltaTime);
+            }
+
+
+            if (math.length(moveData.Velocity) > moveData.MaxSpeed)
+            {
+                moveData.Velocity = math.normalize(moveData.Velocity) * moveData.MaxSpeed;
+            }
+
+            transform.Position += moveData.Velocity * SystemAPI.Time.DeltaTime;
 
             velocity.Linear = float3.zero;
         }

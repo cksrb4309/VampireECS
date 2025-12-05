@@ -2,7 +2,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 [BurstCompile]
 public partial struct ShooterSystem : ISystem
@@ -36,6 +35,8 @@ public partial struct ShooterSystem : ISystem
             }
 
             shooterData.TimeSinceLastFire = 0;
+
+            #region 투사체 발사
             Entity projectile = ecb.Instantiate(shooterData.ProjectilePrefab);
 
             float3 spawnPos =
@@ -58,33 +59,11 @@ public partial struct ShooterSystem : ISystem
                 Lifetime = shooterData.Lifetime,
                 OwnerFaction = shooterData.OwnerFaction
             });
+            #endregion
         }
 
         ecb.Playback(state.EntityManager);
         ecb.Dispose();
-    }
-    [BurstCompile]
-    private void SpawnProjectile(ref SystemState state, ref ShooterData shooter, Entity ownerEntity, ref EntityCommandBuffer ecb)
-    {
-        float3 spawnPos = GetShooterWorldPosition(ref state, ownerEntity) + shooter.MuzzleOffset + (shooter.Direction * shooter.MuzzleDistance);
-
-        Entity projectileEntity = ecb.Instantiate(shooter.ProjectilePrefab);
-
-        ecb.SetComponent(projectileEntity, new LocalTransform
-        {
-            Position = spawnPos,
-            Scale = 1f,
-            Rotation = quaternion.identity
-        });
-
-        ecb.AddComponent(projectileEntity, new ProjectileData
-        {
-            Direction = shooter.Direction,
-            Speed = shooter.Speed,
-            Damage = shooter.Damage,
-            Lifetime = shooter.Lifetime,
-            OwnerFaction = shooter.OwnerFaction
-        });
     }
     [BurstCompile]
     private float3 GetShooterWorldPosition(ref SystemState state, Entity shooter)

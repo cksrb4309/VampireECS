@@ -7,9 +7,19 @@ public class PlayerBaker : Baker<PlayerAuthoring>
     {
         var entity = GetEntity(TransformUsageFlags.Dynamic);
 
+        AddComponent<LockYToZero>(entity);
+
         AddComponent<PhysicsInit>(entity);
 
-        AddComponent(entity, new PlayerStats { MoveSpeed = authoring.MoveSpeed });
+        AddComponent(entity, new PlayerMoveData
+        {
+            MaxSpeed = authoring.MaxSpeed,
+            Acceleration = authoring.Acceleration,
+            Deceleration = authoring.Deceleration,
+            AngularSpeed = authoring.RotationSpeed,
+            Velocity = new float3(0, 0, 0.001f)
+        });
+        AddComponent(entity, new PlayerStats());
 
         AddComponent(entity, new PlayerInputData { Move = float2.zero });
 

@@ -23,14 +23,15 @@ public class FollowCamera : MonoBehaviour
 
         while (target == Entity.Null)
         {
-            var query = entityManager.CreateEntityQuery(typeof(PlayerTag));
-
             await UniTask.WaitUntil(() =>
             {
-                query = entityManager.CreateEntityQuery(typeof(PlayerTag));
+                var query = entityManager.CreateEntityQuery(typeof(PlayerTag));
 
                 return query.CalculateEntityCount() >= 1;
             });
+
+            var query = entityManager.CreateEntityQuery(typeof(PlayerTag));
+
             NativeArray<Entity> entities = query.ToEntityArray(Allocator.TempJob);
 
             target = entities[0];

@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour
     {
         if (!inputActions.ContainsKey(inputType))
         {
-            Debug.LogWarning("요청한 InputType에 맞는 InputAction이 없습니다 ! : " + inputType.ToString());
+            //Debug.LogWarning("요청한 InputType에 맞는 InputAction이 없습니다 ! : " + inputType.ToString());
 
             return null;
         }
@@ -45,11 +45,11 @@ public class InputManager : MonoBehaviour
                 {
                     inputActions.Add(data.InputActionEntries[i].inputType, data.InputActionEntries[i].inputActionReference);
 
-                    Debug.Log("InputType이 추가되었습니다 : " + data.InputActionEntries[i].inputType.ToString());
+                    //Debug.Log("InputType이 추가되었습니다 : " + data.InputActionEntries[i].inputType.ToString());
                 }
                 else
                 {
-                    Debug.LogWarning("중복된 InputType이 존재합니다 : " + data.InputActionEntries[i].inputType.ToString());
+                    //Debug.LogWarning("중복된 InputType이 존재합니다 : " + data.InputActionEntries[i].inputType.ToString());
                 }
             }
         }

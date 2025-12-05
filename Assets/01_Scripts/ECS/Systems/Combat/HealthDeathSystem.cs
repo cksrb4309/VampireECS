@@ -1,6 +1,7 @@
-﻿using Unity.Entities;
-using UnityEngine;
+﻿using Unity.Burst;
+using Unity.Entities;
 
+[BurstCompile]
 [UpdateInGroup(typeof(SimulationSystemGroup))]
 public partial struct HealthDeathSystem : ISystem
 {

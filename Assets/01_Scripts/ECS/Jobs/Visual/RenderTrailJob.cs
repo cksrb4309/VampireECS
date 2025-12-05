@@ -11,7 +11,7 @@ public partial struct RenderTrailJob : IJobEntity
 
     void Execute([EntityIndexInQuery] int index,
                  ref RenderTrailData trailData,
-                 ref DynamicRotationData rotationData,
+                 ref DynamicRotationData rotData,
                  ref LocalToWorld transform)
     {
         if (math.distance(transform.Position, trailData.LastSpawnPos) > trailData.SpawnDistance)
@@ -25,10 +25,10 @@ public partial struct RenderTrailJob : IJobEntity
                 Scale = trailData.KeyScales[0]
             });
 
-            ECB.SetComponent(index, trailEntity, new RotationData 
+            ECB.AddComponent(index, trailEntity, new RotationData
             {
-                Axis = rotationData.CurrentAxis,
-                Speed = rotationData.RotationSpeed
+                Axis = rotData.RotationAxis,
+                Speed = rotData.AngularSpeed
             });
 
             ECB.AddComponent(index, trailEntity, new ShrinkOverTimeData
@@ -39,7 +39,6 @@ public partial struct RenderTrailJob : IJobEntity
                 KeyScales = trailData.KeyScales
             });
 
-            // 마지막 위치 갱신
             trailData.LastSpawnPos = transform.Position;
         }
     }

@@ -27,7 +27,6 @@ public class RenderTrailAuthoring : MonoBehaviour
             float normalized01 = KeyTimes[i] / maxValue; // 0~1 압축
             KeyTimes[i] = normalized01 * Lifetime;      // 0~Lifetime 확장
         }
-
         maxValue = KeyScales.Max();
 
         // Normalize → 0 ~ Scale 범위로 조정

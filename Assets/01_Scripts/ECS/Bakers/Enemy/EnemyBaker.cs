@@ -8,6 +8,8 @@ public class EnemyBaker : Baker<EnemyAuthoring>
 
         AddComponent<PhysicsInit>(entity);
 
+        AddComponent(entity, new ExperienceData { Amount = authoring.ExperienceAmount });
+
         AddComponent(entity, new EnemyMoveData
         {
             Speed = authoring.Speed

@@ -9,6 +9,11 @@ public class ShooterBaker : Baker<ShooterAuthoring>
 
         var projectileEntity = GetEntity(authoring.ProjectilePrefab, TransformUsageFlags.Dynamic);
 
+        AddComponent(entity, new AttackDamageData { Damage = authoring.Damage });
+        AddComponent(entity, new ProjectileDurationData { Duration = authoring.Duration });
+        AddComponent(entity, new ProjectileSpeedData { Speed = authoring.Speed });
+        AddComponent(entity, new ProjectileCountData { Count = authoring.Count });
+
         AddComponent(entity, new ShooterData
         {
             ProjectilePrefab = projectileEntity,
@@ -16,10 +21,7 @@ public class ShooterBaker : Baker<ShooterAuthoring>
             MuzzleDistance = authoring.MuzzleDistance,
             FireRate = authoring.FireRate,
             TimeSinceLastFire = 0f,
-            OwnerFaction = authoring.OwnerFaction,
-            Lifetime = authoring.Lifetime,
-            Damage = authoring.Damage,
-            Speed = authoring.Speed
+            OwnerFaction = authoring.OwnerFaction
         });
         AddComponent(entity, new ShooterCanFireData
         {

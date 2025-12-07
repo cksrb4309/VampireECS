@@ -225,7 +225,7 @@ MonoBehaviour:
     StartTime: 0
   - Prefab: {fileID: 1158322686220326406, guid: 75b71315a6f754947adeb88b8820ead6, type: 3}
     StartTime: 5
-  SpawnInterval: 0.25
+  SpawnInterval: 0.1
   Radius: 50
   BatchCount: 1
 --- !u!1660057539 &9223372036854775807

@@ -17,10 +17,10 @@ public partial struct ProjectileMoveJob : IJobEntity
         transform.Position += projectile.Direction * projectile.Speed * DeltaTime;
 
         // 수명 감소
-        projectile.Lifetime -= DeltaTime;
+        projectile.Duration -= DeltaTime;
 
         // 제거
-        if (projectile.Lifetime <= 0f)
+        if (projectile.Duration <= 0f)
         {
             ECB.DestroyEntity(index, entity);
         }

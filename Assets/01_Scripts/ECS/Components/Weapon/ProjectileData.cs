@@ -9,7 +9,7 @@ public struct ProjectileData : IComponentData
 
     public float Speed;
     public float Damage;
-    public float Lifetime;
+    public float Duration;
 }
 
 [System.Flags]

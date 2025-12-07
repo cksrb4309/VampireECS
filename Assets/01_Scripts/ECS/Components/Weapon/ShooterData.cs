@@ -10,9 +10,6 @@ public struct ShooterData : IComponentData
 
     public Faction OwnerFaction;
 
-    public float Damage;
-    public float Speed;
-    public float Lifetime;
     public float MuzzleDistance;
     public float FireRate;
 

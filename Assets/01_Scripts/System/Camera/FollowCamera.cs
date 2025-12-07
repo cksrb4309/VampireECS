@@ -21,23 +21,20 @@ public class FollowCamera : MonoBehaviour
     {
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        while (target == Entity.Null)
+        await UniTask.WaitUntil(() =>
         {
-            await UniTask.WaitUntil(() =>
-            {
-                var query = entityManager.CreateEntityQuery(typeof(PlayerTag));
-
-                return query.CalculateEntityCount() >= 1;
-            });
-
             var query = entityManager.CreateEntityQuery(typeof(PlayerTag));
 
-            NativeArray<Entity> entities = query.ToEntityArray(Allocator.TempJob);
+            return query.CalculateEntityCount() >= 1;
+        });
 
-            target = entities[0];
+        var query = entityManager.CreateEntityQuery(typeof(PlayerTag));
 
-            entities.Dispose();
-        }
+        NativeArray<Entity> entities = query.ToEntityArray(Allocator.TempJob);
+
+        target = entities[0];
+
+        entities.Dispose();
     }
 
     private void LateUpdate()

@@ -71,11 +71,12 @@ MonoBehaviour:
   OwnerFaction: 1
   ProjectilePrefab: {fileID: 6152799522437821885, guid: ea60191aa349f10459bd7d5cead54e95, type: 3}
   MuzzleOffset: {x: 0, y: 0, z: 0}
+  Count: 1
   MuzzleDistance: 2
   Damage: 20
   FireRate: 0.02
   Speed: 100
-  Lifetime: 2
+  Duration: 2
   StartCanFire: 0
 --- !u!114 &1645570486349591307
 MonoBehaviour:

@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 [BurstCompile]
+[UpdateInGroup(typeof(DamagePreprocessSystemGroup))]
 public partial struct ShooterSystem : ISystem
 {
     [BurstCompile]

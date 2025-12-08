@@ -5,6 +5,7 @@ using Unity.Physics;
 using Unity.Transforms;
 
 [BurstCompile]
+[UpdateInGroup(typeof(DamagePreprocessSystemGroup))]
 public partial struct EnemyFollowSystem : ISystem
 {
     public void OnCreate(ref SystemState state)

@@ -8,6 +8,10 @@ using Unity.Physics;
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 public partial struct PhysicsRotationInitSystem : ISystem
 {
+    public void OnCreate(ref SystemState state)
+    {
+        state.RequireForUpdate<PhysicsInit>();
+    }
     public void OnUpdate(ref SystemState state)
     {
         var ecb = new EntityCommandBuffer(Allocator.Temp);

@@ -54,6 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAuthoring
   Speed: 20
+  ExperienceAmount: 2
 --- !u!114 &3386691065903465003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,11 +70,12 @@ MonoBehaviour:
   OwnerFaction: 2
   ProjectilePrefab: {fileID: 6152799522437821885, guid: 0adc6836e6e42534fa5f6948635c8b5c, type: 3}
   MuzzleOffset: {x: 0, y: 0, z: 0}
+  Count: 1
   MuzzleDistance: 2
   Damage: 5
   FireRate: 0.1
   Speed: 30
-  Lifetime: 2
+  Duration: 1
   StartCanFire: 1
 --- !u!114 &8415646082041460163
 MonoBehaviour:

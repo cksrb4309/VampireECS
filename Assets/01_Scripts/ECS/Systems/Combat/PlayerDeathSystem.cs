@@ -1,5 +1,7 @@
-﻿using Unity.Entities;
+﻿using Unity.Burst;
+using Unity.Entities;
 
+[BurstCompile]
 [UpdateInGroup(typeof(DeathSystemGroup))]
 public partial struct PlayerDeathSystem : ISystem
 {

@@ -5,17 +5,18 @@ using UnityEngine;
 public class AttackDamageConfig : AbilityComponentConfig<AttackDamageData>
 {
     public TierValue<float>[] TierValues;
+    public override void Initialize() => BaseComponent.Damage = 5;
     public override void ApplyTier(Tier tier)
     {
         TierValue<float> selectValue = TierValues.Where((v) => { return tier == v.Tier; }).First();
 
         float damage = Random.Range(selectValue.MinValue, selectValue.MaxValue);
 
-        BaseComponent.Damage = damage;
+        ApplyComponent.Damage = damage;
     }
-    public override void ApplyStack(ref AttackDamageData abilityConfig)
+    public override void ApplyStack()
     {
-        abilityConfig.Damage += BaseComponent.Damage;
+        BaseComponent.Damage += ApplyComponent.Damage;
     }
     public override string GetDescription()
     {

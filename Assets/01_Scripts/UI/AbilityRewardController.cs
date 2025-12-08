@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Entities;
 using UnityEngine;
 
 public class AbilityRewardController : MonoBehaviour
@@ -19,8 +20,11 @@ public class AbilityRewardController : MonoBehaviour
         List<AbilityConfig> eligibleRewards = rewardPool
             .Where(cfg =>
             {
-                abilityStacks.TryGetValue(cfg, out int currentStack);
-                return !cfg.IsMaxed(currentStack);
+                if (abilityStacks.TryGetValue(cfg, out int currentStack))
+                {
+                    return !cfg.IsMaxed(currentStack);
+                }
+                return true;
             })
             .ToList();
 
@@ -53,8 +57,14 @@ public class AbilityRewardController : MonoBehaviour
     public void AcquireReward(AbilityConfig cfg)
     {
         if (!abilityStacks.ContainsKey(cfg))
+        {
             abilityStacks[cfg] = 0;
 
+            cfg.Initialize();
+        }
+
         abilityStacks[cfg]++;
+
+        cfg.ApplyStack();
     }
 }

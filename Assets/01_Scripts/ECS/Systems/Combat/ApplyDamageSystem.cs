@@ -30,7 +30,7 @@ public partial struct ApplyDamageSystem : ISystem
                     ecb.AddComponent<DeadTag>(damageEvent.Target);
                 }
             }
-            여기부터 생각해라
+
             ecb.DestroyEntity(entity);
         }
 

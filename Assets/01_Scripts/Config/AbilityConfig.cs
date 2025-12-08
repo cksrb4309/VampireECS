@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Entities;
+using UnityEngine;
 
 public abstract class AbilityConfig : ScriptableObject
 {
@@ -12,7 +13,8 @@ public abstract class AbilityConfig : ScriptableObject
     public Sprite Icon;
 
     public bool IsMaxed(int currentStack) => (currentStack >= MaxStack);
+    public virtual void Initialize() { }
     public abstract string GetDescription();
     public abstract void ApplyTier(Tier tier);
-    public abstract void ApplyStack(AbilityConfig abilityConfig);
+    public abstract void ApplyStack();
 }

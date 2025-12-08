@@ -1,20 +1,16 @@
 using Cysharp.Threading.Tasks;
-using TMPro;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.UI;
+
 public class HealthDisplay : MonoBehaviour
 {
-    [SerializeField] TMP_Text textLabel;
-    [SerializeField] Image fillImage;
+    [SerializeField] FloatObservableSO amountSO;
+    [SerializeField] FloatObservableSO maxAmountSO;
 
     private Entity playerEntity = Entity.Null;
 
     private EntityManager entityManager;
-
-    private float beforeHealth = 0;
-    private float maxHealth = 0;
 
     public void Start()
     {
@@ -37,7 +33,7 @@ public class HealthDisplay : MonoBehaviour
 
         playerEntity = entities[0];
 
-        maxHealth = entityManager.GetComponentData<HealthData>(playerEntity).Max;
+        maxAmountSO.Observable.Value = entityManager.GetComponentData<HealthData>(playerEntity).Max;
 
         entities.Dispose();
     }
@@ -67,17 +63,6 @@ public class HealthDisplay : MonoBehaviour
 
         HealthData playerHealth = entityManager.GetComponentData<HealthData>(playerEntity);
 
-        SetValue(playerHealth.Current);
-    }
-    private void SetValue(float value)
-    {
-        if (beforeHealth != value)
-        {
-            beforeHealth = value;
-
-            textLabel.text = value.ToString();
-
-            fillImage.fillAmount = value != 0f ? value / maxHealth : 0f;
-        }
+        amountSO.Observable.Value = playerHealth.Current;
     }
 }

@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Physics;
 
 [BurstCompile]
+[UpdateInGroup(typeof(DamageEventSystemGroup))]
 public partial struct ProjectileTriggerSystem : ISystem
 {
     public void OnCreate(ref SystemState state)

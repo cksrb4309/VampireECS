@@ -23,7 +23,7 @@ public class PlayerBaker : Baker<PlayerAuthoring>
         AddComponent(entity, new PlayerExpData
         {
             Level = 1,
-            Required = 100,
+            Required = 10,
             Current = 0
         });
 

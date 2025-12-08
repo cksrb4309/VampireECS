@@ -5,17 +5,18 @@ using UnityEngine;
 public class ProjectileSpeedConfig : AbilityComponentConfig<ProjectileSpeedData>
 {
     public TierValue<float>[] TierValues;
+    public override void Initialize() => BaseComponent.Speed = 10;
     public override void ApplyTier(Tier tier)
     {
         TierValue<float> selectValue = TierValues.Where((v) => { return tier == v.Tier; }).First();
 
         float speed = Random.Range(selectValue.MinValue, selectValue.MaxValue);
 
-        BaseComponent.Speed = speed;
+        ApplyComponent.Speed = speed;
     }
-    public override void ApplyStack(ref ProjectileSpeedData abilityConfig)
+    public override void ApplyStack()
     {
-        abilityConfig.Speed += BaseComponent.Speed;
+        BaseComponent.Speed += ApplyComponent.Speed;
     }
     public override string GetDescription()
     {

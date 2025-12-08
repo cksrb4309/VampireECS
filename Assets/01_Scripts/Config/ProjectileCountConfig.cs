@@ -5,17 +5,18 @@ using UnityEngine;
 public class ProjectileCountConfig : AbilityComponentConfig<ProjectileCountData>
 {
     public TierValue<int>[] TierValues;
+    public override void Initialize() => BaseComponent.Count = 1;
     public override void ApplyTier(Tier tier)
     {
         TierValue<int> selectValue = TierValues.Where((v) => { return tier == v.Tier; }).First();
 
         int count = Random.Range(selectValue.MinValue, selectValue.MaxValue);
 
-        BaseComponent.Count = count;
+        ApplyComponent.Count = count;
     }
-    public override void ApplyStack(ref ProjectileCountData abilityConfig)
+    public override void ApplyStack()
     {
-        abilityConfig.Count += BaseComponent.Count;
+        BaseComponent.Count += ApplyComponent.Count;
     }
     public override string GetDescription()
     {

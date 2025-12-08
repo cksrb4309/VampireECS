@@ -1,5 +1,7 @@
-﻿using Unity.Entities;
+﻿using Unity.Burst;
+using Unity.Entities;
 
+[BurstCompile]
 [UpdateInGroup(typeof(DeathSystemGroup))]
 public partial struct EnemyDeathSystem : ISystem
 {
@@ -9,9 +11,7 @@ public partial struct EnemyDeathSystem : ISystem
         
         foreach (var (experienceDataRO, entity) in SystemAPI.Query<RefRO<ExperienceData>>().WithEntityAccess().WithAll<EnemyTag, DeadTag>())
         {
-            Entity experienceEvent = ecb.CreateEntity();
-
-            ecb.AddComponent(experienceEvent, new ExperienceGainEvent { Amount = experienceDataRO.ValueRO.Amount });
+            ecb.AddComponent(ecb.CreateEntity(), new ExperienceGainEvent { Amount = experienceDataRO.ValueRO.Amount });
 
             ecb.DestroyEntity(entity);
         }

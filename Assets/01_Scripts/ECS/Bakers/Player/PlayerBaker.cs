@@ -19,6 +19,14 @@ public class PlayerBaker : Baker<PlayerAuthoring>
             AngularSpeed = authoring.RotationSpeed,
             Velocity = new float3(0, 0, 0.001f)
         });
+
+        AddComponent(entity, new PlayerExpData
+        {
+            Level = 1,
+            Required = 100,
+            Current = 0
+        });
+
         AddComponent(entity, new PlayerStats());
 
         AddComponent(entity, new PlayerInputData { Move = float2.zero });

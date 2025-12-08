@@ -2,7 +2,8 @@
 using Unity.Entities;
 
 [BurstCompile]
-[UpdateInGroup(typeof(SimulationSystemGroup))]
+[UpdateInGroup(typeof(DamageEventSystemGroup))]
+[UpdateAfter(typeof(ApplyDamageSystem))]
 public partial struct HealthDeathSystem : ISystem
 {
     public void OnCreate(ref SystemState state)

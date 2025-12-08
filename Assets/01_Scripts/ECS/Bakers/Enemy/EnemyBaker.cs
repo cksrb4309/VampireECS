@@ -6,15 +6,12 @@ public class EnemyBaker : Baker<EnemyAuthoring>
     {
         Entity entity = GetEntity(TransformUsageFlags.Dynamic);
 
-        AddComponent<PhysicsInit>(entity);
-
         AddComponent(entity, new ExperienceData { Amount = authoring.ExperienceAmount });
 
-        AddComponent(entity, new EnemyMoveData
-        {
-            Speed = authoring.Speed
-        });
+        AddComponent(entity, new EnemyMoveData { Speed = authoring.Speed });
 
+        AddComponent<EnemyTag>(entity);
+        AddComponent<PhysicsInit>(entity);
         AddComponent<LockYToZero>(entity);
     }
 }

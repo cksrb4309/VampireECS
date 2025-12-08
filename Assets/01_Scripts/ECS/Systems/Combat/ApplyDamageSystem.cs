@@ -2,6 +2,7 @@
 using Unity.Entities;
 
 [BurstCompile]
+[UpdateInGroup(typeof(DamageApplySystemGroup))]
 public partial struct ApplyDamageSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
@@ -26,10 +27,10 @@ public partial struct ApplyDamageSystem : ISystem
 
                 if (health.Current <= 0)
                 {
-                    ecb.DestroyEntity(damageEvent.Target);
+                    ecb.AddComponent<DeadTag>(damageEvent.Target);
                 }
             }
-
+            여기부터 생각해라
             ecb.DestroyEntity(entity);
         }
 

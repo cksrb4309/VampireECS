@@ -2,5 +2,5 @@
 
 public struct ExperienceData : IComponentData
 {
-    public float Amount;
+    public int Amount;
 }

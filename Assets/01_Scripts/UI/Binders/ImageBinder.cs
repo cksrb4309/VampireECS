@@ -45,24 +45,18 @@ public class ImageBinder : MonoBehaviour
 
     private void UpdateImage(float v)
     {
-        if (value == v) return;
-
         value = v;
 
         fillImage.fillAmount = v != 0f ? v / maxValue : 0f;
     }
     private void UpdateImage(int v)
     {
-        if (value == (float)v) return;
-
         value = (float)v;
 
         fillImage.fillAmount = v != 0 ? (float)v / maxValue : 0f;
     }
     public void SetMaxValue(float v)
     {
-        if (v == maxValue) return;
-
         maxValue = v;
 
         if (valueFloatSO != null)
@@ -76,8 +70,6 @@ public class ImageBinder : MonoBehaviour
     }
     public void SetMaxValue(int value)
     {
-        if ((float)value == maxValue) return;
-
         maxValue = (float)value;
 
         if (valueFloatSO != null)

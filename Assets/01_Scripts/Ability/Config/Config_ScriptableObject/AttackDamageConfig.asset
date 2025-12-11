@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fded1cf5b88ef70458c1bc4b45d9693c, type: 3}
+  m_Name: AttackDamageConfig
+  m_EditorClassIdentifier: Assembly-CSharp::AttackDamageConfig
+  SelectTier: 0
+  MaxStack: 100
+  Icon: {fileID: 0}
+  prerequisitesAbilities: []
+  TierValues:
+  - Tier: 1
+    MinValue: 1
+    MaxValue: 3
+  - Tier: 2
+    MinValue: 4
+    MaxValue: 6
+  - Tier: 3
+    MinValue: 7
+    MaxValue: 15

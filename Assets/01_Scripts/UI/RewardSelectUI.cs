@@ -7,12 +7,7 @@ public class RewardSelectUI : MonoBehaviour
 {
     [SerializeField] RewardCardPanel[] rewardCardPanels;
 
-    AbilityRewardController rewardManager;
-
-    private void Start()
-    {
-        rewardManager = GetComponent<AbilityRewardController>();
-    }
+    [SerializeField] AbilityRewardGenerator rewardManager;
 
     public void OnReward(AbilityConfig[] abilityConfigs)
     {

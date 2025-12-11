@@ -11,12 +11,20 @@ public class ExperienceBridge : MonoBehaviour
     private Entity playerEntity = Entity.Null;
     private EntityManager em;
 
-    private AbilityRewardController rewardUI;
+    private AbilityRewardGenerator rewardUI;
+    private TimePauseController timePauseController;
 
     private async void Start()
     {
+
+        Debug.Log("현재 amount: " + amountSO.Observable.Value);
+        Debug.Log("현재 required: " + requiredSO.Observable.Value);
+
         em = World.DefaultGameObjectInjectionWorld.EntityManager;
-        rewardUI = FindFirstObjectByType<AbilityRewardController>();
+
+        rewardUI = FindFirstObjectByType<AbilityRewardGenerator>();
+
+        timePauseController = FindFirstObjectByType<TimePauseController>();
 
         await WaitPlayerReady();
     }
@@ -53,10 +61,10 @@ public class ExperienceBridge : MonoBehaviour
         // 레벨업 요청 감지
         var query = em.CreateEntityQuery(typeof(LevelUpUIRequest));
 
-        Debug.Log("레벨업 확인 개수 : " + query.CalculateEntityCount());
-
         if (query.CalculateEntityCount() > 0)
         {
+            //timePauseController.SetPause(true);
+
             // 이벤트 삭제
             var ents = query.ToEntityArray(Unity.Collections.Allocator.Temp);
 

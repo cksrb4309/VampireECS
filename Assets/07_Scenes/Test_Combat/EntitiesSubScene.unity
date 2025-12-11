@@ -119,6 +119,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &845228425
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 845228427}
+  - component: {fileID: 845228426}
+  m_Layer: 0
+  m_Name: AbilityPrefabLibrary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &845228426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845228425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5533d2dadd3bcf14daeb75befbb5a18c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityPrefabLibraryAuthoring
+  ShooterProjectilePrefab: {fileID: 6152799522437821885, guid: ea60191aa349f10459bd7d5cead54e95, type: 3}
+--- !u!4 &845228427
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845228425}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1205245385
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -165,6 +210,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32728415340431361, guid: e5d0af7e885d51740aa89250430c1263, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4863986158732759187, guid: e5d0af7e885d51740aa89250430c1263, type: 3}
+      propertyPath: UseShooterStats
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7550494689332373404, guid: e5d0af7e885d51740aa89250430c1263, type: 3}
@@ -232,5 +281,6 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1773597154}
   - {fileID: 1205245385}
+  - {fileID: 1773597154}
+  - {fileID: 845228427}

@@ -18,15 +18,16 @@ public class MouseInputBridge : IDisposable
     private Entity playerEntity;
     private EntityManager entityManager;
 
+    private event Action<Vector3> handle;
+
     [Inject]
     public MouseInputBridge(InputManager inputManager)
     {
         this.inputManager = inputManager;
-        this.entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         Setting().Forget();
     }
-
     private async UniTaskVoid Setting()
     {
         mainCamera = Camera.main;
@@ -36,28 +37,12 @@ public class MouseInputBridge : IDisposable
             return inputManager.GetInputAction(InputType.MousePosition) != null;
         });
 
-        await UniTask.WaitUntil(() =>
-        {
-            // 씬에서 Player 태그 가진 엔티티 찾기
-            var query = entityManager.CreateEntityQuery(typeof(PlayerTag), typeof(ShooterData));
-
-            if (!query.IsEmpty)
-            {
-                playerEntity = query.GetSingletonEntity();
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        });
+        playerEntity = await EntityUtility.GetOrWaitForSingletonEntityAsync<PlayerTag>();
 
         mouseMoveAction = inputManager.GetInputAction(InputType.MousePosition);
 
         mouseMoveAction.action.performed += OnMouseMove;
         mouseMoveAction.action.canceled += OnMouseMove;
-
     }
     public void Dispose()
     {
@@ -66,7 +51,6 @@ public class MouseInputBridge : IDisposable
 
         inputManager.Release(InputType.MousePosition);
     }
-
     private void OnMouseMove(InputAction.CallbackContext context)
     {
         if (playerEntity == Entity.Null) return;
@@ -85,14 +69,36 @@ public class MouseInputBridge : IDisposable
         float t = (0f - cameraPos.y) / aimDir.y;
         float3 targetPos = cameraPos + aimDir * t;
 
-        // 플레이어 ShooterData 가져오기
-        if (!entityManager.HasComponent<ShooterData>(playerEntity)) return;
+        MousePositionEventBus.Publish(new MouseWorldPositionMessage { Position = targetPos });
 
-        var shooterData = entityManager.GetComponentData<ShooterData>(playerEntity);
+        //var shooterData = entityManager.GetComponentData<ShooterData>(playerEntity);
+        
+        //shooterData.Direction = math.normalize(targetPos - entityManager.GetComponentData<LocalToWorld>(playerEntity).Position);
 
-        shooterData.Direction = math.normalize(targetPos - entityManager.GetComponentData<LocalToWorld>(playerEntity).Position);
-
-        // 변경된 ShooterData 다시 저장
-        entityManager.SetComponentData(playerEntity, shooterData);
+        //EntityUtility.AddOrSetComponent(World.DefaultGameObjectInjectionWorld.EntityManager, playerEntity, shooterData);
     }
+    public void Subscribe(Action<Vector3> action) => handle += action;
+    public void Unsubscribe(Action<Vector3> action) => handle -= action;
+}
+
+public static class MousePositionEventBus
+{
+    public static IDisposable Subscribe(Action<MouseWorldPositionMessage> handler)
+        => EventBus<MouseWorldPositionMessage>.Subscribe(handler);
+
+    public static void SubscribeOnce(Action<MouseWorldPositionMessage> handler)
+        => EventBus<MouseWorldPositionMessage>.SubscribeOnce(handler);
+
+    public static void Unsubscribe(Action<MouseWorldPositionMessage> handler)
+        => EventBus<MouseWorldPositionMessage>.Unsubscribe(handler);
+
+    public static void Publish(MouseWorldPositionMessage message)
+        => EventBus<MouseWorldPositionMessage>.Publish(message);
+
+    public static void UnsubscribeAll()
+        => EventBus<MouseWorldPositionMessage>.UnsubscribeAll();
+}
+public struct MouseWorldPositionMessage
+{
+    public float3 Position;
 }

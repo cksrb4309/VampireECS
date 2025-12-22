@@ -2,7 +2,6 @@ using UnityEngine;
 using Unity.Entities;
 public class TimePauseController : MonoBehaviour
 {
-
     public void Awake()
     {
         EntityManager em = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -23,5 +22,7 @@ public class TimePauseController : MonoBehaviour
         {
             Value = isPaused ? 0f : 1f
         });
+
+        Time.timeScale = isPaused ? 0f : 1f;
     }
 }

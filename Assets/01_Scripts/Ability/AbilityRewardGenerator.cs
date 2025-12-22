@@ -9,9 +9,11 @@ public class AbilityRewardGenerator : MonoBehaviour
     [SerializeField] TimePauseController timePauseController;
     [SerializeField] RewardSelectUI ui;
 
+    [SerializeField] AbilityConfig dummyConfig;
+
     Dictionary<AbilityConfig, int> abilityStacks = new();
 
-    List<AbilityConfig> unlockableRewards = new();
+    List<AbilityConfig> unlockedRewardPool = new();
 
     public void GenerateRewardChoices()
     {
@@ -24,7 +26,8 @@ public class AbilityRewardGenerator : MonoBehaviour
                 }
                 return true;
             })
-            .Union(unlockableRewards)
+            .Union(unlockedRewardPool) // TODO : 중복된 것 제거되는지 확인바람
+            .Distinct()
             .ToList();
 
         AbilityConfig[] selectedAbilities = new AbilityConfig[3];
@@ -47,7 +50,7 @@ public class AbilityRewardGenerator : MonoBehaviour
             }
             else
             {
-                selectedAbilities[i] = null;
+                selectedAbilities[i] = dummyConfig;
             }
         }
         ui.OnReward(selectedAbilities);
@@ -56,12 +59,9 @@ public class AbilityRewardGenerator : MonoBehaviour
     public void AcquireReward(AbilityConfig cfg)
     {
         // 최초 1회 획득만 가능하다면 제거
-        if (!cfg.IsStackable)
+        if (!cfg.IsStackable && rewardCandidates.Contains(cfg))
         {
-            if (rewardCandidates.Contains(cfg))
-            {
-                rewardCandidates.Remove(cfg);
-            }
+            rewardCandidates.Remove(cfg);
         }
 
         // 최초 획득 시
@@ -78,16 +78,32 @@ public class AbilityRewardGenerator : MonoBehaviour
             {
                 if (!abilityStacks.ContainsKey(preCfg))
                 {
-                    unlockableRewards.Add(preCfg);
+                    unlockedRewardPool.Add(preCfg);
 
-                    AcquireReward(preCfg);
+                    InitAbility(preCfg);
                 }
             }
         }
 
         abilityStacks[cfg]++;
 
-        cfg.Apply();
+        cfg.ApplyToPlayer();
+
+        timePauseController.SetPause(false);
+    }
+    private void InitAbility(AbilityConfig cfg)
+    {   
+        // 최초 1회 획득만 가능하다면 제거
+        if (!cfg.IsStackable && rewardCandidates.Contains(cfg))
+        {
+            rewardCandidates.Remove(cfg);
+        }
+
+        // Config 초기화 및 적용
+        cfg.Initialize();
+        cfg.ApplyToPlayer();
+
+        abilityStacks[cfg] = 1;
 
         timePauseController.SetPause(false);
     }

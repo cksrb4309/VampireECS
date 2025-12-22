@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class EnemyAuthoring : MonoBehaviour
@@ -11,8 +12,9 @@ public class EnemyAuthoring : MonoBehaviour
         {
             Entity entity = GetEntity(TransformUsageFlags.Dynamic);
 
+            AddComponent(entity, new SpatialCell { Value = new int2 { x = 1000, y = 1000 } });
+            AddComponent(entity, new FactionData { Value = Faction.Enemy });
             AddComponent(entity, new ExperienceData { Amount = authoring.ExperienceAmount });
-
             AddComponent(entity, new EnemyMoveData { Speed = authoring.Speed });
 
             AddComponent<EnemyTag>(entity);

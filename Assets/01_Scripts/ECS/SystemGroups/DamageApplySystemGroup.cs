@@ -1,5 +1,5 @@
 ﻿using Unity.Entities;
 
 [UpdateInGroup(typeof(CombatRootSystemGroup))]
-[UpdateAfter(typeof(DamageEventSystemGroup))]
+[UpdateBefore(typeof(PreDestructionCleanupSystemGroup))]
 public partial class DamageApplySystemGroup : ComponentSystemGroup { }

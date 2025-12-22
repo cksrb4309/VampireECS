@@ -14,6 +14,10 @@ public class PlayerAuthoring : MonoBehaviour
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
 
+            AddComponent(entity, new SpatialCell { Value = new int2 { x = 1000, y = 1000 } });
+
+            AddComponent(entity, new FactionData { Value = Faction.Player });
+
             AddComponent<LockYToZero>(entity);
 
             AddComponent<PhysicsInit>(entity);
@@ -33,8 +37,6 @@ public class PlayerAuthoring : MonoBehaviour
                 Required = 10,
                 Current = 0
             });
-
-            AddComponent(entity, new PlayerStats());
 
             AddComponent(entity, new PlayerInputData { Move = float2.zero });
 

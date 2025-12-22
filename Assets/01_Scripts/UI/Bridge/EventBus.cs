@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Threading;
 using UnityEngine;
-
-
 public static class EventBus<TMessage>
 {
     // 내부 델리게이트(멀티캐스트)
     private static Action<TMessage> _handlers;
-
-    // 락 객체: 안전한 구독/발행을 위해 사용
-    private static readonly object _lock = new object();
 
     [RuntimeInitializeOnLoadMethod]
     private static void InitializeOnLoad()
@@ -20,10 +15,9 @@ public static class EventBus<TMessage>
     {
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
-        lock (_lock)
-        {
-            _handlers += handler;
-        }
+#pragma warning disable UDR0005 // Domain Reload Analyzer
+        _handlers += handler;
+#pragma warning restore UDR0005 // Domain Reload Analyzer
 
         return new Subscription(() => Unsubscribe(handler));
     }
@@ -32,6 +26,7 @@ public static class EventBus<TMessage>
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
         Action<TMessage> wrapper = null;
+
         wrapper = (msg) =>
         {
             try { handler(msg); }
@@ -43,28 +38,20 @@ public static class EventBus<TMessage>
     public static void Unsubscribe(Action<TMessage> handler)
     {
         if (handler == null) return;
-        lock (_lock)
-        {
-            _handlers -= handler;
-        }
+
+        _handlers -= handler;
     }
     public static void Publish(TMessage msg)
     {
-        // 로컬 복사 후 호출 (thread-safe snapshot)
         Action<TMessage> snapshot;
-        lock (_lock)
-        {
-            snapshot = _handlers;
-        }
+
+        snapshot = _handlers;
 
         snapshot?.Invoke(msg);
     }
     public static void UnsubscribeAll()
     {
-        lock (_lock)
-        {
-            _handlers = null;
-        }
+        _handlers = null;
     }
     private sealed class Subscription : IDisposable
     {

@@ -39,7 +39,7 @@ public partial struct ExperienceSystem : ISystem
 
                 ecb.AddComponent<LevelUpUIRequest>(ecb.CreateEntity());
 
-                SystemAPI.GetSingletonRW<GameTimeScale>().ValueRW.Value = 0f;
+                //SystemAPI.GetSingletonRW<GameTimeScale>().ValueRW.Value = 0f; TimePauseController에서 관리
             }
         }
 

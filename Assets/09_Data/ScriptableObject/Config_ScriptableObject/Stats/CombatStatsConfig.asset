@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7830e3f99e43bc9429ec408069cb11cc, type: 3}
+  m_Name: CombatStatsConfig
+  m_EditorClassIdentifier: Assembly-CSharp::CombatStatsConfig
+  MaxStack: 200
+  Icon: {fileID: 0}
+  IsStackable: 1
+  prerequisitesAbilities: []
+  CurrentTier: 1
+  damageValue:
+  - Tier: 0
+    MinValue: 0.1
+    MaxValue: 0.2
+  - Tier: 1
+    MinValue: 0.2
+    MaxValue: 0.3
+  - Tier: 2
+    MinValue: 0.3
+    MaxValue: 0.5
+  attackSpeedValue:
+  - Tier: 0
+    MinValue: 0.1
+    MaxValue: 0.2
+  - Tier: 1
+    MinValue: 0.2
+    MaxValue: 0.3
+  - Tier: 2
+    MinValue: 0.3
+    MaxValue: 0.5
+  attackRangeValue:
+  - Tier: 0
+    MinValue: 0.1
+    MaxValue: 0.2
+  - Tier: 1
+    MinValue: 0.2
+    MaxValue: 0.3
+  - Tier: 2
+    MinValue: 0.3
+    MaxValue: 0.5

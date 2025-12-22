@@ -18,8 +18,6 @@ public class MouseInputBridge : IDisposable
     private Entity playerEntity;
     private EntityManager entityManager;
 
-    private event Action<Vector3> handle;
-
     [Inject]
     public MouseInputBridge(InputManager inputManager)
     {
@@ -77,8 +75,6 @@ public class MouseInputBridge : IDisposable
 
         //EntityUtility.AddOrSetComponent(World.DefaultGameObjectInjectionWorld.EntityManager, playerEntity, shooterData);
     }
-    public void Subscribe(Action<Vector3> action) => handle += action;
-    public void Unsubscribe(Action<Vector3> action) => handle -= action;
 }
 
 public static class MousePositionEventBus

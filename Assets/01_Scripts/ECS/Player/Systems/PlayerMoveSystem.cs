@@ -5,7 +5,7 @@ using Unity.Physics;
 using Unity.Transforms;
 
 [BurstCompile]
-[UpdateInGroup(typeof(DamagePreprocessSystemGroup))]
+[UpdateInGroup(typeof(DamageSetupSystemGroup))]
 public partial struct PlayerMoveSystem : ISystem
 {
     public void OnCreate(ref SystemState state)

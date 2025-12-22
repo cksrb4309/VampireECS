@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Entities;
+using UnityEngine;
 
 [BurstCompile]
 public static class EntityUtility
@@ -153,6 +154,18 @@ public static class EntityUtility
             em.SetComponentData(ent, component);
         else
             em.AddComponentData(ent, component);
+    }
+    public static EntityArchetype CreateArchetype(params ComponentType[] types)
+    {
+        return World.DefaultGameObjectInjectionWorld.EntityManager.CreateArchetype(types);
+    }
+    public static Entity CreateEntity()
+    {
+        return World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity();
+    }
+    public static Entity CreateEntity(EntityArchetype archetype)
+    {
+        return World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(archetype);
     }
 
     private static bool IsEntityValid<T>(EntityManager em, Entity ent)

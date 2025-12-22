@@ -2,6 +2,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.STP;
 
 public class RewardSelectUI : MonoBehaviour
 {
@@ -24,7 +25,10 @@ public class RewardSelectUI : MonoBehaviour
                 var panel = x.panel;
                 var cfg = x.cfg;
 
-                panel.Description.text = cfg.GetDescription();
+                string raw = cfg.GetDescription();
+                string colored = AbilityDescriptionFormatter.ApplyTierColor(raw, cfg.CurrentTier);
+
+                panel.Description.text = colored;
 
                 panel.Icon.sprite = cfg.Icon;
 

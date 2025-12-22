@@ -2,7 +2,7 @@
 using Unity.Entities;
 
 [BurstCompile]
-[UpdateInGroup(typeof(DamagePreprocessSystemGroup))]
+[UpdateInGroup(typeof(DamageSetupSystemGroup))]
 public partial struct ProjectileMoveSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)

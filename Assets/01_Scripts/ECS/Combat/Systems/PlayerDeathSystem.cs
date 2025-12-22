@@ -2,7 +2,7 @@
 using Unity.Entities;
 
 [BurstCompile]
-[UpdateInGroup(typeof(DeathSystemGroup))]
+[UpdateInGroup(typeof(DestructionSystemGroup))]
 public partial struct PlayerDeathSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad1410f943513734190d85fd54c1f359, type: 3}
+  m_Name: AuraStatsConfig
+  m_EditorClassIdentifier: Assembly-CSharp::AuraStatsConfig
+  MaxStack: 100
+  Icon: {fileID: 0}
+  IsStackable: 1
+  prerequisitesAbilities: []
+  CurrentTier: 0
+  damageValue:
+  - Tier: 0
+    MinValue: 2.5
+    MaxValue: 5
+  - Tier: 1
+    MinValue: 5
+    MaxValue: 7.5
+  - Tier: 2
+    MinValue: 7.5
+    MaxValue: 10
+  attackSpeedValue:
+  - Tier: 0
+    MinValue: 0.1
+    MaxValue: 0.2
+  - Tier: 1
+    MinValue: 0.2
+    MaxValue: 0.3
+  - Tier: 2
+    MinValue: 0.3
+    MaxValue: 0.5
+  radiusValue:
+  - Tier: 0
+    MinValue: 2.5
+    MaxValue: 5
+  - Tier: 1
+    MinValue: 5
+    MaxValue: 7.5
+  - Tier: 2
+    MinValue: 7.5
+    MaxValue: 10

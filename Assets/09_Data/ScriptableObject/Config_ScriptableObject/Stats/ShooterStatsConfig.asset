@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d163a443650465d4a87774be13fd24b1, type: 3}
+  m_Name: ShooterStatsConfig
+  m_EditorClassIdentifier: Assembly-CSharp::ShooterStatsConfig
+  MaxStack: 100
+  Icon: {fileID: 0}
+  IsStackable: 1
+  prerequisitesAbilities: []
+  CurrentTier: -1
+  damageValue:
+  - Tier: 0
+    MinValue: 2
+    MaxValue: 4
+  - Tier: 1
+    MinValue: 4
+    MaxValue: 6
+  - Tier: 2
+    MinValue: 6
+    MaxValue: 10
+  attackSpeedValue:
+  - Tier: 0
+    MinValue: 0.1
+    MaxValue: 0.2
+  - Tier: 1
+    MinValue: 0.2
+    MaxValue: 0.3
+  - Tier: 2
+    MinValue: 0.3
+    MaxValue: 0.5
+  projectileSpeedValue:
+  - Tier: 0
+    MinValue: 5
+    MaxValue: 10
+  - Tier: 1
+    MinValue: 10
+    MaxValue: 15
+  - Tier: 2
+    MinValue: 15
+    MaxValue: 20
+  projectileDurationValue:
+  - Tier: 0
+    MinValue: 0.2
+    MaxValue: 0.4
+  - Tier: 1
+    MinValue: 0.4
+    MaxValue: 0.6
+  - Tier: 2
+    MinValue: 0.6
+    MaxValue: 1
+  projectileCountValue:
+  - Tier: 0
+    MinValue: 1
+    MaxValue: 1
+  - Tier: 1
+    MinValue: 2
+    MaxValue: 2
+  - Tier: 2
+    MinValue: 3
+    MaxValue: 3

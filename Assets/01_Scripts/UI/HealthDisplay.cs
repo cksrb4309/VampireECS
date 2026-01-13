@@ -12,7 +12,7 @@ public class HealthDisplay : MonoBehaviour
 
     private EntityManager entityManager;
 
-    public void Start()
+    public async void Start()
     {
         Setting().Forget();
     }

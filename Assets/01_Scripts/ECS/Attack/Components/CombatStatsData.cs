@@ -16,7 +16,7 @@ public struct CombatStatsData : IComponentData, IAddable<CombatStatsData>, IInit
     }
     public void Initialize()
     {
-        Damage = 1f;
+        Damage = 1234f;
         AttackSpeed = 1f;
         AttackRange = 1f;
     }

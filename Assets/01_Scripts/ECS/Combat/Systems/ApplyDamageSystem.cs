@@ -1,5 +1,7 @@
 ﻿using Unity.Burst;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 
 [BurstCompile]
 [UpdateInGroup(typeof(DamageApplySystemGroup))]
@@ -24,6 +26,21 @@ public partial struct ApplyDamageSystem : ISystem
             if (health.Current > 0)
             {
                 health.Current -= damageEvent.Damage;
+
+
+                { // DamageTextEvent 생성
+                    float3 pos = SystemAPI.GetComponent<LocalTransform>(damageEvent.Target).Position;
+
+                    Entity evt = ecb.CreateEntity();
+
+                    ecb.AddComponent(evt, new DamageTextEvent
+                    {
+                        WorldPosition = pos,
+                        Damage = (int)damageEvent.Damage,
+                        Color = new float4(1, 0, 0, 1)
+                    });
+                }
+                
 
                 if (health.Current <= 0)
                 {

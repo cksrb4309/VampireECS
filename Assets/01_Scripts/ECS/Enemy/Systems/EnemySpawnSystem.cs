@@ -1,4 +1,4 @@
-using Unity.Burst;
+ï»¿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -33,7 +33,7 @@ public partial struct EnemySpawnSystem : ISystem
             if (spawner.Timer > 0f) continue;
 
 
-            Entity spawnEntity = spawnElements[0].EnemyPrefab; // ±âº»°ª
+            Entity spawnEntity = spawnElements[0].EnemyPrefab; // ê¸°ë³¸ê°’
 
             for (int i = spawnElements.Length - 1; i >= 0; i--)
             {
@@ -45,7 +45,7 @@ public partial struct EnemySpawnSystem : ISystem
             }
             Entity player = SystemAPI.GetSingletonEntity<PlayerTag>();
             float3 playerPos = SystemAPI.GetComponent<LocalToWorld>(player).Position;
-            Random random = new Random((uint)(SystemAPI.Time.ElapsedTime * 193256) % 10000000 + 1); // ½Ãµå·Î ½Ã°£ »ç¿ë
+            Random random = new Random((uint)(SystemAPI.Time.ElapsedTime * 193256) % 10000000 + 1); // ì‹œë“œë¡œ ì‹œê°„ ì‚¬ìš©
 
             int batchCount = spawner.BatchCount;
 
@@ -65,7 +65,7 @@ public partial struct EnemySpawnSystem : ISystem
                 });
             }
 
-            // ´ÙÀ½ ½ºÆù±îÁöÀÇ ÀÎÅÍ¹ú
+            // ë‹¤ìŒ ìŠ¤í°ê¹Œì§€ì˜ ì¸í„°ë²Œ
             spawner.Timer = spawner.SpawnInterval;
         }
 

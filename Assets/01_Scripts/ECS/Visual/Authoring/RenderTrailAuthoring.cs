@@ -1,4 +1,4 @@
-using Sirenix.OdinInspector;
+ï»¿using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
@@ -23,19 +23,19 @@ public class RenderTrailAuthoring : MonoBehaviour
 
         maxValue = KeyTimes.Max();
 
-        // Normalize ¡æ 0 ~ Lifetime ¹üÀ§·Î Á¶Á¤
+        // Normalize â†’ 0 ~ Lifetime ë²”ìœ„ë¡œ ì¡°ì •
         for (int i = 0; i < KeyTimes.Count; i++)
         {
-            float normalized01 = KeyTimes[i] / maxValue; // 0~1 ¾ÐÃà
-            KeyTimes[i] = normalized01 * Lifetime;      // 0~Lifetime È®Àå
+            float normalized01 = KeyTimes[i] / maxValue; // 0~1 ì••ì¶•
+            KeyTimes[i] = normalized01 * Lifetime;      // 0~Lifetime í™•ìž¥
         }
         maxValue = KeyScales.Max();
 
-        // Normalize ¡æ 0 ~ Scale ¹üÀ§·Î Á¶Á¤
+        // Normalize â†’ 0 ~ Scale ë²”ìœ„ë¡œ ì¡°ì •
         for (int i = 0; i < KeyScales.Count; i++)
         {
-            float normalized01 = KeyScales[i] / maxValue; // 0~1 ¾ÐÃà
-            KeyScales[i] = normalized01 * Scale;      // 0~Lifetime È®Àå
+            float normalized01 = KeyScales[i] / maxValue; // 0~1 ì••ì¶•
+            KeyScales[i] = normalized01 * Scale;      // 0~Lifetime í™•ìž¥
         }
     }
 

@@ -1,4 +1,4 @@
-using Unity.Entities;
+ï»¿using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +11,7 @@ public class PlayerMoveInputBridge : IDisposable
     private InputManager inputManager;
     private InputActionReference input;
 
-    private Entity[] multiplePlayers; // ¿©·¯ ÇÃ·¹ÀÌ¾î ÀúÀå
+    private Entity[] multiplePlayers; // ì—¬ëŸ¬ í”Œë ˆì´ì–´ ì €ì¥
 
     private Entity playerEntity;
     private EntityManager entityManager;
@@ -26,7 +26,7 @@ public class PlayerMoveInputBridge : IDisposable
     }
     private async UniTaskVoid Setting()
     {
-        // EntityManager ÃÊ±âÈ­
+        // EntityManager ì´ˆê¸°í™”
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         EntityQuery query = new EntityQuery();
@@ -67,10 +67,10 @@ public class PlayerMoveInputBridge : IDisposable
     }
     private async UniTaskVoid Setting_2()
     {
-        // EntityManager ÃÊ±âÈ­
+        // EntityManager ì´ˆê¸°í™”
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        // PlayerTag °¡Áø ¿£Æ¼Æ¼°¡ ¿©·¯ °³ »ı¼ºµÉ ¶§±îÁö ±â´Ù¸®±â
+        // PlayerTag ê°€ì§„ ì—”í‹°í‹°ê°€ ì—¬ëŸ¬ ê°œ ìƒì„±ë  ë•Œê¹Œì§€ ê¸°ë‹¤ë¦¬ê¸°
         await UniTask.WaitUntil(() =>
         {
             var query = entityManager.CreateEntityQuery(typeof(PlayerTag));
@@ -84,11 +84,11 @@ public class PlayerMoveInputBridge : IDisposable
         NativeArray<Entity> players = default;
         players = query.ToEntityArray(Unity.Collections.Allocator.Temp);
 
-        // ¿©·¯ ÇÃ·¹ÀÌ¾î ¿£Æ¼Æ¼ ÀúÀå
+        // ì—¬ëŸ¬ í”Œë ˆì´ì–´ ì—”í‹°í‹° ì €ì¥
         multiplePlayers = players.ToArray();
         players.Dispose();
 
-        // ÀÔ·Â ¹ÙÀÎµù
+        // ì…ë ¥ ë°”ì¸ë”©
         input = inputManager.GetInputAction(InputType.PlayerMove);
 
         input.action.performed += OnMove_Multi;
@@ -104,7 +104,7 @@ public class PlayerMoveInputBridge : IDisposable
         Vector2 v = ctx.ReadValue<Vector2>();
         float2 move = new float2(v.x, v.y);
 
-        // ÀüÃ¼ ÇÃ·¹ÀÌ¾î ¿£Æ¼Æ¼¿¡ ÀÔ·Â Àû¿ë
+        // ì „ì²´ í”Œë ˆì´ì–´ ì—”í‹°í‹°ì— ì…ë ¥ ì ìš©
         foreach (var entity in multiplePlayers)
         {
             if (!entityManager.Exists(entity))  continue;

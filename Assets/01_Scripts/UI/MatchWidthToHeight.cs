@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [ExecuteAlways]
 [RequireComponent(typeof(RectTransform))]

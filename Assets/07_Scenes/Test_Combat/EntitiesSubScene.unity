@@ -270,9 +270,9 @@ MonoBehaviour:
     StartTime: 0
   - Prefab: {fileID: 1158322686220326406, guid: 75b71315a6f754947adeb88b8820ead6, type: 3}
     StartTime: 5
-  SpawnInterval: 1
+  SpawnInterval: 0.1
   Radius: 80
-  BatchCount: 1
+  BatchCount: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Unity.Entities;
 public class TimePauseController : MonoBehaviour
 {

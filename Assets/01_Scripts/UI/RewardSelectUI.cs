@@ -1,4 +1,4 @@
-using System.Linq;
+ï»¿using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,7 +38,7 @@ public class RewardSelectUI : MonoBehaviour
                 panel.Button.gameObject.SetActive(true);
             });
 
-        // ÆĞ³ÎÀÌ ´õ ¸¹Àº °æ¿ì ³ª¸ÓÁö ºñÈ°¼ºÈ­
+        // íŒ¨ë„ì´ ë” ë§ì€ ê²½ìš° ë‚˜ë¨¸ì§€ ë¹„í™œì„±í™”
         for (int i = abilityConfigs.Length; i < rewardCardPanels.Length; i++)
             rewardCardPanels[i].Button?.gameObject.SetActive(false);
     }

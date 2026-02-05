@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
@@ -12,25 +12,25 @@ public class HorizontalLayoutGroupResponsivePadding : MonoBehaviour
     public enum PaddingBase
     {
         None,   // None: left/right -> width, top/bottom -> height
-        Width,  // ¸ğµç ÆĞµùÀ» width ±âÁØÀ¸·Î °è»ê
-        Height  // ¸ğµç ÆĞµùÀ» height ±âÁØÀ¸·Î °è»ê
+        Width,  // ëª¨ë“  íŒ¨ë”©ì„ width ê¸°ì¤€ìœ¼ë¡œ ê³„ì‚°
+        Height  // ëª¨ë“  íŒ¨ë”©ì„ height ê¸°ì¤€ìœ¼ë¡œ ê³„ì‚°
     }
 
     [Header("Base Calculation")]
-    [Tooltip("padding °è»ê ±âÁØ Ãà (None = ÁÂ/¿ì´Â width, »ó/ÇÏ ´Â height)")]
+    [Tooltip("padding ê³„ì‚° ê¸°ì¤€ ì¶• (None = ì¢Œ/ìš°ëŠ” width, ìƒ/í•˜ ëŠ” height)")]
     public PaddingBase baseAxis = PaddingBase.Width;
 
     [Header("Individual Padding Ratios")]
-    [Tooltip("Left padding °è»ê¿ë ºñÀ² (base¿¡ µû¶ó width ¶Ç´Â height¿¡ °öÇØÁü)")]
+    [Tooltip("Left padding ê³„ì‚°ìš© ë¹„ìœ¨ (baseì— ë”°ë¼ width ë˜ëŠ” heightì— ê³±í•´ì§)")]
     public float ratioLeft = 0.05f;
 
-    [Tooltip("Right padding °è»ê¿ë ºñÀ² (base¿¡ µû¶ó width ¶Ç´Â height¿¡ °öÇØÁü)")]
+    [Tooltip("Right padding ê³„ì‚°ìš© ë¹„ìœ¨ (baseì— ë”°ë¼ width ë˜ëŠ” heightì— ê³±í•´ì§)")]
     public float ratioRight = 0.05f;
 
-    [Tooltip("Top padding °è»ê¿ë ºñÀ² (base¿¡ µû¶ó width ¶Ç´Â height¿¡ °öÇØÁü)")]
+    [Tooltip("Top padding ê³„ì‚°ìš© ë¹„ìœ¨ (baseì— ë”°ë¼ width ë˜ëŠ” heightì— ê³±í•´ì§)")]
     public float ratioTop = 0.05f;
 
-    [Tooltip("Bottom padding °è»ê¿ë ºñÀ² (base¿¡ µû¶ó width ¶Ç´Â height¿¡ °öÇØÁü)")]
+    [Tooltip("Bottom padding ê³„ì‚°ìš© ë¹„ìœ¨ (baseì— ë”°ë¼ width ë˜ëŠ” heightì— ê³±í•´ì§)")]
     public float ratioBottom = 0.05f;
 
     [Header("Optional Limits")]
@@ -54,7 +54,7 @@ public class HorizontalLayoutGroupResponsivePadding : MonoBehaviour
 #if UNITY_EDITOR
     void Update()
     {
-        // ¿¡µğÅÍ¿¡¼­ Áï½Ã ¹İ¿µ
+        // ì—ë””í„°ì—ì„œ ì¦‰ì‹œ ë°˜ì˜
         if (!Application.isPlaying)
             ApplyPadding();
     }
@@ -94,7 +94,7 @@ public class HorizontalLayoutGroupResponsivePadding : MonoBehaviour
 
             case PaddingBase.None:
             default:
-                // None: left/rightÀº width¿¡, top/bottomÀº height¿¡ ¿µÇâ¹ŞÀ½
+                // None: left/rightì€ widthì—, top/bottomì€ heightì— ì˜í–¥ë°›ìŒ
                 left = Mathf.RoundToInt(width * ratioLeft);
                 right = Mathf.RoundToInt(width * ratioRight);
                 top = Mathf.RoundToInt(height * ratioTop);
@@ -102,13 +102,13 @@ public class HorizontalLayoutGroupResponsivePadding : MonoBehaviour
                 break;
         }
 
-        // Å¬·¥ÇÁ
+        // í´ë¨í”„
         left = Mathf.Clamp(left, minPadding, maxPadding);
         right = Mathf.Clamp(right, minPadding, maxPadding);
         top = Mathf.Clamp(top, minPadding, maxPadding);
         bottom = Mathf.Clamp(bottom, minPadding, maxPadding);
 
-        // Àû¿ë
+        // ì ìš©
         hlg.padding.left = left;
         hlg.padding.right = right;
         hlg.padding.top = top;
@@ -117,13 +117,13 @@ public class HorizontalLayoutGroupResponsivePadding : MonoBehaviour
 #if UNITY_EDITOR
         if (!Application.isPlaying)
         {
-            // 1) Editor PlayerLoop °»½Å ¿¹¾à (º¸Á¶)
+            // 1) Editor PlayerLoop ê°±ì‹  ì˜ˆì•½ (ë³´ì¡°)
             EditorApplication.QueuePlayerLoopUpdate();
 
-            // 2) Áï½Ã ·¹ÀÌ¾Æ¿ô Àç°è»ê (°­Á¦)
+            // 2) ì¦‰ì‹œ ë ˆì´ì•„ì›ƒ ì¬ê³„ì‚° (ê°•ì œ)
             LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
 
-            // 3) SceneView °­Á¦ ¸®ÆäÀÎÆ®
+            // 3) SceneView ê°•ì œ ë¦¬í˜ì¸íŠ¸
             SceneView.RepaintAll();
         }
 #endif

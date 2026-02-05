@@ -1,9 +1,9 @@
-//using UnityEngine;
+ï»¿//using UnityEngine;
 //using UnityEditor;
 
 //public class SavePrimitiveMesh : EditorWindow
 //{
-//    PrimitiveType selectedType = PrimitiveType.Sphere; // ±âº»°ª
+//    PrimitiveType selectedType = PrimitiveType.Sphere; // ê¸°ë³¸ê°’
 
 //    [MenuItem("Tools/Save Primitive Mesh")]
 //    public static void ShowWindow()
@@ -23,15 +23,15 @@
 
 //    void SaveSelectedPrimitiveMesh(PrimitiveType type)
 //    {
-//        // ÀÓ½Ã GameObject »ı¼º
+//        // ì„ì‹œ GameObject ìƒì„±
 //        GameObject temp = GameObject.CreatePrimitive(type);
 
 //        Mesh mesh = temp.GetComponent<MeshFilter>().sharedMesh;
 
-//        // ÀúÀå °æ·Î ÁöÁ¤
+//        // ì €ì¥ ê²½ë¡œ ì§€ì •
 //        string path = $"Assets/{type}Mesh.asset";
 
-//        // ¸Ş½¬ º¹»ç ÈÄ ÀúÀå
+//        // ë©”ì‰¬ ë³µì‚¬ í›„ ì €ì¥
 //        Mesh meshCopy = Object.Instantiate(mesh);
 //        AssetDatabase.CreateAsset(meshCopy, path);
 //        AssetDatabase.SaveAssets();

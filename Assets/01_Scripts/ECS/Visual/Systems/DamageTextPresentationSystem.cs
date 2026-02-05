@@ -7,10 +7,6 @@ public partial struct DamageTextPresentationSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
     {
-        var emitter = DamageTextParticleEmitter.Instance;
-
-        if (emitter == null) return;
-
         var ecb = new EntityCommandBuffer(Allocator.Temp);
 
         foreach (var (evt, entity) in
@@ -19,9 +15,10 @@ public partial struct DamageTextPresentationSystem : ISystem
         {
             var data = evt.ValueRO;
 
-            emitter.SpawnParticle(
+            // DamageTextProvider를 통해 데미지 텍스트 출력 관제 (관심사 분리)
+            DamageTextProvider.ShowDamageText(
                 data.WorldPosition,
-                data.Damage.ToString(),
+                data.Damage,
                 new Color(data.Color.x, data.Color.y, data.Color.z, data.Color.w)
             );
 

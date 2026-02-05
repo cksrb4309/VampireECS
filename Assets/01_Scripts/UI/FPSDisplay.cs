@@ -1,5 +1,5 @@
-using UnityEngine;
-using TMPro; // TMP »ç¿ë ½Ã
+ï»¿using UnityEngine;
+using TMPro; // TMP ì‚¬ìš© ì‹œ
 
 public class FPSDisplay : MonoBehaviour
 {

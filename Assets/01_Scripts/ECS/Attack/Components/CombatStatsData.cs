@@ -16,12 +16,13 @@ public struct CombatStatsData : IComponentData, IAddable<CombatStatsData>, IInit
     }
     public void Initialize()
     {
-        Damage = 1234f;
+        // TODO: 기본 스탯 설정
+        Damage = 1f;
         AttackSpeed = 1f;
         AttackRange = 1f;
     }
     public override string ToString()
     {
-        return $"AuraStatsData Damage: {Damage}, AttackSpeed: {AttackSpeed}, AttackRange: {AttackRange}";
+        return $"CombatStat Damage: {Damage}, AttackSpeed: {AttackSpeed}, AttackRange: {AttackRange}";
     }
 }

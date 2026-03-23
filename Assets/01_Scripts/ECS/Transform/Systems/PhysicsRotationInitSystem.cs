@@ -6,7 +6,7 @@ using Unity.Physics;
 
 [BurstCompile]
 [UpdateInGroup(typeof(InitializationSystemGroup))]
-public partial struct PhysicsRotationInitSystem : ISystem
+public partial struct RotationInitSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {

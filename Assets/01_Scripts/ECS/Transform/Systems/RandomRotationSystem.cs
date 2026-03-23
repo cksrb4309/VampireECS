@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [BurstCompile]
-public partial struct RandomRotationSystem : ISystem
+public partial struct RandomizedRotationSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {

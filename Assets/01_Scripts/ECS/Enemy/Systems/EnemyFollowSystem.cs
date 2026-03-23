@@ -6,7 +6,7 @@ using Unity.Transforms;
 
 [BurstCompile]
 [UpdateInGroup(typeof(DamageSetupSystemGroup))]
-public partial struct EnemyFollowSystem : ISystem
+public partial struct EnemyMoveSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {

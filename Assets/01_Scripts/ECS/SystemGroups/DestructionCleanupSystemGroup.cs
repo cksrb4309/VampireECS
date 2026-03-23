@@ -2,4 +2,4 @@
 
 [UpdateInGroup(typeof(CombatRootSystemGroup))]
 [UpdateBefore(typeof(DestructionSystemGroup))]
-public partial class PreDestructionCleanupSystemGroup : ComponentSystemGroup { }
+public partial class DestructionCleanupSystemGroup : ComponentSystemGroup { }

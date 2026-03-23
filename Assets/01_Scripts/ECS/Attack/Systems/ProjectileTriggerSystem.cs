@@ -5,7 +5,7 @@ using Unity.Physics;
 
 [BurstCompile]
 [UpdateInGroup(typeof(DamageEventSystemGroup))]
-public partial struct ProjectileTriggerSystem : ISystem
+public partial struct ProjectileHitDetectionSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {
@@ -21,7 +21,7 @@ public partial struct ProjectileTriggerSystem : ISystem
         SimulationSingleton simulation = SystemAPI.GetSingleton<SimulationSingleton>();
 
         // TriggerJob 생성
-        var job = new ProjectileTriggerJob
+        var job = new ProjectileHitDetectionJob
         {
             HasHealthLookup = SystemAPI.GetComponentLookup<HealthData>(true),
             ProjectileLookup = SystemAPI.GetComponentLookup<ProjectileData>(true),

@@ -3,9 +3,9 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 
-[UpdateInGroup(typeof(SpatialCellSetupSystemGroup))]
-[UpdateAfter(typeof(SpatialCellUpdateSystem))]
-public partial struct SpatialIndexBuildSystem : ISystem
+[UpdateInGroup(typeof(SpatialSetupSystemGroup))]
+[UpdateAfter(typeof(SpatialPartitionUpdateSystem))]
+public partial struct SpatialPartitionBuildSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {

@@ -2,8 +2,8 @@
 using Unity.Entities;
 using UnityEngine;
 
-[UpdateInGroup(typeof(PreDestructionCleanupSystemGroup))]
-public partial struct DamageTextPresentationSystem : ISystem
+[UpdateInGroup(typeof(DestructionCleanupSystemGroup))]
+public partial struct DamageTextSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
     {

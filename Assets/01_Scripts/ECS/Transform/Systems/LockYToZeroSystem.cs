@@ -5,7 +5,7 @@ using Unity.Transforms;
 
 [BurstCompile]
 [UpdateInGroup(typeof(LateSimulationSystemGroup))]
-public partial struct LockYToZeroSystem : ISystem
+public partial struct GroundAlignmentSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
     {

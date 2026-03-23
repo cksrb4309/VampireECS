@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Physics;
 
 [BurstCompile]
-public struct ProjectileTriggerJob : ITriggerEventsJob
+public struct ProjectileHitDetectionJob : ITriggerEventsJob
 {
     [ReadOnly] public ComponentLookup<HealthData> HasHealthLookup;
     [ReadOnly] public ComponentLookup<ProjectileData> ProjectileLookup;

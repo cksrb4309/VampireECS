@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 [BurstCompile]
-public partial struct EnemyTargetDirectionSystem : ISystem
+public partial struct EnemyDirectionSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {

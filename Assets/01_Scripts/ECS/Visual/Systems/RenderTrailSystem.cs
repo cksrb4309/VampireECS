@@ -2,7 +2,7 @@
 using Unity.Entities;
 
 [BurstCompile]
-public partial struct RenderTrailSystem : ISystem
+public partial struct TrailRenderSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {

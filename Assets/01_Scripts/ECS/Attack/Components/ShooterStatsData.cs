@@ -22,7 +22,7 @@ public struct ShooterStatsData : IComponentData, IAddable<ShooterStatsData>, IIn
     public void Initialize()
     {
         Damage = 20f;
-        AttackSpeed = 1f;
+        AttackSpeed = 5f;
         ProjectileSpeed = 20f;
         ProjectileDuration = 1f;
         ProjectileCount = 1;

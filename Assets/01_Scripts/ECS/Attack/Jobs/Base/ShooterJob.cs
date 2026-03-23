@@ -2,7 +2,7 @@
 using Unity.Mathematics;
 using Unity.Transforms;
 
-public partial struct ShooterJob : IJobEntity
+public partial struct ProjectileSpawnJob : IJobEntity
 {
     public float DeltaTime;
     public EntityCommandBuffer.ParallelWriter ECB;

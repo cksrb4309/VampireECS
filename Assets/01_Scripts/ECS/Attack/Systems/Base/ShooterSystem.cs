@@ -3,7 +3,7 @@ using Unity.Entities;
 
 [BurstCompile]
 [UpdateInGroup(typeof(DamageSetupSystemGroup))]
-public partial struct ShooterSystem : ISystem
+public partial struct ProjectileSpawnSystem : ISystem
 {
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
@@ -13,7 +13,7 @@ public partial struct ShooterSystem : ISystem
         var ecbSystem = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSystem.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
 
-        var job = new ShooterJob
+        var job = new ProjectileSpawnJob
         {
             DeltaTime = deltaTime,
             ECB = ecb

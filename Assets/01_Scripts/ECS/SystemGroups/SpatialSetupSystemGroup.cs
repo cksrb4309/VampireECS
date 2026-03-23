@@ -2,4 +2,4 @@
 
 [UpdateInGroup(typeof(CombatRootSystemGroup))]
 [UpdateBefore(typeof(DamageSetupSystemGroup))]
-public partial class SpatialCellSetupSystemGroup : ComponentSystemGroup { }
+public partial class SpatialSetupSystemGroup : ComponentSystemGroup { }

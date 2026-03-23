@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 [BurstCompile]
-public partial struct DynamicRotationSystem : ISystem
+public partial struct MovementRotationSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {

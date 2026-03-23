@@ -4,9 +4,9 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 [BurstCompile]
-[UpdateInGroup(typeof(SpatialCellSetupSystemGroup))]
-[UpdateBefore(typeof(SpatialIndexBuildSystem))]
-public partial struct SpatialCellUpdateSystem : ISystem
+[UpdateInGroup(typeof(SpatialSetupSystemGroup))]
+[UpdateBefore(typeof(SpatialPartitionBuildSystem))]
+public partial struct SpatialPartitionUpdateSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {

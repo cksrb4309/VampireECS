@@ -61,7 +61,6 @@
   <Project Path="Unity.Settings.Editor.csproj" />
   <Project Path="Unity.Scenes.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
-  <Project Path="Unity.CollabProxy.Editor.csproj" />
   <Project Path="Unity.Physics.Custom.Editor.csproj" />
   <Project Path="VInspector.csproj" />
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
@@ -74,6 +73,7 @@
   <Project Path="Unity.AI.Navigation.csproj" />
   <Project Path="Unity.Mathematics.Editor.csproj" />
   <Project Path="Domain_Reload.csproj" />
+  <Project Path="Unity.CollabProxy.Editor.csproj" />
   <Project Path="Unity.AssetManager.Upload.Editor.csproj" />
   <Project Path="Unity.Cloud.Identity.Editor.Embedded.csproj" />
   <Project Path="Unity.Cloud.AppLinking.Embedded.csproj" />

@@ -1,8 +1,16 @@
-﻿using UnityEngine;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : Component
 {
     protected static T instance = null;
+
+    static Singleton()
+    {
+        SingletonRuntimeRegistry.Register(ResetInstance);
+    }
+
     public static T Instance
     {
         get
@@ -15,7 +23,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
             return instance;
         }
     }
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+
     private static void SetupInstance()
     {
         instance = FindFirstObjectByType<T>();
@@ -41,6 +49,12 @@ public class Singleton<T> : MonoBehaviour where T : Component
             DontDestroyOnLoad(instance);
         }
     }
+
+    private static void ResetInstance()
+    {
+        instance = null;
+    }
+
     public virtual void Awake()
     {
         if (instance != null && instance != this)
@@ -57,6 +71,30 @@ public class Singleton<T> : MonoBehaviour where T : Component
             }
 
             DontDestroyOnLoad(gameObject);
+        }
+    }
+}
+
+internal static class SingletonRuntimeRegistry
+{
+    private static readonly List<Action> resetActions = new();
+
+    internal static void Register(Action resetAction)
+    {
+        if (resetAction == null)
+        {
+            return;
+        }
+
+        resetActions.Add(resetAction);
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitializeOnLoad()
+    {
+        for (int i = 0; i < resetActions.Count; i++)
+        {
+            resetActions[i]?.Invoke();
         }
     }
 }

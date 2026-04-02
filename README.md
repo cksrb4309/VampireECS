@@ -1,40 +1,85 @@
 # VampireECS
 
-Unity DOTS/ECS 기반 전투 루프를 고성능으로 구동하기 위한 탑다운 생존 액션 프로토타입입니다.
+Unity 6 기반의 3D 뱀서라이크 전투 수직 슬라이스 프로젝트입니다.
 
-이 프로젝트의 핵심 목적은 다음 두 가지입니다.
+이 저장소의 목표는 완성형 콘텐츠를 빠르게 늘리는 것이 아니라, `전투 상태는 ECS`, `입력/UI/표현은 브리지 계층`이라는 구조를 유지한 채 전투 루프와 성장 루프를 안정적으로 굴리는 것입니다.
 
-1. `Unity.Entities + Unity.Physics + Burst` 기반으로 전투 루프를 ECS 구조로 정리한다.
-2. 적 스폰, 이동, 투사체, 범위 공격, 피해 처리, 경험치, 레벨업 선택지까지 이어지는 게임 루프를 안정적으로 높은 성능으로 굴린다.
+## 현재 상태
 
-현재 상태는 완성형 게임보다는 `전투/성장 수직 슬라이스(vertical slice)`에 가깝습니다.  
-즉, 콘텐츠의 양보다도 ECS 전투 구조와 성장 루프의 작동 검증에 초점이 맞춰져 있습니다.
+- Unity 6 `6000.3.11f1`
+- DOTS/ECS 기반 전투 루프
+- 주 전투 씬: `Assets/07_Scenes/Test_Combat.unity`
+- 주 무기/공격 계열
+  - `Aura`
+  - `Shooter`
+  - `Chain Lightning`
+- 성장 루프
+  - 경험치 획득
+  - 레벨업 요청
+  - 시간 정지형 보상 선택
+  - ScriptableObject 기반 해금/스택 강화
+- 시각 표현
+  - VFX Graph 기반 데미지 텍스트
+  - 오라 뷰 매니저
+  - 라인 렌더러 기반 체인 라이트닝 프레젠테이션
 
-## 프로젝트 개요
+## 핵심 게임 루프
 
-- 장르: 탑다운 생존 액션
-- 방향성: Vampire Survivors 류의 지속 전투 + 레벨업 선택 성장
-- 기술 목표: MonoBehaviour 중심 구조가 아니라 ECS 중심 전투 루프 설계
-- 현재 포커스: 전투 성능, 시스템 분리, 데이터 기반 성장 구조
+1. 플레이어가 이동하고 조준한다.
+2. ECS 전투 시스템이 오라, 투사체, 체인 라이트닝 공격을 처리한다.
+3. 적이 피해를 받고 사망하면 경험치 이벤트가 생성된다.
+4. 경험치가 누적되면 레벨업 선택 UI가 열린다.
+5. 선택한 보상이 ECS 컴포넌트 또는 해금 상태에 반영된다.
+6. 전투가 재개되고 다음 성장 루프로 이어진다.
 
-## 핵심 특징
+## 아키텍처 요약
 
-- DOTS/ECS 기반 전투 처리
-- 플레이어 주변 오라 공격과 조준형 투사체 공격 지원
-- 적 스폰, 추적, 텔레포트 보정까지 포함한 지속 전투 루프
-- 경험치 획득 후 시간 정지형 레벨업 선택 UI
-- ScriptableObject 기반 능력/강화 데이터
-- VFX Graph 기반 데미지 텍스트 및 오라 표현
+### ECS Core
 
-## 현재 구현된 게임 루프
+- `Assets/01_Scripts/ECS/**`
+- 전투 상태, 피해 처리, 적 스폰/이동, 투사체, 경험치, 시스템 그룹 관리
+- 성능에 민감한 흐름을 중심으로 유지
 
-1. 플레이어가 이동하고 공격한다.
-2. 적이 플레이어 주변에 지속적으로 스폰된다.
-3. 투사체 또는 오라가 적에게 피해를 준다.
-4. 적이 죽으면 경험치 이벤트가 생성된다.
-5. 플레이어가 레벨업하면 게임이 일시정지된다.
-6. 3개의 보상 후보 중 하나를 선택한다.
-7. 선택 결과가 플레이어 ECS 컴포넌트에 적용되고 전투가 재개된다.
+### Bridge / Presentation
+
+- `Assets/01_Scripts/UI/**`
+- `Assets/01_Scripts/System/**`
+- `Assets/01_Scripts/Presentation/**`
+- 입력, UI, 카메라, 런타임 VFX 표현 담당
+
+### Visual Event Flow
+
+- `Assets/01_Scripts/ECS/Visual/**`
+- ECS가 시각 이벤트 엔티티를 발행
+- 프레젠테이션 계층이 이를 소비하고 즉시 정리
+- 현재 대표 흐름
+  - `DamageTextPresentationSystem`
+  - `ChainLightningPresentationSystem`
+
+### Data-Driven Ability Flow
+
+- `Assets/01_Scripts/Ability/**`
+- `Assets/09_Data/**`
+- 오라, 슈터, 체인 라이트닝 해금/스탯 자산이 코드 경로와 연결됨
+
+## 주요 폴더
+
+```text
+Assets/
+├── 00_Core/                     프로젝트 설정 자산
+├── 01_Scripts/
+│   ├── Ability/                 능력, 해금, 스탯 적용
+│   ├── ECS/                     전투 ECS 코어
+│   ├── Presentation/            런타임 표현 계층
+│   ├── System/                  카메라, 시간 정지 등
+│   └── UI/                      입력/UI 브리지
+├── 06_Prefabs/                  씬, 플레이어, 적, VFX 프리팹
+├── 07_Scenes/                   테스트 전투 씬
+├── 09_Data/                     ScriptableObject 구성 데이터
+├── 99_Tests/                    EditMode 테스트 및 확장 예정 테스트
+└── Editor/CodexValidation/      프로젝트 전용 검증 엔트리
+tools/                           Unity 배치 검증 스크립트
+```
 
 ## 현재 구현 범위
 
@@ -42,162 +87,81 @@ Unity DOTS/ECS 기반 전투 루프를 고성능으로 구동하기 위한 탑�
 
 - 플레이어 이동
 - 마우스 조준
-- 공격 입력 기반 투사체 발사
-- 오라 기반 범위 공격
-- 충돌 기반 피해 이벤트 처리
-- 데미지 텍스트 출력
+- 투사체 생성 및 충돌 처리
+- 오라 기반 범위 피해
+- 체인 라이트닝 점프 공격
+- 피해 적용과 사망 판정
 
-### 적
-
-- 플레이어 주변 원형 반경 스폰
-- 플레이어 추적 이동
-- 멀어진 적의 재배치 텔레포트
-- 적 사망 시 경험치 생성
-
-### 성장
+### 성장과 해금
 
 - 경험치 누적
-- 레벨업
-- 시간 정지형 보상 선택
-- 해금형 능력과 스택형 강화 공존
+- 레벨업 선택 UI 요청
+- 기본 전투 스탯 강화
+- 오라 해금
+- 슈터 해금
+- 체인 라이트닝 해금
 
-### UI
+### 표현
 
-- 체력 UI
-- 경험치 / 레벨 UI
-- 레벨업 보상 선택 UI
-- FPS / 시간 표시 디버그 UI
+- 데미지 텍스트 이벤트 기반 출력
+- 오라 VFX 관리
+- 체인 라이트닝 세그먼트 시각화
+- 트레일 렌더링 보조 시스템
 
-## 현재 콘텐츠 상태
+## 검증과 하네스
 
-현재 콘텐츠는 많지 않습니다.
+이 저장소는 프롬프트만으로 작업하지 않고, 문서화된 하네스와 검증 게이트를 같이 사용합니다.
 
-- 테스트 씬: `Assets/07_Scenes/Test_Combat.unity`
-- 플레이어 프리팹 1종
-- 적 프리팹 1종
-- 플레이어/적 투사체 프리팹
-- 능력 계열
-  - 기본 스탯 강화
-  - 오라 해금
-  - 투사체 사수형 무기 해금 구조
+### 작업 규칙 문서
 
-즉, 콘텐츠 확장 이전에 `전투 루프와 시스템 구조가 성립하는지`를 먼저 확인하는 단계입니다.
+- [AGENTS.md](AGENTS.md)
+  - 수정 허용 범위, 검증 기본값, guarded asset 규칙
+- [CLAUDE.md](CLAUDE.md)
+  - 코드 구조와 시스템 맥락
+- [docs/CodexPromptTemplates.md](docs/CodexPromptTemplates.md)
+  - Codex 요청 템플릿과 짧은 요청 해석 기준
 
-## 아키텍처 요약
+### 배치 검증
 
-### ECS가 담당하는 것
+에디터가 닫혀 있을 때:
 
-- 전투 상태
-- 피해 이벤트
-- 적 스폰 및 이동
-- 플레이어 이동
-- 투사체 이동 및 충돌
-- 경험치 및 레벨업 요청
-
-### MonoBehaviour가 담당하는 것
-
-- 입력 브리지
-- 카메라 추적
-- UI 반영
-- 레벨업 선택지 표시
-- ECS와 화면 표현 사이의 연결
-
-이 프로젝트는 “전부 ECS”보다도, `전투 성능에 직접적인 부분은 ECS로`, `입력/UI/표현 연결은 브리지 계층으로` 나누는 실용적인 구조를 택하고 있습니다.
-
-## 주요 폴더
-
-```text
-Assets/
-├── 00_Core/        프로젝트 설정 자산
-├── 01_Scripts/     핵심 코드
-│   ├── Ability/    능력/강화/해금 로직
-│   ├── Core/       입력 매니저, DI, 공용 유틸
-│   ├── ECS/        전투 핵심 시스템
-│   ├── Presentation/
-│   ├── System/     카메라, 일시정지
-│   └── UI/         브리지 및 UI
-├── 06_Prefabs/     플레이어, 적, VFX, 씬 설정 프리팹
-├── 07_Scenes/      테스트 씬
-└── 09_Data/        ScriptableObject 기반 데이터
+```powershell
+tools\compile-unity.cmd
+tools\smoke-unity.cmd
+tools\test-editmode.cmd
+tools\validate-unity.cmd
 ```
 
-## 주요 ECS 시스템
+### 에디터 메뉴 검증
 
-- `Attack`
-  - 오라 공격
-  - 투사체 생성
-  - 투사체 이동
-  - 투사체 충돌 감지
-- `Combat`
-  - 피해 적용
-  - 사망 판정
-  - 경험치 이벤트 생성
-- `Enemy`
-  - 적 스폰
-  - 적 추적 이동
-  - 적 방향 갱신
-  - 적 텔레포트 보정
-- `Experience`
-  - 경험치 누적
-  - 레벨업 요청 생성
-- `Visual`
-  - 데미지 텍스트 프레젠테이션
-  - 트레일 렌더링
+에디터가 열려 있을 때:
 
-## 기술 스택
+- `Tools/Codex Validation/Run Smoke Validation`
+- `Tools/Codex Validation/Run Strict Smoke Validation`
+- `Tools/Codex Validation/Run EditMode Smoke Tests`
+- `Tools/Codex Validation/Run Full Validation`
 
-- Unity 6
-- Unity.Entities
-- Unity.Physics
-- Unity.Burst
-- Unity.Mathematics
-- Universal Render Pipeline
-- Visual Effect Graph
-- Input System
-- UniTask
-- VContainer
+### 현재 검증이 확인하는 것
 
-## 실행 및 확인
-
-### Unity 에디터
-
-- 권장 진입 씬: `Assets/07_Scenes/Test_Combat.unity`
-- 프로젝트는 Unity 6 계열에서 열어야 합니다.
-
-### 조작
-
-- 이동: `PlayerMove`
-- 공격: `PlayerAttack`
-- 조준: `MousePosition`
-
-입력은 Input System 자산을 통해 연결되어 있으며, UI/브리지 계층에서 ECS 컴포넌트로 전달됩니다.
-
-## 이 프로젝트에서 중요한 설계 기준
-
-- 전투 루프는 ECS에서 끝까지 이어져야 한다.
-- 시스템 간 데이터 흐름은 이벤트 엔티티 중심으로 단순해야 한다.
-- 성능 병목 가능성이 높은 부분은 Job/Burst 친화적으로 유지해야 한다.
-- UI와 입력은 ECS 바깥에 두되, 브리지 계층을 통해 분리한다.
-- 콘텐츠를 늘리기 전에 루프와 구조를 먼저 검증한다.
+- `Test_Combat` 씬 존재 여부
+- `CombatSetting.prefab` 존재 여부
+- 핵심 입력/데이터 자산 존재 여부
+- 씬/프리팹의 missing MonoBehaviour 참조
+- 기본 EditMode smoke 시나리오
+  - `ApplyDamageSystem` 치명타 처리
+  - 존재하지 않는 타깃 이벤트 소비
 
 ## 현재 한계
 
-- 빌드 세팅과 실제 테스트 씬 연결은 아직 정리 중입니다.
-- 적 종류와 능력 종류가 매우 적습니다.
-- 게임 오버, 승리 조건, 메타 진행은 아직 본격 구현 전입니다.
-- 밸런스 수치는 테스트 목적 값이 섞여 있습니다.
-
-## 다음 확장 후보
-
-- 적 타입 다변화
-- 능력 풀 확대
-- 웨이브/시간축 연출 강화
-- 게임 오버 및 재시작 루프
-- 성능 측정 지표 정리
-- 많은 적 수에서의 ECS 병목 분석
+- 적 종류와 전투 패턴 수가 아직 적습니다.
+- PlayMode 수준의 자동화 검증은 아직 얕습니다.
+- 씬, 프리팹, VFX, ScriptableObject 튜닝은 여전히 수동 확인 비중이 높습니다.
+- 게임 오버, 메타 진행, 장기 콘텐츠 루프는 본격 구현 전입니다.
 
 ## 문서
 
-- 프로젝트 설명: [README.md](README.md)
+- 프로젝트 개요: [README.md](README.md)
+- 작업 규칙: [AGENTS.md](AGENTS.md)
+- 코드 컨텍스트: [CLAUDE.md](CLAUDE.md)
+- 프롬프트 템플릿: [docs/CodexPromptTemplates.md](docs/CodexPromptTemplates.md)
 - 기획 초안: [docs/GAME_DESIGN_DRAFT.md](docs/GAME_DESIGN_DRAFT.md)
-- 코드 컨텍스트 메모: [CLAUDE.md](CLAUDE.md)

@@ -1,192 +1,206 @@
-# VampireECS — Claude 컨텍스트 파일
+# VampireECS Context
 
-## 프로젝트 개요
-- **장르**: Vampire Survivors 류 액션 RPG
-- **아키텍처**: 100% Unity DOTS/ECS (Unity.Entities 기반)
-- **주요 언어**: C#
+## Overview
 
----
+- Genre: 3D vampire-survivor-like action prototype
+- Engine: Unity 6 `6000.3.11f1`
+- Primary architecture: DOTS/ECS for combat state and hot gameplay paths
+- Secondary architecture: MonoBehaviour bridge/presentation layer for input, UI, camera, and runtime visuals
 
-## 폴더 구조
+This project is not aiming for "everything in ECS".
+The important split is:
 
-```
+- ECS owns combat state, damage flow, entity simulation, and progression requests
+- bridge/presentation code owns input plumbing, UI, camera, and view-side rendering
+
+Use [AGENTS.md](AGENTS.md) for write boundaries and validation rules.
+
+## Main Runtime Loop
+
+1. Input bridges update ECS-facing player input state.
+2. ECS combat systems run movement, targeting, attack generation, and damage flow.
+3. Death and experience systems emit progression events.
+4. UI bridges pause time and present level-up choices.
+5. ability/unlock code applies the chosen reward back into ECS data.
+6. presentation systems consume ECS visual events and spawn or update view objects.
+
+## Repo Map
+
+```text
 Assets/
-├── 00_Core/         # 프로젝트 설정 (RP Asset 등)
-├── 01_Scripts/      # 모든 C# 스크립트 (139개)
-├── 02_Art/          # 3D 모델, 메시
-├── 03_Animations/   # 애니메이션
-├── 04_Effects/      # VFX, 파티클 (VFX Graph 포함)
-├── 05_Audio/        # 사운드
-├── 06_Prefabs/      # 프리팹
-├── 07_Scenes/       # 씬 (Test_Combat.unity 등)
-├── 08_UI/           # UI 프리팹
-├── 09_Data/         # ScriptableObject 데이터
-└── 10_ThirdParty/   # 외부 라이브러리
+├── 00_Core/                         project settings and input assets
+├── 01_Scripts/
+│   ├── Ability/                     unlocks, stat configs, reward application
+│   ├── Core/                        managers, DI lifetime scope, shared utilities
+│   ├── ECS/
+│   │   ├── Attack/                  aura, shooter, chain lightning
+│   │   ├── Combat/                  health, damage, death
+│   │   ├── Common/                  spatial partitioning and helpers
+│   │   ├── Enemy/                   spawning and follow logic
+│   │   ├── Experience/              exp gain and level-up requests
+│   │   ├── Player/                  move and rotation
+│   │   ├── SystemGroups/            deterministic update ordering
+│   │   └── Visual/                  ECS visual events and presentation bridges
+│   ├── Presentation/                runtime VFX/view managers
+│   ├── System/                      time pause, camera, scene systems
+│   └── UI/                          binders, controllers, ECS bridges
+├── 06_Prefabs/                      player, enemy, scene, and effect prefabs
+├── 07_Scenes/                       main test scene
+├── 09_Data/                         ScriptableObject config assets
+├── 99_Tests/                        EditMode test assembly
+└── Editor/CodexValidation/          editor/batch validation code
+tools/                               compile and validation wrappers
 ```
 
----
+## Combat Systems
 
-## 스크립트 구조 (`Assets/01_Scripts/`)
+### Attack
 
-### ECS/ — 핵심 게임 로직
+Key components:
 
-#### Attack/ — 공격 시스템
-- `Components/Base/AuraData.cs` — 오라(범위 공격) 컴포넌트 (ElapsedTime, OwnerFaction)
-- `Components/Base/ShooterData.cs` — 사수 컴포넌트 (Direction, MuzzleOffset, ProjectilePrefab)
-- `Components/AuraStatsData.cs` — 오라 스탯 (Damage, AttackSpeed, Radius)
-- `Components/ShooterStatsData.cs` — 사수 스탯 (Damage, AttackSpeed, ProjectileSpeed, Count, Duration)
-- `Components/ProjectileData.cs` — 투사체 (Direction, Speed, Damage, Duration, OwnerFaction)
-- `Components/FactionData.cs` — Faction enum (Player=1, Enemy=2, Flags)
-- `Systems/Base/AuraSystem.cs` — 공간 분할 기반 범위 피해 처리
-- `Systems/Base/ShooterSystem.cs` — 투사체 생성
-- `Systems/ProjectileMoveSystem.cs` — 투사체 이동
-- `Systems/ProjectileTriggerSystem.cs` — 투사체 충돌 (ITriggerEventsJob)
+- `AuraData`, `AuraStatsData`
+- `ShooterData`, `ShooterStatsData`, `ShooterCanFireData`
+- `ChainLightningData`, `ChainLightningStatsData`
+- `ProjectileData`, `FactionData`, `CombatStatsData`
 
-#### Combat/ — 전투 시스템
-- `Components/HealthData.cs` — 체력 (Current, Max)
-- `Components/DamageEventData.cs` — 피해 이벤트 (버퍼 엔티티)
-- `Components/DeadTag.cs` — 사망 태그
-- `Systems/ApplyDamageSystem.cs` — HealthData 감소 + DeadTag + DamageTextEvent 생성
-- `Systems/EnemyDeathSystem.cs` — 적 제거 + ExperienceGainEvent 생성
-- `Systems/PlayerDeathSystem.cs` — 플레이어 사망 처리
+Key systems:
 
-#### Common/ — 공용 유틸
-- `Components/SpatialCell.cs`, `SpatialIndex.cs` — 공간 분할 구조체
-- `Systems/SpatialPartitionBuildSystem.cs` — NativeParallelMultiHashMap 빌드
-- `Systems/SpatialPartitionUpdateSystem.cs` — 이전 위치 기반 업데이트
-- `Utils/SpatialUtility.cs` — WorldToCell, CellToWorldCenter, QueryRadius
-- `Utils/EntityUtility.cs` — 싱글톤 엔티티 관리 (비동기 포함)
-- `Interfaces/IAddable<T>` — 스탯 누적 합산 인터페이스
-- `Interfaces/IInitializableStats<T>` — 스탯 초기화 인터페이스
+- `AuraSystem`
+- `ProjectileSpawnSystem`
+- `ProjectileMoveSystem`
+- `ProjectileTriggerSystem`
+- `AuraRenderSystem`
+- `AuraCleanupSystem`
+- `ChainLightningSystem`
 
-#### Enemy/ — 적 시스템
-- `Components/EnemyTag.cs`, `EnemyMoveData.cs`, `EnemySpawnerData.cs`
-- `Systems/EnemyFollowSystem.cs` — 플레이어 추적 이동
-- `Systems/EnemySpawnSystem.cs` — 시간 기반 단계(Stage) 스포닝
-- `Systems/EnemyTargetDirectionSystem.cs` — 사수형 적 조준 방향 계산
+### Combat / Death
 
-#### Player/ — 플레이어 시스템
-- `Components/PlayerTag.cs`, `PlayerInputData.cs` (Move: float2), `PlayerMoveData.cs`, `PlayerExpData.cs`
-- `Systems/PlayerMoveSystem.cs` — 가속/감속 이동
-- `Systems/PlayerRotationSystem.cs` — DynamicRotationData 기반 회전
+- `ApplyDamageSystem`
+  - consumes `DamageEventData`
+  - reduces `HealthData`
+  - adds `DeadTag`
+  - emits `DamageTextEvent`
+- `EnemyDeathSystem`
+  - removes dead enemies
+  - emits experience gain
+- `PlayerDeathSystem`
+  - handles player death flow
 
-#### Experience/ — 경험치 시스템
-- `ExperienceGainEvent.cs`, `ExperienceSystem.cs`, `LevelUpUIRequest.cs`
-- 흐름: EnemyDeathSystem → ExperienceGainEvent → ExperienceSystem → LevelUpUIRequest → ExperienceBridge → TimePauseController / AbilityRewardGenerator
+### Enemy / Player / Progression
 
-#### Global/ — 전역 싱글톤 컴포넌트
-- `GameTimeScale.cs` — 게임 시간 스케일
-- `AbilityPrefabLibrary.cs` — 능력 프리팹 라이브러리
+- `EnemySpawnSystem`
+- `EnemyFollowSystem`
+- `EnemyTargetDirectionSystem`
+- `PlayerMoveSystem`
+- `PlayerRotationSystem`
+- `ExperienceSystem`
+- `ExperienceBridge`
 
-#### Transform/ — 변환 시스템
-- DynamicRotation, LockYToZero, ShrinkOverTime, RandomRotation 등
+## Visual Flow
 
-#### SystemGroups/ — 실행 순서 정의
-```
-CombatRootSystemGroup (SimulationSystemGroup 내)
-├── SpatialUpdatePreparationGroup   ← 이전 위치 스냅샷
-├── SpatialSetupSystemGroup         ← 공간 인덱스 빌드
-├── DamageSetupSystemGroup          ← 이동 처리, 오라/투사체 생성
-├── DamageEventSystemGroup          ← 충돌 감지 (Physics)
-├── DamageApplySystemGroup          ← HealthData 감소 + 이벤트 생성
-├── DestructionCleanupSystemGroup   ← 적 제거
-└── DestructionSystemGroup          ← 플레이어 처리
-```
+Visual events are a one-way bridge from ECS to managed presentation.
 
----
+Important ECS-side visual pieces:
 
-### UI/ — UI 시스템
+- `DamageTextEvent`
+- `ChainLightningVisualEvent`
+- `DamageTextPresentationSystem`
+- `ChainLightningPresentationSystem`
+- `RenderTrailSystem`
 
-#### DamageText/ — 데미지 텍스트 (VFX Graph 기반)
-- `DamageTextProvider.cs` — 정적 진입점 `ShowDamageText(Vector3, int, Color)`
-- `DamageTextVfxBatchEmitter.cs` — 싱글톤, GraphicsBuffer GPU 배치, 최대 100개 동시
-- `DamageTextBufferLayout.cs` — GPU 버퍼 레이아웃 (`TextInstanceData` 64B, `GlyphData` 32B)
+Important managed presentation pieces:
 
-#### 기타 UI 폴더
-- `Binders/` — UI 데이터 바인딩
-- `Bridge/` — ECS ↔ UI 연결 브릿지
-- `Controller/` — UI 컨트롤러
-- `Bootstrap/` — UI 초기화
+- `DamageTextProvider`
+- `DamageTextVfxBatchEmitter`
+- `AuraViewManager`
+- `ChainLightningViewManager`
+- `LineChainLightningView`
 
----
+Current intent:
 
-### Presentation/ — 표현 계층
-- `VFX/AuraViewManager.cs` — 오라 VFX 뷰 관리 (싱글톤)
-- `VFX/VFXAuraView.cs` — 오라 VFX 개별 컴포넌트
+- ECS decides when a visual should happen
+- presentation code decides how to render it
+- ECS core should not directly own pooled scene objects or VFX lifecycle
 
-### System/ — 게임 시스템
-- `Time/TimePauseController.cs` — GameTimeScale 제어 (일시정지/재개)
-- `Camera/FollowCamera.cs` — 플레이어 추적 카메라 (UniTask)
+## Progression / Data Flow
 
-### Ability/ — 능력/스킬 시스템
-- `AbilityConfig.cs` — 기본 클래스 (Tier, MaxStack, Icon)
-- `Config/Stats/` — AuraStatsConfig, ShooterStatsConfig, CombatStatsConfig
-- `Config/Unlock/` — UnlockAbilityConfig, UnlockAuraConfig, UnlockShooterConfig
-- `PlayerStatApplier.cs` — 플레이어 스탯 적용 (비동기)
+Ability configs live under `Assets/01_Scripts/Ability/**`.
+Serialized tuning data lives under `Assets/09_Data/**`.
 
-### Core/ — 핵심 유틸
-- `Manager/InputManager.cs` — InputAction 매핑
-- `Util/BattleSceneLifetimeScope.cs` — DI 생명주기
-- `Util/Singleton.cs` — 싱글톤 베이스 클래스
+Current unlock/tuning families:
 
----
+- Aura
+- Shooter
+- Chain Lightning
+- shared combat stats
 
-## 데미지 처리 전체 흐름
+Important rule:
 
-```
-[AuraSystem / ProjectileHitDetectionSystem]
-        ↓  DamageEventData 생성
-[ApplyDamageSystem]
-        ↓  HealthData 감소 + DeadTag 추가 + DamageTextEvent 생성
-[DamageTextSystem]
-        ↓  DamageTextProvider.ShowDamageText() 호출
-[DamageTextProvider.ShowDamageText()]
-        ↓
-[DamageTextVfxBatchEmitter] → VFX Graph → 화면 표시
-        ↓
-[EnemyDeathSystem]
-        ↓  엔티티 제거 + ExperienceGainEvent 생성
-[ExperienceSystem]
-        ↓  레벨업 시 LevelUpUIRequest 생성
-[ExperienceBridge]
-        ↓  LevelUpUIRequest 감지 및 소비
-[TimePauseController.SetPause(true)]
-        ↓
-[AbilityRewardGenerator.GenerateRewardChoices()]
-```
+- if behavior needs tuning, prefer adding or updating aligned config assets instead of hardcoding values in runtime systems
 
----
+## System Group Ordering
 
-## 핵심 설계 패턴
+Combat order matters.
+The project uses explicit system groups under `Assets/01_Scripts/ECS/SystemGroups/**`.
 
-| 패턴 | 적용 위치 |
-|------|-----------|
-| `IAddable<T>` | 스탯 누적 합산 (AuraStatsData, ShooterStatsData, CombatStatsData) |
-| `IInitializableStats<T>` | 스탯 초기값 설정 |
-| `IJobEntity` | 병렬 엔티티 처리 (Burst 컴파일) |
-| `ITriggerEventsJob` | 물리 충돌 감지 |
-| 싱글톤 컴포넌트 | 전역 상태 (GameTimeScale, AbilityPrefabLibrary) |
-| 이벤트 버퍼 엔티티 | DamageEventData, ExperienceGainEvent, LevelUpUIRequest |
+The high-level flow is:
 
----
+1. spatial preparation
+2. spatial index build
+3. attack setup and movement
+4. physics trigger detection
+5. damage application
+6. destruction cleanup
+7. presentation event consumption
 
-## 외부 의존성
+Do not attach new high-frequency systems loosely when a matching update group already exists.
 
-| 라이브러리 | 용도 |
-|-----------|------|
-| `Unity.Entities` | ECS 핵심 |
-| `Unity.Physics` | 충돌 감지 |
-| `Unity.Mathematics` | 수학 연산 |
-| `Unity.Burst` | JIT 컴파일 최적화 |
-| `Unity.VFX Graph` | 오라/데미지 텍스트 렌더링 |
-| `UniTask (Cysharp)` | 비동기 처리 |
-| `Odin Inspector` | 에디터 UI 확장 |
+## Validation
 
----
+Project-specific validation exists in two forms.
 
-## 현재 활성 브랜치 작업 이력
+### Batch
 
-- `feature/damage-text-ui` — VFX Graph 기반 데미지 텍스트 UI 구현 중
-  - `DamageTextBufferLayout.cs` 신규 추가 (GPU 버퍼 레이아웃)
-  - `DamageTextVfxBatchEmitter.cs` 배치 렌더링 로직 구현
-  - `TextVFXGraph.vfx` 수정
+- `tools\compile-unity.cmd`
+- `tools\smoke-unity.cmd`
+- `tools\test-editmode.cmd`
+- `tools\validate-unity.cmd`
+
+### Editor Menu
+
+- `Tools/Codex Validation/Run Smoke Validation`
+- `Tools/Codex Validation/Run Strict Smoke Validation`
+- `Tools/Codex Validation/Run EditMode Smoke Tests`
+- `Tools/Codex Validation/Run Full Validation`
+
+Validation entry point:
+
+- `Assets/Editor/CodexValidation/BatchValidationRunner.cs`
+
+Current smoke coverage focuses on:
+
+- `Test_Combat` scene presence
+- `CombatSetting.prefab` presence
+- core config/input assets
+- missing scripts in the main scene and scene settings prefab
+- `ApplyDamageSystem` smoke scenarios
+
+## Guarded Assets
+
+These assets are high-risk because they are frequently tuned in the editor and easy to break:
+
+- `Assets/07_Scenes/Test_Combat.unity`
+- `Assets/06_Prefabs/Scene/CombatSetting.prefab`
+- `Assets/09_Data/ScriptableObject/**`
+- `Assets/00_Core/ProjectSetting/InputSystem_Actions.inputactions`
+- `ProjectSettings/EditorBuildSettings.asset`
+
+Assume scene, prefab, VFX, and ScriptableObject edits may conflict with ongoing manual work unless the task explicitly allows them.
+
+## Practical Guidance
+
+- Start in `Assets/01_Scripts/ECS/**` for gameplay bugs.
+- Check `Assets/01_Scripts/ECS/Visual/**` and `Assets/01_Scripts/Presentation/VFX/**` for visual mismatches.
+- Check `Assets/01_Scripts/UI/Bridge/**` when gameplay state and UI diverge.
+- Check both `Ability/**` and `09_Data/**` when an unlock or stat change is involved.
+- Prefer the smallest edit surface that can solve the problem.

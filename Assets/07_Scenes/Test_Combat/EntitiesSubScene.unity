@@ -276,7 +276,7 @@ MonoBehaviour:
     StartTime: 5
   SpawnInterval: 0.1
   Radius: 100
-  BatchCount: 3
+  BatchCount: 6
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

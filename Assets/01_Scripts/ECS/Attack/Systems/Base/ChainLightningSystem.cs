@@ -6,6 +6,7 @@ using Unity.Transforms;
 [UpdateInGroup(typeof(DamageSetupSystemGroup))]
 [UpdateAfter(typeof(AuraSystem))]
 [UpdateAfter(typeof(ProjectileSpawnSystem))]
+[UpdateAfter(typeof(SpatialPartitionBuildSystem))]
 public partial struct ChainLightningSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
@@ -18,6 +19,11 @@ public partial struct ChainLightningSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         float deltaTime = SystemAPI.Time.DeltaTime * SystemAPI.GetSingleton<GameTimeScale>().Value;
+
+        // SpatialIndex.Map is written by BuildIndexJob in the previous group.
+        // This system reads it directly on the main thread, so the scheduled work
+        // must be completed before accessing the map safely.
+        state.Dependency.Complete();
 
         SpatialIndex spatialIndex = SystemAPI.GetSingleton<SpatialIndex>();
         ComponentLookup<LocalTransform> transformLookup = SystemAPI.GetComponentLookup<LocalTransform>(true);
@@ -96,6 +102,7 @@ public partial struct ChainLightningSystem : ISystem
         int maxTargets = math.max(1, chainStats.MaxTargets);
         candidates.Clear();
         hitTargets.Clear();
+        FixedList512Bytes<ChainLightningSegment> segments = default;
 
         Entity currentSource = sourceEntity;
         float3 currentPosition = sourcePosition;
@@ -131,10 +138,28 @@ public partial struct ChainLightningSystem : ISystem
                 Damage = finalDamage
             });
 
+            float3 nextPosition = transformLookup[nextTarget].Position;
+
+            segments.Add(new ChainLightningSegment
+            {
+                From = currentPosition,
+                To = nextPosition
+            });
+
             hitTargets.Add(nextTarget);
             currentSource = nextTarget;
-            currentPosition = transformLookup[nextTarget].Position;
+            currentPosition = nextPosition;
             firstHop = false;
+        }
+
+        if (segments.Length > 0)
+        {
+            Entity visualEventEntity = ecb.CreateEntity();
+            ecb.AddComponent(visualEventEntity, new ChainLightningVisualEvent
+            {
+                Segments = segments,
+                Duration = 0.12f
+            });
         }
     }
 

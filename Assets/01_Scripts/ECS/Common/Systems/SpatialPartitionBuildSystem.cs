@@ -7,9 +7,12 @@ using Unity.Mathematics;
 [UpdateAfter(typeof(SpatialPartitionUpdateSystem))]
 public partial struct SpatialPartitionBuildSystem : ISystem
 {
+    private EntityQuery spatialCellQuery;
+
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<SpatialCell>();
+        spatialCellQuery = state.GetEntityQuery(ComponentType.ReadOnly<SpatialCell>());
+        state.RequireForUpdate(spatialCellQuery);
 
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
@@ -37,6 +40,12 @@ public partial struct SpatialPartitionBuildSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         var index = SystemAPI.GetSingletonRW<SpatialIndex>();
+        int requiredCapacity = math.max(1024, spatialCellQuery.CalculateEntityCount());
+
+        if (index.ValueRW.Map.Capacity < requiredCapacity)
+        {
+            index.ValueRW.Map.Capacity = math.max(requiredCapacity, index.ValueRW.Map.Capacity * 2);
+        }
 
         index.ValueRW.Map.Clear();
 

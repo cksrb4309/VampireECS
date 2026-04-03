@@ -33,7 +33,7 @@ Assets/
 │   ├── Ability/                     unlocks, stat configs, reward application
 │   ├── Core/                        managers, DI lifetime scope, shared utilities
 │   ├── ECS/
-│   │   ├── Attack/                  aura, shooter, chain lightning
+│   │   ├── Attack/                  shooter, aura, chain lightning, meteor strike, black hole
 │   │   ├── Combat/                  health, damage, death
 │   │   ├── Common/                  spatial partitioning and helpers
 │   │   ├── Enemy/                   spawning and follow logic
@@ -56,22 +56,35 @@ tools/                               compile and validation wrappers
 
 ### Attack
 
-Key components:
+Key runtime patterns:
 
-- `AuraData`, `AuraStatsData`
-- `ShooterData`, `ShooterStatsData`, `ShooterCanFireData`
-- `ChainLightningData`, `ChainLightningStatsData`
+- each attack has runtime state in `...Data`
+- each attack has per-ability base tuning in `...BaseStatsData`
+- each attack has stackable upgrade data in `...StatsData`
+- all attacks can be affected by shared `CombatStatsData`
+
+Representative attack components:
+
+- `ShooterData`, `ShooterBaseStatsData`, `ShooterStatsData`, `ShooterCanFireData`
+- `AuraData`, `AuraBaseStatsData`, `AuraStatsData`, `AuraVFXID`
+- `ChainLightningData`, `ChainLightningBaseStatsData`, `ChainLightningStatsData`
+- `MeteorStrikeData`, `MeteorStrikeBaseStatsData`, `MeteorStrikeStatsData`, `MeteorStrikePendingData`
+- `BlackHoleData`, `BlackHoleBaseStatsData`, `BlackHoleStatsData`, `BlackHoleFieldData`
 - `ProjectileData`, `FactionData`, `CombatStatsData`
 
-Key systems:
+Key attack systems:
 
-- `AuraSystem`
 - `ProjectileSpawnSystem`
 - `ProjectileMoveSystem`
-- `ProjectileTriggerSystem`
+- `ProjectileHitDetectionSystem`
+- `AuraSystem`
 - `AuraRenderSystem`
 - `AuraCleanupSystem`
 - `ChainLightningSystem`
+- `MeteorStrikeCastSystem`
+- `MeteorStrikeImpactSystem`
+- `BlackHoleCastSystem`
+- `BlackHoleFieldSystem`
 
 ### Combat / Death
 
@@ -89,12 +102,52 @@ Key systems:
 ### Enemy / Player / Progression
 
 - `EnemySpawnSystem`
-- `EnemyFollowSystem`
-- `EnemyTargetDirectionSystem`
+- `EnemyMoveSystem`
+- `EnemyDirectionSystem`
+- `EnemyTeleportSystem`
 - `PlayerMoveSystem`
 - `PlayerRotationSystem`
 - `ExperienceSystem`
 - `ExperienceBridge`
+
+## Ability / Data Model
+
+Ability configs live under `Assets/01_Scripts/Ability/**`.
+Serialized tuning data lives under `Assets/09_Data/**`.
+
+Current attack families:
+
+- Shooter
+- Aura
+- Chain Lightning
+- Meteor Strike
+- Black Hole
+- shared combat stats
+
+Current stat authoring rule:
+
+- `Unlock...Config`
+  - owns unlock behavior and base tuning values
+- `...BaseStatsData`
+  - holds the attack's baseline runtime performance
+- `...StatsConfig`
+  - defines stackable upgrade values
+- `...StatsData`
+  - stores accumulated upgrade bonuses on the player
+
+Typical final-value shape:
+
+```text
+final = base * (1 + local bonus rate) * combat multiplier
+```
+
+Count-like values and some radii/timers still use additive bonus fields where that is more practical than a percentage.
+
+Important rule:
+
+- if behavior needs tuning, prefer aligned config assets over hardcoded values in runtime systems
+- keep unlock asset meaning and stats asset meaning distinct
+- UI descriptions should describe the bonus value semantics, not the final computed value
 
 ## Visual Flow
 
@@ -104,8 +157,13 @@ Important ECS-side visual pieces:
 
 - `DamageTextEvent`
 - `ChainLightningVisualEvent`
+- `MeteorStrikeTelegraphVisualEvent`
+- `MeteorStrikeImpactVisualEvent`
+- `BlackHoleVisualID`
 - `DamageTextPresentationSystem`
 - `ChainLightningPresentationSystem`
+- `MeteorStrikePresentationSystem`
+- `BlackHolePresentationSystem`
 - `RenderTrailSystem`
 
 Important managed presentation pieces:
@@ -114,29 +172,18 @@ Important managed presentation pieces:
 - `DamageTextVfxBatchEmitter`
 - `AuraViewManager`
 - `ChainLightningViewManager`
+- `MeteorStrikeViewManager`
+- `BlackHoleViewManager`
 - `LineChainLightningView`
+- `MeteorStrikeTelegraphView`
+- `MeteorStrikeImpactView`
+- `LineBlackHoleView`
 
 Current intent:
 
 - ECS decides when a visual should happen
 - presentation code decides how to render it
 - ECS core should not directly own pooled scene objects or VFX lifecycle
-
-## Progression / Data Flow
-
-Ability configs live under `Assets/01_Scripts/Ability/**`.
-Serialized tuning data lives under `Assets/09_Data/**`.
-
-Current unlock/tuning families:
-
-- Aura
-- Shooter
-- Chain Lightning
-- shared combat stats
-
-Important rule:
-
-- if behavior needs tuning, prefer adding or updating aligned config assets instead of hardcoding values in runtime systems
 
 ## System Group Ordering
 
@@ -203,4 +250,5 @@ Assume scene, prefab, VFX, and ScriptableObject edits may conflict with ongoing 
 - Check `Assets/01_Scripts/ECS/Visual/**` and `Assets/01_Scripts/Presentation/VFX/**` for visual mismatches.
 - Check `Assets/01_Scripts/UI/Bridge/**` when gameplay state and UI diverge.
 - Check both `Ability/**` and `09_Data/**` when an unlock or stat change is involved.
+- If attack tuning looks inconsistent, verify both the unlock asset base values and the stats asset bonus values.
 - Prefer the smallest edit surface that can solve the problem.

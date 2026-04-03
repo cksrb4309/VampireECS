@@ -191,6 +191,7 @@ Use this when tuning data assets is part of the request.
 
 배경:
 - 코드만 추가하는 것이 아니라 실제 플레이 가능한 기본값이 필요하다.
+- 현재 능력 데이터가 `해금 자산의 기본값`과 `스탯 자산의 보너스값`으로 나뉘어 있다면 그 의미를 유지해야 한다.
 
 수정 허용 범위:
 - Assets/01_Scripts/ECS/**
@@ -208,6 +209,7 @@ Use this when tuning data assets is part of the request.
 - Chain Lightning 관련 코드와 데이터가 연결된다.
 - 기존 해금/보상 흐름과 충돌하지 않는다.
 - 데이터 자산 경로가 바뀌지 않는다.
+- 해금 자산과 스탯 자산의 값 의미가 섞이지 않는다.
 
 검증:
 - AGENTS.md 기준으로 검증해줘.

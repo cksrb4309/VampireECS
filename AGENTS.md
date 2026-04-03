@@ -132,6 +132,9 @@ Ask for clarification only when one of these is true:
 
 - New combat behavior that needs tuning should usually come with data changes in `Assets/09_Data/**`.
 - Keep unlock/config assets aligned with the code path that consumes them.
+- For attack abilities, keep base tuning in `Unlock...Config` and matching `...BaseStatsData`.
+- Keep stackable upgrade tuning in `...StatsConfig` and matching runtime `...StatsData`.
+- When using the current stat model, prefer `Base * (1 + local bonus) * CombatStats` for percentage-based growth, and use explicit additive bonus fields for count/radius/timer values that should not compound.
 - Do not rename or move existing config assets casually. Asset references are more important than folder neatness.
 
 ### Code Style

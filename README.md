@@ -9,10 +9,12 @@ Unity 6 기반의 3D 뱀서라이크 전투 수직 슬라이스 프로젝트입�
 - Unity 6 `6000.3.11f1`
 - DOTS/ECS 기반 전투 루프
 - 주 전투 씬: `Assets/07_Scenes/Test_Combat.unity`
-- 주 무기/공격 계열
-  - `Aura`
+- 주 공격 계열
   - `Shooter`
+  - `Aura`
   - `Chain Lightning`
+  - `Meteor Strike`
+  - `Black Hole`
 - 성장 루프
   - 경험치 획득
   - 레벨업 요청
@@ -21,12 +23,14 @@ Unity 6 기반의 3D 뱀서라이크 전투 수직 슬라이스 프로젝트입�
 - 시각 표현
   - VFX Graph 기반 데미지 텍스트
   - 오라 뷰 매니저
-  - 라인 렌더러 기반 체인 라이트닝 프레젠테이션
+  - 라인 렌더러 기반 체인 라이트닝
+  - 라인 렌더러 기반 메테오 경고/임팩트
+  - 라인 렌더러 기반 블랙홀 프레젠테이션
 
 ## 핵심 게임 루프
 
 1. 플레이어가 이동하고 조준한다.
-2. ECS 전투 시스템이 오라, 투사체, 체인 라이트닝 공격을 처리한다.
+2. ECS 전투 시스템이 오라, 투사체, 체인 라이트닝, 메테오, 블랙홀 공격을 처리한다.
 3. 적이 피해를 받고 사망하면 경험치 이벤트가 생성된다.
 4. 경험치가 누적되면 레벨업 선택 UI가 열린다.
 5. 선택한 보상이 ECS 컴포넌트 또는 해금 상태에 반영된다.
@@ -37,7 +41,7 @@ Unity 6 기반의 3D 뱀서라이크 전투 수직 슬라이스 프로젝트입�
 ### ECS Core
 
 - `Assets/01_Scripts/ECS/**`
-- 전투 상태, 피해 처리, 적 스폰/이동, 투사체, 경험치, 시스템 그룹 관리
+- 전투 상태, 공간 분할, 적 스폰/이동, 공격 생성, 피해 처리, 경험치 처리
 - 성능에 민감한 흐름을 중심으로 유지
 
 ### Bridge / Presentation
@@ -55,12 +59,31 @@ Unity 6 기반의 3D 뱀서라이크 전투 수직 슬라이스 프로젝트입�
 - 현재 대표 흐름
   - `DamageTextPresentationSystem`
   - `ChainLightningPresentationSystem`
+  - `MeteorStrikePresentationSystem`
+  - `BlackHolePresentationSystem`
 
-### Data-Driven Ability Flow
+## 능력 스탯 모델
 
-- `Assets/01_Scripts/Ability/**`
-- `Assets/09_Data/**`
-- 오라, 슈터, 체인 라이트닝 해금/스탯 자산이 코드 경로와 연결됨
+현재 공격 능력은 공통적으로 `기본값(Base)`과 `강화값(Bonus)`을 분리하는 구조를 사용합니다.
+
+- `Unlock...Config`
+  - 능력 해금과 함께 기본 성능을 정의
+- `...BaseStatsData`
+  - ECS 런타임에서 능력의 기본 성능을 보관
+- `...StatsConfig`
+  - 레벨업 보상으로 더해지는 강화값을 정의
+- `...StatsData`
+  - ECS 런타임에서 누적된 강화값을 보관
+- `CombatStatsData`
+  - 모든 능력에 공통으로 곱해지는 전역 전투 배율
+
+대표 계산식은 다음 형태를 따릅니다.
+
+```text
+최종값 = BaseValue * (1 + LocalBonusRate) * GlobalCombatMultiplier
+```
+
+개수형 수치나 반경 보정처럼 비율이 아닌 값은 별도의 bonus 필드로 가산합니다.
 
 ## 주요 폴더
 
@@ -90,6 +113,8 @@ tools/                           Unity 배치 검증 스크립트
 - 투사체 생성 및 충돌 처리
 - 오라 기반 범위 피해
 - 체인 라이트닝 점프 공격
+- 메테오 타겟팅/지연 폭발
+- 블랙홀 생성/흡인/도트 피해
 - 피해 적용과 사망 판정
 
 ### 성장과 해금
@@ -97,15 +122,15 @@ tools/                           Unity 배치 검증 스크립트
 - 경험치 누적
 - 레벨업 선택 UI 요청
 - 기본 전투 스탯 강화
-- 오라 해금
-- 슈터 해금
-- 체인 라이트닝 해금
+- Shooter, Aura, Chain Lightning, Meteor Strike, Black Hole 해금
 
 ### 표현
 
 - 데미지 텍스트 이벤트 기반 출력
 - 오라 VFX 관리
 - 체인 라이트닝 세그먼트 시각화
+- 메테오 텔레그래프/임팩트 시각화
+- 블랙홀 지속 필드 시각화
 - 트레일 렌더링 보조 시스템
 
 ## 검증과 하네스

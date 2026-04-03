@@ -485,6 +485,7 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: c4b63d42ec704d34ea29b2fe7b561394, type: 2}
   - {fileID: 11400000, guid: cbe66ed719aacc740a839f7a012ff466, type: 2}
+  - {fileID: 11400000, guid: 2c8f5876e68e8194994dd0de8e1b3ec1, type: 2}
   generator: {fileID: 1887635051483157362}
 --- !u!1 &2476542463654371727
 GameObject:
@@ -3028,10 +3029,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
-    m_Left: 229
-    m_Right: 229
-    m_Top: 216
-    m_Bottom: 216
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 100
   m_ChildForceExpandWidth: 1

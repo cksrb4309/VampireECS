@@ -2,33 +2,33 @@ using Unity.Entities;
 
 public struct ChainLightningStatsData : IComponentData, IAddable<ChainLightningStatsData>, IInitializableStats<ChainLightningStatsData>
 {
-    public float Damage;
-    public float AttackSpeed;
-    public float AcquireRadius;
-    public float JumpRadius;
-    public int MaxTargets;
-    public float DamageMultiplierPerJump;
+    public float DamageBonusRate;
+    public float AttackSpeedBonusRate;
+    public float AcquireRadiusBonus;
+    public float JumpRadiusBonus;
+    public int MaxTargetsBonus;
+    public float DamageMultiplierPerJumpBonus;
 
     public ChainLightningStatsData Add(ChainLightningStatsData other)
     {
         return new ChainLightningStatsData
         {
-            Damage = Damage + other.Damage,
-            AttackSpeed = AttackSpeed + other.AttackSpeed,
-            AcquireRadius = AcquireRadius + other.AcquireRadius,
-            JumpRadius = JumpRadius + other.JumpRadius,
-            MaxTargets = MaxTargets + other.MaxTargets,
-            DamageMultiplierPerJump = DamageMultiplierPerJump + other.DamageMultiplierPerJump
+            DamageBonusRate = DamageBonusRate + other.DamageBonusRate,
+            AttackSpeedBonusRate = AttackSpeedBonusRate + other.AttackSpeedBonusRate,
+            AcquireRadiusBonus = AcquireRadiusBonus + other.AcquireRadiusBonus,
+            JumpRadiusBonus = JumpRadiusBonus + other.JumpRadiusBonus,
+            MaxTargetsBonus = MaxTargetsBonus + other.MaxTargetsBonus,
+            DamageMultiplierPerJumpBonus = DamageMultiplierPerJumpBonus + other.DamageMultiplierPerJumpBonus
         };
     }
 
     public void Initialize()
     {
-        Damage = 15f;
-        AttackSpeed = 1f;
-        AcquireRadius = 8f;
-        JumpRadius = 5f;
-        MaxTargets = 3;
-        DamageMultiplierPerJump = 0.85f;
+        DamageBonusRate = 0f;
+        AttackSpeedBonusRate = 0f;
+        AcquireRadiusBonus = 0f;
+        JumpRadiusBonus = 0f;
+        MaxTargetsBonus = 0;
+        DamageMultiplierPerJumpBonus = 0f;
     }
 }

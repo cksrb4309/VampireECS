@@ -18,25 +18,25 @@ public class BlackHoleStatsConfig : AbilityStatsConfig<BlackHoleStatsData>
         switch (dataType)
         {
             case BlackHoleStatType.Damage:
-                return $"\uBE14\uB799\uD640 \uD53C\uD574\uB7C9 <v>{addValue.Damage.ToString("F1")}</v> \uC99D\uAC00";
+                return $"블랙홀 피해량 <v>{(addValue.DamageBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case BlackHoleStatType.AttackSpeed:
-                return $"\uBE14\uB799\uD640 \uBC1C\uB3D9 \uC18D\uB3C4 <v>{(addValue.AttackSpeed * 100f).ToString("F0")}%</v> \uC99D\uAC00";
+                return $"블랙홀 발동 속도 <v>{(addValue.AttackSpeedBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case BlackHoleStatType.AcquireRadius:
-                return $"\uBE14\uB799\uD640 \uD0D0\uC0C9 \uBC94\uC704 <v>{addValue.AcquireRadius.ToString("F1")}</v> \uC99D\uAC00";
+                return $"블랙홀 탐색 범위 <v>{addValue.AcquireRadiusBonus.ToString("F1")}</v> 증가";
 
             case BlackHoleStatType.Radius:
-                return $"\uBE14\uB799\uD640 \uBC94\uC704 <v>{addValue.Radius.ToString("F1")}</v> \uC99D\uAC00";
+                return $"블랙홀 범위 <v>{addValue.RadiusBonus.ToString("F1")}</v> 증가";
 
             case BlackHoleStatType.Duration:
-                return $"\uBE14\uB799\uD640 \uC9C0\uC18D\uC2DC\uAC04 <v>{addValue.Duration.ToString("F1")}</v>\uCD08 \uC99D\uAC00";
+                return $"블랙홀 지속시간 <v>{addValue.DurationBonus.ToString("F1")}</v>초 증가";
 
             case BlackHoleStatType.TickInterval:
-                return $"\uBE14\uB799\uD640 \uD53C\uD574 \uAC04\uACA9 <v>{Mathf.Abs(addValue.TickInterval).ToString("F2")}</v>\uCD08 \uAC10\uC18C";
+                return $"블랙홀 피해 간격 <v>{Mathf.Abs(addValue.TickIntervalBonus).ToString("F2")}</v>초 감소";
 
             case BlackHoleStatType.PullStrength:
-                return $"\uBE14\uB799\uD640 \uD761\uC778\uB825 <v>{addValue.PullStrength.ToString("F1")}</v> \uC99D\uAC00";
+                return $"블랙홀 흡인력 <v>{addValue.PullStrengthBonus.ToString("F1")}</v> 증가";
 
             default:
                 return string.Empty;
@@ -54,31 +54,31 @@ public class BlackHoleStatsConfig : AbilityStatsConfig<BlackHoleStatsData>
         switch (dataType)
         {
             case BlackHoleStatType.Damage:
-                addValue.Damage = damageValue[(int)tier].GetRandomValue();
+                addValue.DamageBonusRate = damageValue[(int)tier].GetRandomValue();
                 break;
 
             case BlackHoleStatType.AttackSpeed:
-                addValue.AttackSpeed = attackSpeedValue[(int)tier].GetRandomValue();
+                addValue.AttackSpeedBonusRate = attackSpeedValue[(int)tier].GetRandomValue();
                 break;
 
             case BlackHoleStatType.AcquireRadius:
-                addValue.AcquireRadius = acquireRadiusValue[(int)tier].GetRandomValue();
+                addValue.AcquireRadiusBonus = acquireRadiusValue[(int)tier].GetRandomValue();
                 break;
 
             case BlackHoleStatType.Radius:
-                addValue.Radius = radiusValue[(int)tier].GetRandomValue();
+                addValue.RadiusBonus = radiusValue[(int)tier].GetRandomValue();
                 break;
 
             case BlackHoleStatType.Duration:
-                addValue.Duration = durationValue[(int)tier].GetRandomValue();
+                addValue.DurationBonus = durationValue[(int)tier].GetRandomValue();
                 break;
 
             case BlackHoleStatType.TickInterval:
-                addValue.TickInterval = tickIntervalValue[(int)tier].GetRandomValue();
+                addValue.TickIntervalBonus = tickIntervalValue[(int)tier].GetRandomValue();
                 break;
 
             case BlackHoleStatType.PullStrength:
-                addValue.PullStrength = pullStrengthValue[(int)tier].GetRandomValue();
+                addValue.PullStrengthBonus = pullStrengthValue[(int)tier].GetRandomValue();
                 break;
         }
     }

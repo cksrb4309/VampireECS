@@ -12,13 +12,17 @@ public partial struct AuraSnapshotJob : IJobEntity
         in AuraData aura,
         in AuraVFXID vfxID,
         in LocalTransform transform,
+        in AuraBaseStatsData auraBaseStatsData,
         in AuraStatsData auraStatsData,
         in CombatStatsData combatStatsData)
     {
         Output.AddNoResize(new AuraSnapshot
         {
             Position = transform.Position,
-            Radius = auraStatsData.Radius * combatStatsData.AttackRange,
+            Radius =
+                auraBaseStatsData.BaseRadius *
+                (1f + auraStatsData.RadiusBonusRate) *
+                combatStatsData.AttackRange,
             ViewID = vfxID.Value
         });
     }

@@ -12,6 +12,8 @@ partial struct AuraRenderSystem : ISystem
         snapshotBuffer = new NativeList<AuraSnapshot>(Allocator.Persistent);
 
         state.RequireForUpdate<AuraData>();
+        state.RequireForUpdate<AuraBaseStatsData>();
+        state.RequireForUpdate<AuraStatsData>();
     }
     public void OnDestroy(ref SystemState state)
     {

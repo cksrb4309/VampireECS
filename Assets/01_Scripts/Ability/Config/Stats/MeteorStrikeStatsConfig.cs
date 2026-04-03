@@ -18,25 +18,25 @@ public class MeteorStrikeStatsConfig : AbilityStatsConfig<MeteorStrikeStatsData>
         switch (dataType)
         {
             case MeteorStrikeStatType.Damage:
-                return $"메테오 피해량 <v>{addValue.Damage.ToString("F0")}</v> 증가";
+                return $"메테오 피해량 <v>{(addValue.DamageBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case MeteorStrikeStatType.AttackSpeed:
-                return $"메테오 발동 속도 <v>{(addValue.AttackSpeed * 100f).ToString("F0")}%</v> 증가";
+                return $"메테오 발동 속도 <v>{(addValue.AttackSpeedBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case MeteorStrikeStatType.AcquireRadius:
-                return $"메테오 탐색 범위 <v>{addValue.AcquireRadius.ToString("F1")}</v> 증가";
+                return $"메테오 탐색 범위 <v>{addValue.AcquireRadiusBonus.ToString("F1")}</v> 증가";
 
             case MeteorStrikeStatType.ImpactRadius:
-                return $"메테오 폭발 범위 <v>{addValue.ImpactRadius.ToString("F1")}</v> 증가";
+                return $"메테오 폭발 범위 <v>{addValue.ImpactRadiusBonus.ToString("F1")}</v> 증가";
 
             case MeteorStrikeStatType.ImpactDelay:
-                return $"메테오 낙하 시간 <v>{Mathf.Abs(addValue.ImpactDelay).ToString("F1")}</v>초 감소";
+                return $"메테오 낙하 시간 <v>{Mathf.Abs(addValue.ImpactDelayBonus).ToString("F1")}</v>초 감소";
 
             case MeteorStrikeStatType.MeteorCount:
-                return $"메테오 개수 <v>{addValue.MeteorCount}</v>개 증가";
+                return $"메테오 개수 <v>{addValue.MeteorCountBonus}</v>개 증가";
 
             case MeteorStrikeStatType.ScatterRadius:
-                return $"메테오 산개 범위 <v>{addValue.ScatterRadius.ToString("F1")}</v> 증가";
+                return $"메테오 분산 범위 <v>{addValue.ScatterRadiusBonus.ToString("F1")}</v> 증가";
 
             default:
                 return string.Empty;
@@ -54,31 +54,31 @@ public class MeteorStrikeStatsConfig : AbilityStatsConfig<MeteorStrikeStatsData>
         switch (dataType)
         {
             case MeteorStrikeStatType.Damage:
-                addValue.Damage = damageValue[(int)tier].GetRandomValue();
+                addValue.DamageBonusRate = damageValue[(int)tier].GetRandomValue();
                 break;
 
             case MeteorStrikeStatType.AttackSpeed:
-                addValue.AttackSpeed = attackSpeedValue[(int)tier].GetRandomValue();
+                addValue.AttackSpeedBonusRate = attackSpeedValue[(int)tier].GetRandomValue();
                 break;
 
             case MeteorStrikeStatType.AcquireRadius:
-                addValue.AcquireRadius = acquireRadiusValue[(int)tier].GetRandomValue();
+                addValue.AcquireRadiusBonus = acquireRadiusValue[(int)tier].GetRandomValue();
                 break;
 
             case MeteorStrikeStatType.ImpactRadius:
-                addValue.ImpactRadius = impactRadiusValue[(int)tier].GetRandomValue();
+                addValue.ImpactRadiusBonus = impactRadiusValue[(int)tier].GetRandomValue();
                 break;
 
             case MeteorStrikeStatType.ImpactDelay:
-                addValue.ImpactDelay = impactDelayValue[(int)tier].GetRandomValue();
+                addValue.ImpactDelayBonus = impactDelayValue[(int)tier].GetRandomValue();
                 break;
 
             case MeteorStrikeStatType.MeteorCount:
-                addValue.MeteorCount = meteorCountValue[(int)tier].GetRandomValue();
+                addValue.MeteorCountBonus = meteorCountValue[(int)tier].GetRandomValue();
                 break;
 
             case MeteorStrikeStatType.ScatterRadius:
-                addValue.ScatterRadius = scatterRadiusValue[(int)tier].GetRandomValue();
+                addValue.ScatterRadiusBonus = scatterRadiusValue[(int)tier].GetRandomValue();
                 break;
         }
     }

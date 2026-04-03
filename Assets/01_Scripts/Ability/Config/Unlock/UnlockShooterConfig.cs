@@ -5,6 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UnlockShooterConfig", menuName = "Config/Base/Unlock/ShooterConfig")]
 public class UnlockShooterConfig : UnlockAbilityConfig
 {
+    [SerializeField] private float baseDamage = 20f;
+    [SerializeField] private float baseAttackSpeed = 5f;
+    [SerializeField] private float baseProjectileSpeed = 20f;
+    [SerializeField] private float baseProjectileDuration = 1f;
+    [SerializeField] private int baseProjectileCount = 1;
+
     public override async void ApplyToPlayer()
     {
         AbilityPrefabLibrary prefabLibrary = await EntityUtility.GetOrWaitForSingletonComponentAsync<AbilityPrefabLibrary>();
@@ -19,6 +25,15 @@ public class UnlockShooterConfig : UnlockAbilityConfig
         };
 
         await EntityUtility.AddOrSetComponentToSingletonAsync<PlayerTag, ShooterData>(shooterData);
+        await EntityUtility.AddOrSetComponentToSingletonAsync<PlayerTag, ShooterBaseStatsData>(new ShooterBaseStatsData
+        {
+            BaseDamage = baseDamage,
+            BaseAttackSpeed = baseAttackSpeed,
+            BaseProjectileSpeed = baseProjectileSpeed,
+            BaseProjectileDuration = baseProjectileDuration,
+            BaseProjectileCount = baseProjectileCount
+        });
+        await EntityUtility.AddOrSetComponentToSingletonAsync<PlayerTag, ShooterStatsData>(new ShooterStatsData());
         await EntityUtility.AddOrSetComponentToSingletonAsync<PlayerTag, ShooterCanFireData>(new ShooterCanFireData { CanFire = false });
 
         new GameObject("ShooterSetupObj").AddComponent<ShooterSetup>();

@@ -19,24 +19,24 @@ MonoBehaviour:
   CurrentTier: -1
   damageValue:
   - Tier: 0
-    MinValue: 0.5
-    MaxValue: 1
+    MinValue: 0.125
+    MaxValue: 0.25
   - Tier: 1
-    MinValue: 1
-    MaxValue: 2
+    MinValue: 0.25
+    MaxValue: 0.5
   - Tier: 2
-    MinValue: 2
-    MaxValue: 3.5
+    MinValue: 0.5
+    MaxValue: 0.875
   attackSpeedValue:
   - Tier: 0
-    MinValue: 0.05
-    MaxValue: 0.1
+    MinValue: 0.14285715
+    MaxValue: 0.2857143
   - Tier: 1
-    MinValue: 0.1
-    MaxValue: 0.2
+    MinValue: 0.2857143
+    MaxValue: 0.5714286
   - Tier: 2
-    MinValue: 0.2
-    MaxValue: 0.3
+    MinValue: 0.5714286
+    MaxValue: 0.85714287
   acquireRadiusValue:
   - Tier: 0
     MinValue: 1

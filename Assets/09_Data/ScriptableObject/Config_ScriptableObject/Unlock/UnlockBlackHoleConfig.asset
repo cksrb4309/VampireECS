@@ -20,3 +20,10 @@ MonoBehaviour:
   CurrentTier: -1
   fixedTier: 2
   description: "\uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uC801 \uC704\uCE58\uC5D0 \uD761\uC778\uD558\uB294 \uBE14\uB799\uD640\uC744 \uC0DD\uC131\uD569\uB2C8\uB2E4"
+  baseDamage: 4
+  baseAttackSpeed: 0.35
+  baseAcquireRadius: 10
+  baseRadius: 4
+  baseDuration: 2.5
+  baseTickInterval: 0.25
+  basePullStrength: 7.5

@@ -12,6 +12,7 @@ public partial struct ChainLightningSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<ChainLightningData>();
+        state.RequireForUpdate<ChainLightningBaseStatsData>();
         state.RequireForUpdate<ChainLightningStatsData>();
         state.RequireForUpdate<SpatialIndex>();
     }
@@ -20,9 +21,6 @@ public partial struct ChainLightningSystem : ISystem
     {
         float deltaTime = SystemAPI.Time.DeltaTime * SystemAPI.GetSingleton<GameTimeScale>().Value;
 
-        // SpatialIndex.Map is written by BuildIndexJob in the previous group.
-        // This system reads it directly on the main thread, so the scheduled work
-        // must be completed before accessing the map safely.
         state.Dependency.Complete();
 
         SpatialIndex spatialIndex = SystemAPI.GetSingleton<SpatialIndex>();
@@ -35,19 +33,26 @@ public partial struct ChainLightningSystem : ISystem
         NativeList<Entity> candidates = new NativeList<Entity>(Allocator.Temp);
         NativeList<Entity> hitTargets = new NativeList<Entity>(Allocator.Temp);
 
-        foreach (var (transformRO, chainRW, combatStatsRO, chainStatsRO, sourceEntity) in
+        foreach (var (transformRO, chainRW, combatStatsRO, chainBaseStatsRO, chainStatsRO, sourceEntity) in
             SystemAPI.Query<
                 RefRO<LocalTransform>,
                 RefRW<ChainLightningData>,
                 RefRO<CombatStatsData>,
+                RefRO<ChainLightningBaseStatsData>,
                 RefRO<ChainLightningStatsData>>()
             .WithEntityAccess())
         {
             ref ChainLightningData chainData = ref chainRW.ValueRW;
             ref readonly CombatStatsData combatStats = ref combatStatsRO.ValueRO;
+            ref readonly ChainLightningBaseStatsData chainBaseStats = ref chainBaseStatsRO.ValueRO;
             ref readonly ChainLightningStatsData chainStats = ref chainStatsRO.ValueRO;
 
-            chainData.ElapsedTime += deltaTime * chainStats.AttackSpeed * combatStats.AttackSpeed;
+            float finalAttackSpeed =
+                chainBaseStats.BaseAttackSpeed *
+                (1f + chainStats.AttackSpeedBonusRate) *
+                combatStats.AttackSpeed;
+
+            chainData.ElapsedTime += deltaTime * finalAttackSpeed;
 
             if (chainData.ElapsedTime < 1f)
                 continue;
@@ -63,6 +68,7 @@ public partial struct ChainLightningSystem : ISystem
                     sourceEntity,
                     sourcePosition,
                     chainData.OwnerFaction,
+                    chainBaseStats,
                     chainStats,
                     combatStats,
                     spatialIndex,
@@ -86,6 +92,7 @@ public partial struct ChainLightningSystem : ISystem
         Entity sourceEntity,
         float3 sourcePosition,
         Faction ownerFaction,
+        in ChainLightningBaseStatsData chainBaseStats,
         in ChainLightningStatsData chainStats,
         in CombatStatsData combatStats,
         in SpatialIndex spatialIndex,
@@ -97,9 +104,10 @@ public partial struct ChainLightningSystem : ISystem
         ref NativeList<Entity> hitTargets,
         ref EntityCommandBuffer ecb)
     {
-        float acquireRadius = chainStats.AcquireRadius * combatStats.AttackRange;
-        float jumpRadius = chainStats.JumpRadius * combatStats.AttackRange;
-        int maxTargets = math.max(1, chainStats.MaxTargets);
+        float acquireRadius = (chainBaseStats.BaseAcquireRadius + chainStats.AcquireRadiusBonus) * combatStats.AttackRange;
+        float jumpRadius = (chainBaseStats.BaseJumpRadius + chainStats.JumpRadiusBonus) * combatStats.AttackRange;
+        int maxTargets = math.max(1, chainBaseStats.BaseMaxTargets + chainStats.MaxTargetsBonus);
+        float jumpDamageMultiplier = math.max(0f, chainBaseStats.BaseDamageMultiplierPerJump + chainStats.DamageMultiplierPerJumpBonus);
         candidates.Clear();
         hitTargets.Clear();
         FixedList512Bytes<ChainLightningSegment> segments = default;
@@ -128,8 +136,12 @@ public partial struct ChainLightningSystem : ISystem
             if (nextTarget == Entity.Null)
                 break;
 
-            float damageMultiplier = math.pow(chainStats.DamageMultiplierPerJump, hopIndex);
-            float finalDamage = chainStats.Damage * combatStats.Damage * damageMultiplier;
+            float damageMultiplier = math.pow(jumpDamageMultiplier, hopIndex);
+            float finalDamage =
+                chainBaseStats.BaseDamage *
+                (1f + chainStats.DamageBonusRate) *
+                combatStats.Damage *
+                damageMultiplier;
 
             Entity damageEventEntity = ecb.CreateEntity();
             ecb.AddComponent(damageEventEntity, new DamageEventData

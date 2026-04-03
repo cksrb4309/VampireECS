@@ -68,14 +68,14 @@ public static class BlackHoleAssetSetup
         SetObjectArray(serializedObject.FindProperty("prerequisitesAbilities"), Array.Empty<AbilityConfig>());
 
         SetTierFloatArray(serializedObject.FindProperty("damageValue"),
-            (Tier.Bronze, 0.5f, 1f),
-            (Tier.Silver, 1f, 2f),
-            (Tier.Gold, 2f, 3.5f));
+            (Tier.Bronze, 0.125f, 0.25f),
+            (Tier.Silver, 0.25f, 0.5f),
+            (Tier.Gold, 0.5f, 0.875f));
 
         SetTierFloatArray(serializedObject.FindProperty("attackSpeedValue"),
-            (Tier.Bronze, 0.05f, 0.1f),
-            (Tier.Silver, 0.1f, 0.2f),
-            (Tier.Gold, 0.2f, 0.3f));
+            (Tier.Bronze, 0.14285715f, 0.2857143f),
+            (Tier.Silver, 0.2857143f, 0.5714286f),
+            (Tier.Gold, 0.5714286f, 0.85714287f));
 
         SetTierFloatArray(serializedObject.FindProperty("acquireRadiusValue"),
             (Tier.Bronze, 1f, 2f),
@@ -116,7 +116,14 @@ public static class BlackHoleAssetSetup
         serializedObject.FindProperty("Icon").objectReferenceValue = null;
         serializedObject.FindProperty("CurrentTier").intValue = (int)Tier.None;
         serializedObject.FindProperty("fixedTier").intValue = (int)Tier.Gold;
-        serializedObject.FindProperty("description").stringValue = "Create a black hole that pulls nearby enemies toward its center";
+        serializedObject.FindProperty("description").stringValue = "가장 가까운 적 위치에 흡인하는 블랙홀을 생성합니다";
+        serializedObject.FindProperty("baseDamage").floatValue = 4f;
+        serializedObject.FindProperty("baseAttackSpeed").floatValue = 0.35f;
+        serializedObject.FindProperty("baseAcquireRadius").floatValue = 10f;
+        serializedObject.FindProperty("baseRadius").floatValue = 4f;
+        serializedObject.FindProperty("baseDuration").floatValue = 2.5f;
+        serializedObject.FindProperty("baseTickInterval").floatValue = 0.25f;
+        serializedObject.FindProperty("basePullStrength").floatValue = 7.5f;
 
         SetObjectArray(
             serializedObject.FindProperty("prerequisitesAbilities"),

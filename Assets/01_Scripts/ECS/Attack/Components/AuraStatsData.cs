@@ -1,28 +1,30 @@
-﻿using Unity.Entities;
+using Unity.Entities;
 
 public struct AuraStatsData : IComponentData, IAddable<AuraStatsData>, IInitializableStats<AuraStatsData>
 {
-    public float Damage;
-    public float AttackSpeed;
-    public float Radius;
+    public float DamageBonusRate;
+    public float AttackSpeedBonusRate;
+    public float RadiusBonusRate;
 
     public AuraStatsData Add(AuraStatsData other)
     {
         return new AuraStatsData
         {
-            Damage = this.Damage + other.Damage,
-            AttackSpeed = this.AttackSpeed + other.AttackSpeed,
-            Radius = this.Radius + other.Radius
+            DamageBonusRate = DamageBonusRate + other.DamageBonusRate,
+            AttackSpeedBonusRate = AttackSpeedBonusRate + other.AttackSpeedBonusRate,
+            RadiusBonusRate = RadiusBonusRate + other.RadiusBonusRate
         };
     }
+
     public void Initialize()
     {
-        Damage = 10f;
-        AttackSpeed = 1f;
-        Radius = 10f;
+        DamageBonusRate = 0f;
+        AttackSpeedBonusRate = 0f;
+        RadiusBonusRate = 0f;
     }
+
     public override string ToString()
     {
-        return $"AuraStatsData Damage: {Damage}, AttackSpeed: {AttackSpeed}, Radius: {Radius}";
+        return $"AuraStatsData DamageBonusRate: {DamageBonusRate}, AttackSpeedBonusRate: {AttackSpeedBonusRate}, RadiusBonusRate: {RadiusBonusRate}";
     }
 }

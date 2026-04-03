@@ -2,36 +2,36 @@ using Unity.Entities;
 
 public struct BlackHoleStatsData : IComponentData, IAddable<BlackHoleStatsData>, IInitializableStats<BlackHoleStatsData>
 {
-    public float Damage;
-    public float AttackSpeed;
-    public float AcquireRadius;
-    public float Radius;
-    public float Duration;
-    public float TickInterval;
-    public float PullStrength;
+    public float DamageBonusRate;
+    public float AttackSpeedBonusRate;
+    public float AcquireRadiusBonus;
+    public float RadiusBonus;
+    public float DurationBonus;
+    public float TickIntervalBonus;
+    public float PullStrengthBonus;
 
     public BlackHoleStatsData Add(BlackHoleStatsData other)
     {
         return new BlackHoleStatsData
         {
-            Damage = Damage + other.Damage,
-            AttackSpeed = AttackSpeed + other.AttackSpeed,
-            AcquireRadius = AcquireRadius + other.AcquireRadius,
-            Radius = Radius + other.Radius,
-            Duration = Duration + other.Duration,
-            TickInterval = TickInterval + other.TickInterval,
-            PullStrength = PullStrength + other.PullStrength
+            DamageBonusRate = DamageBonusRate + other.DamageBonusRate,
+            AttackSpeedBonusRate = AttackSpeedBonusRate + other.AttackSpeedBonusRate,
+            AcquireRadiusBonus = AcquireRadiusBonus + other.AcquireRadiusBonus,
+            RadiusBonus = RadiusBonus + other.RadiusBonus,
+            DurationBonus = DurationBonus + other.DurationBonus,
+            TickIntervalBonus = TickIntervalBonus + other.TickIntervalBonus,
+            PullStrengthBonus = PullStrengthBonus + other.PullStrengthBonus
         };
     }
 
     public void Initialize()
     {
-        Damage = 4f;
-        AttackSpeed = 0.35f;
-        AcquireRadius = 10f;
-        Radius = 4f;
-        Duration = 2.5f;
-        TickInterval = 0.25f;
-        PullStrength = 7.5f;
+        DamageBonusRate = 0f;
+        AttackSpeedBonusRate = 0f;
+        AcquireRadiusBonus = 0f;
+        RadiusBonus = 0f;
+        DurationBonus = 0f;
+        TickIntervalBonus = 0f;
+        PullStrengthBonus = 0f;
     }
 }

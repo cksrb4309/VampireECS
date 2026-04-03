@@ -13,6 +13,7 @@ public partial struct MeteorStrikeCastSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<MeteorStrikeData>();
+        state.RequireForUpdate<MeteorStrikeBaseStatsData>();
         state.RequireForUpdate<MeteorStrikeStatsData>();
         state.RequireForUpdate<SpatialIndex>();
     }
@@ -32,19 +33,26 @@ public partial struct MeteorStrikeCastSystem : ISystem
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
         NativeList<Entity> candidates = new NativeList<Entity>(Allocator.Temp);
 
-        foreach (var (transformRO, meteorRW, combatStatsRO, meteorStatsRO, sourceEntity) in
+        foreach (var (transformRO, meteorRW, combatStatsRO, meteorBaseStatsRO, meteorStatsRO, sourceEntity) in
             SystemAPI.Query<
                 RefRO<LocalTransform>,
                 RefRW<MeteorStrikeData>,
                 RefRO<CombatStatsData>,
+                RefRO<MeteorStrikeBaseStatsData>,
                 RefRO<MeteorStrikeStatsData>>()
             .WithEntityAccess())
         {
             ref MeteorStrikeData meteorData = ref meteorRW.ValueRW;
             ref readonly CombatStatsData combatStats = ref combatStatsRO.ValueRO;
+            ref readonly MeteorStrikeBaseStatsData meteorBaseStats = ref meteorBaseStatsRO.ValueRO;
             ref readonly MeteorStrikeStatsData meteorStats = ref meteorStatsRO.ValueRO;
 
-            meteorData.ElapsedTime += deltaTime * meteorStats.AttackSpeed * combatStats.AttackSpeed;
+            float finalAttackSpeed =
+                meteorBaseStats.BaseAttackSpeed *
+                (1f + meteorStats.AttackSpeedBonusRate) *
+                combatStats.AttackSpeed;
+
+            meteorData.ElapsedTime += deltaTime * finalAttackSpeed;
 
             if (meteorData.ElapsedTime < 1f)
                 continue;
@@ -60,6 +68,7 @@ public partial struct MeteorStrikeCastSystem : ISystem
                     sourceEntity,
                     sourcePosition,
                     meteorData.OwnerFaction,
+                    meteorBaseStats,
                     meteorStats,
                     combatStats,
                     spatialIndex,
@@ -82,6 +91,7 @@ public partial struct MeteorStrikeCastSystem : ISystem
         Entity sourceEntity,
         float3 sourcePosition,
         Faction ownerFaction,
+        in MeteorStrikeBaseStatsData meteorBaseStats,
         in MeteorStrikeStatsData meteorStats,
         in CombatStatsData combatStats,
         in SpatialIndex spatialIndex,
@@ -93,8 +103,14 @@ public partial struct MeteorStrikeCastSystem : ISystem
         ref NativeList<Entity> candidates,
         ref EntityCommandBuffer ecb)
     {
-        float acquireRadius = meteorStats.AcquireRadius * combatStats.AttackRange;
-        float effectiveAttackSpeed = math.max(0.0001f, meteorStats.AttackSpeed * combatStats.AttackSpeed);
+        float acquireRadius = (meteorBaseStats.BaseAcquireRadius + meteorStats.AcquireRadiusBonus) * combatStats.AttackRange;
+        float effectiveAttackSpeed =
+            math.max(
+                0.0001f,
+                meteorBaseStats.BaseAttackSpeed *
+                (1f + meteorStats.AttackSpeedBonusRate) *
+                combatStats.AttackSpeed);
+
         float attackInterval = 1f / effectiveAttackSpeed;
 
         Entity target = FindNearestTarget(
@@ -113,12 +129,16 @@ public partial struct MeteorStrikeCastSystem : ISystem
             return;
 
         float3 targetPosition = transformLookup[target].Position;
-        int meteorCount = math.max(1, meteorStats.MeteorCount);
-        float impactRadius = meteorStats.ImpactRadius * combatStats.AttackRange;
-        float scatterRadius = meteorStats.ScatterRadius * combatStats.AttackRange;
-        float baseDelay = math.max(0.05f, meteorStats.ImpactDelay);
+        int meteorCount = math.max(1, meteorBaseStats.BaseMeteorCount + meteorStats.MeteorCountBonus);
+        float impactRadius = (meteorBaseStats.BaseImpactRadius + meteorStats.ImpactRadiusBonus) * combatStats.AttackRange;
+        float scatterRadius = (meteorBaseStats.BaseScatterRadius + meteorStats.ScatterRadiusBonus) * combatStats.AttackRange;
+        float baseDelay = math.max(0.05f, meteorBaseStats.BaseImpactDelay + meteorStats.ImpactDelayBonus);
         float burstWindow = attackInterval * BurstWindowFraction;
         float burstStepDelay = CalculateBurstStepDelay(meteorCount, burstWindow);
+        float finalDamage =
+            meteorBaseStats.BaseDamage *
+            (1f + meteorStats.DamageBonusRate) *
+            combatStats.Damage;
 
         for (int meteorIndex = 0; meteorIndex < meteorCount; meteorIndex++)
         {
@@ -137,7 +157,7 @@ public partial struct MeteorStrikeCastSystem : ISystem
             ecb.AddComponent(pendingMeteorEntity, new MeteorStrikePendingData
             {
                 Position = impactPosition,
-                Damage = meteorStats.Damage * combatStats.Damage,
+                Damage = finalDamage,
                 Radius = impactRadius,
                 RemainingDelay = totalImpactDelay,
                 OwnerFaction = ownerFaction

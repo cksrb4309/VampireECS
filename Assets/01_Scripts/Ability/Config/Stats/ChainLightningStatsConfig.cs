@@ -17,22 +17,22 @@ public class ChainLightningStatsConfig : AbilityStatsConfig<ChainLightningStatsD
         switch (dataType)
         {
             case ChainLightningStatType.Damage:
-                return $"연쇄 번개 피해량 <v>{(addValue.Damage * 100f).ToString("F0")}%</v> 증가";
+                return $"연쇄 번개 피해량 <v>{(addValue.DamageBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case ChainLightningStatType.AttackSpeed:
-                return $"연쇄 번개 발동 속도 <v>{(addValue.AttackSpeed * 100f).ToString("F0")}%</v> 증가";
+                return $"연쇄 번개 발동 속도 <v>{(addValue.AttackSpeedBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case ChainLightningStatType.AcquireRadius:
-                return $"연쇄 번개 첫 탐색 범위 <v>{addValue.AcquireRadius.ToString("F1")}</v> 증가";
+                return $"연쇄 번개 첫 탐색 범위 <v>{addValue.AcquireRadiusBonus.ToString("F1")}</v> 증가";
 
             case ChainLightningStatType.JumpRadius:
-                return $"연쇄 번개 점프 범위 <v>{addValue.JumpRadius.ToString("F1")}</v> 증가";
+                return $"연쇄 번개 점프 범위 <v>{addValue.JumpRadiusBonus.ToString("F1")}</v> 증가";
 
             case ChainLightningStatType.MaxTargets:
-                return $"연쇄 번개 타격 대상 수 <v>{addValue.MaxTargets}</v> 증가";
+                return $"연쇄 번개 타격 대상 수 <v>{addValue.MaxTargetsBonus}</v> 증가";
 
             case ChainLightningStatType.DamageMultiplierPerJump:
-                return $"연쇄 번개 점프 피해 유지율 <v>{(addValue.DamageMultiplierPerJump * 100f).ToString("F0")}%</v> 증가";
+                return $"연쇄 번개 점프 피해 유지율 <v>{(addValue.DamageMultiplierPerJumpBonus * 100f).ToString("F0")}%</v> 증가";
 
             default:
                 return string.Empty;
@@ -50,27 +50,27 @@ public class ChainLightningStatsConfig : AbilityStatsConfig<ChainLightningStatsD
         switch (dataType)
         {
             case ChainLightningStatType.Damage:
-                addValue.Damage = damageValue[(int)tier].GetRandomValue();
+                addValue.DamageBonusRate = damageValue[(int)tier].GetRandomValue();
                 break;
 
             case ChainLightningStatType.AttackSpeed:
-                addValue.AttackSpeed = attackSpeedValue[(int)tier].GetRandomValue();
+                addValue.AttackSpeedBonusRate = attackSpeedValue[(int)tier].GetRandomValue();
                 break;
 
             case ChainLightningStatType.AcquireRadius:
-                addValue.AcquireRadius = acquireRadiusValue[(int)tier].GetRandomValue();
+                addValue.AcquireRadiusBonus = acquireRadiusValue[(int)tier].GetRandomValue();
                 break;
 
             case ChainLightningStatType.JumpRadius:
-                addValue.JumpRadius = jumpRadiusValue[(int)tier].GetRandomValue();
+                addValue.JumpRadiusBonus = jumpRadiusValue[(int)tier].GetRandomValue();
                 break;
 
             case ChainLightningStatType.MaxTargets:
-                addValue.MaxTargets = maxTargetsValue[(int)tier].GetRandomValue();
+                addValue.MaxTargetsBonus = maxTargetsValue[(int)tier].GetRandomValue();
                 break;
 
             case ChainLightningStatType.DamageMultiplierPerJump:
-                addValue.DamageMultiplierPerJump = damageMultiplierPerJumpValue[(int)tier].GetRandomValue();
+                addValue.DamageMultiplierPerJumpBonus = damageMultiplierPerJumpValue[(int)tier].GetRandomValue();
                 break;
         }
     }

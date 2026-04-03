@@ -21,10 +21,10 @@ MonoBehaviour:
   - Tier: 0
     MinValue: 0.1
     MaxValue: 0.2
-  - Tier: 0
+  - Tier: 1
     MinValue: 0.25
     MaxValue: 0.5
-  - Tier: 0
+  - Tier: 2
     MinValue: 0.5
     MaxValue: 1
   attackSpeedValue:
@@ -51,10 +51,10 @@ MonoBehaviour:
   - Tier: 0
     MinValue: 0.3
     MaxValue: 0.5
-  - Tier: 0
+  - Tier: 1
     MinValue: 0.6
     MaxValue: 0.9
-  - Tier: 0
+  - Tier: 2
     MinValue: 1
     MaxValue: 1.5
   maxTargetsValue:
@@ -71,9 +71,9 @@ MonoBehaviour:
   - Tier: 0
     MinValue: 0.1
     MaxValue: 0.15
-  - Tier: 0
+  - Tier: 1
     MinValue: 0.2
     MaxValue: 0.3
-  - Tier: 0
+  - Tier: 2
     MinValue: 0.4
     MaxValue: 0.5

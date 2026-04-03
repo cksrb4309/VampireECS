@@ -11,6 +11,7 @@ public partial struct BlackHoleCastSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<BlackHoleData>();
+        state.RequireForUpdate<BlackHoleBaseStatsData>();
         state.RequireForUpdate<BlackHoleStatsData>();
         state.RequireForUpdate<SpatialIndex>();
     }
@@ -30,19 +31,26 @@ public partial struct BlackHoleCastSystem : ISystem
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
         NativeList<Entity> candidates = new NativeList<Entity>(Allocator.Temp);
 
-        foreach (var (transformRO, blackHoleRW, combatStatsRO, blackHoleStatsRO, sourceEntity) in
+        foreach (var (transformRO, blackHoleRW, combatStatsRO, blackHoleBaseStatsRO, blackHoleStatsRO, sourceEntity) in
             SystemAPI.Query<
                 RefRO<LocalTransform>,
                 RefRW<BlackHoleData>,
                 RefRO<CombatStatsData>,
+                RefRO<BlackHoleBaseStatsData>,
                 RefRO<BlackHoleStatsData>>()
             .WithEntityAccess())
         {
             ref BlackHoleData blackHoleData = ref blackHoleRW.ValueRW;
             ref readonly CombatStatsData combatStats = ref combatStatsRO.ValueRO;
+            ref readonly BlackHoleBaseStatsData blackHoleBaseStats = ref blackHoleBaseStatsRO.ValueRO;
             ref readonly BlackHoleStatsData blackHoleStats = ref blackHoleStatsRO.ValueRO;
 
-            blackHoleData.ElapsedTime += deltaTime * blackHoleStats.AttackSpeed * combatStats.AttackSpeed;
+            float finalAttackSpeed =
+                blackHoleBaseStats.BaseAttackSpeed *
+                (1f + blackHoleStats.AttackSpeedBonusRate) *
+                combatStats.AttackSpeed;
+
+            blackHoleData.ElapsedTime += deltaTime * finalAttackSpeed;
 
             if (blackHoleData.ElapsedTime < 1f)
                 continue;
@@ -58,6 +66,7 @@ public partial struct BlackHoleCastSystem : ISystem
                     sourceEntity,
                     sourcePosition,
                     blackHoleData.OwnerFaction,
+                    blackHoleBaseStats,
                     blackHoleStats,
                     combatStats,
                     spatialIndex,
@@ -79,6 +88,7 @@ public partial struct BlackHoleCastSystem : ISystem
         Entity sourceEntity,
         float3 sourcePosition,
         Faction ownerFaction,
+        in BlackHoleBaseStatsData blackHoleBaseStats,
         in BlackHoleStatsData blackHoleStats,
         in CombatStatsData combatStats,
         in SpatialIndex spatialIndex,
@@ -89,7 +99,7 @@ public partial struct BlackHoleCastSystem : ISystem
         ref NativeList<Entity> candidates,
         ref EntityCommandBuffer ecb)
     {
-        float acquireRadius = blackHoleStats.AcquireRadius * combatStats.AttackRange;
+        float acquireRadius = (blackHoleBaseStats.BaseAcquireRadius + blackHoleStats.AcquireRadiusBonus) * combatStats.AttackRange;
 
         Entity target = FindNearestTarget(
             sourceEntity,
@@ -109,14 +119,17 @@ public partial struct BlackHoleCastSystem : ISystem
         float3 targetPosition = transformLookup[target].Position;
 
         Entity blackHoleEntity = ecb.CreateEntity();
-        float totalDuration = math.max(0.1f, blackHoleStats.Duration);
+        float totalDuration = math.max(0.1f, blackHoleBaseStats.BaseDuration + blackHoleStats.DurationBonus);
         ecb.AddComponent(blackHoleEntity, new BlackHoleFieldData
         {
             Position = targetPosition,
-            Radius = blackHoleStats.Radius * combatStats.AttackRange,
-            PullStrength = blackHoleStats.PullStrength,
-            TickDamage = blackHoleStats.Damage * combatStats.Damage,
-            TickInterval = math.max(0.05f, blackHoleStats.TickInterval),
+            Radius = (blackHoleBaseStats.BaseRadius + blackHoleStats.RadiusBonus) * combatStats.AttackRange,
+            PullStrength = math.max(0f, blackHoleBaseStats.BasePullStrength + blackHoleStats.PullStrengthBonus),
+            TickDamage =
+                blackHoleBaseStats.BaseDamage *
+                (1f + blackHoleStats.DamageBonusRate) *
+                combatStats.Damage,
+            TickInterval = math.max(0.05f, blackHoleBaseStats.BaseTickInterval + blackHoleStats.TickIntervalBonus),
             TickElapsedTime = 0f,
             TotalDuration = totalDuration,
             RemainingDuration = totalDuration,

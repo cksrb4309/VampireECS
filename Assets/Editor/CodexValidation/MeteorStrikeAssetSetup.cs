@@ -68,14 +68,14 @@ public static class MeteorStrikeAssetSetup
         SetObjectArray(serializedObject.FindProperty("prerequisitesAbilities"), Array.Empty<AbilityConfig>());
 
         SetTierFloatArray(serializedObject.FindProperty("damageValue"),
-            (Tier.Bronze, 5f, 10f),
-            (Tier.Silver, 10f, 20f),
-            (Tier.Gold, 20f, 35f));
+            (Tier.Bronze, 0.11111111f, 0.22222222f),
+            (Tier.Silver, 0.22222222f, 0.44444445f),
+            (Tier.Gold, 0.44444445f, 0.7777778f));
 
         SetTierFloatArray(serializedObject.FindProperty("attackSpeedValue"),
-            (Tier.Bronze, 0.05f, 0.1f),
-            (Tier.Silver, 0.1f, 0.2f),
-            (Tier.Gold, 0.2f, 0.3f));
+            (Tier.Bronze, 0.125f, 0.25f),
+            (Tier.Silver, 0.25f, 0.5f),
+            (Tier.Gold, 0.5f, 0.75f));
 
         SetTierFloatArray(serializedObject.FindProperty("acquireRadiusValue"),
             (Tier.Bronze, 1f, 2f),
@@ -117,6 +117,13 @@ public static class MeteorStrikeAssetSetup
         serializedObject.FindProperty("CurrentTier").intValue = (int)Tier.None;
         serializedObject.FindProperty("fixedTier").intValue = (int)Tier.Gold;
         serializedObject.FindProperty("description").stringValue = "가장 가까운 적 위치에 지연 폭발 메테오를 떨어뜨립니다";
+        serializedObject.FindProperty("baseDamage").floatValue = 45f;
+        serializedObject.FindProperty("baseAttackSpeed").floatValue = 0.4f;
+        serializedObject.FindProperty("baseAcquireRadius").floatValue = 10f;
+        serializedObject.FindProperty("baseImpactRadius").floatValue = 2.5f;
+        serializedObject.FindProperty("baseImpactDelay").floatValue = 0.8f;
+        serializedObject.FindProperty("baseMeteorCount").intValue = 1;
+        serializedObject.FindProperty("baseScatterRadius").floatValue = 1.5f;
 
         SetObjectArray(
             serializedObject.FindProperty("prerequisitesAbilities"),

@@ -20,3 +20,9 @@ MonoBehaviour:
   CurrentTier: -1
   fixedTier: 2
   description: "\uC5F0\uC1C4 \uBC88\uAC1C \uB2A5\uB825"
+  baseDamage: 15
+  baseAttackSpeed: 1
+  baseAcquireRadius: 8
+  baseJumpRadius: 5
+  baseMaxTargets: 3
+  baseDamageMultiplierPerJump: 0.85

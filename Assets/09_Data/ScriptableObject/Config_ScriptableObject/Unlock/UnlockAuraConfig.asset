@@ -21,3 +21,6 @@ MonoBehaviour:
   fixedTier: 2
   description: "\uD50C\uB808\uC774\uC5B4 \uC8FC\uBCC0\uC5D0 \uD53C\uD574\uB97C \uAC00\uD558\uB294
     \uC601\uC5ED\uC744 \uC0DD\uC131\uD569\uB2C8\uB2E4"
+  baseDamage: 10
+  baseAttackSpeed: 1
+  baseRadius: 10

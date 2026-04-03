@@ -21,3 +21,10 @@ MonoBehaviour:
   fixedTier: 2
   description: "\uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uC801 \uC704\uCE58\uC5D0 \uC9C0\uC5F0
     \uD3ED\uBC1C \uBA54\uD14C\uC624\uB97C \uB5A8\uC5B4\uB728\uB9BD\uB2C8\uB2E4"
+  baseDamage: 45
+  baseAttackSpeed: 0.4
+  baseAcquireRadius: 10
+  baseImpactRadius: 2.5
+  baseImpactDelay: 0.8
+  baseMeteorCount: 1
+  baseScatterRadius: 1.5

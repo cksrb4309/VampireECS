@@ -2,29 +2,29 @@
 
 public struct ShooterStatsData : IComponentData, IAddable<ShooterStatsData>, IInitializableStats<ShooterStatsData>
 {
-    public float Damage;
-    public float AttackSpeed;
-    public float ProjectileSpeed;
-    public float ProjectileDuration;
-    public int ProjectileCount;
+    public float DamageBonusRate;
+    public float AttackSpeedBonusRate;
+    public float ProjectileSpeedBonusRate;
+    public float ProjectileDurationBonus;
+    public int ProjectileCountBonus;
 
     public ShooterStatsData Add(ShooterStatsData other)
     {
         return new ShooterStatsData
         {
-            Damage = this.Damage + other.Damage,
-            AttackSpeed = this.AttackSpeed + other.AttackSpeed,
-            ProjectileSpeed = this.ProjectileSpeed + other.ProjectileSpeed,
-            ProjectileDuration = this.ProjectileDuration + other.ProjectileDuration,
-            ProjectileCount = this.ProjectileCount + other.ProjectileCount
+            DamageBonusRate = DamageBonusRate + other.DamageBonusRate,
+            AttackSpeedBonusRate = AttackSpeedBonusRate + other.AttackSpeedBonusRate,
+            ProjectileSpeedBonusRate = ProjectileSpeedBonusRate + other.ProjectileSpeedBonusRate,
+            ProjectileDurationBonus = ProjectileDurationBonus + other.ProjectileDurationBonus,
+            ProjectileCountBonus = ProjectileCountBonus + other.ProjectileCountBonus
         };
     }
     public void Initialize()
     {
-        Damage = 20f;
-        AttackSpeed = 5f;
-        ProjectileSpeed = 20f;
-        ProjectileDuration = 1f;
-        ProjectileCount = 1;
+        DamageBonusRate = 0f;
+        AttackSpeedBonusRate = 0f;
+        ProjectileSpeedBonusRate = 0f;
+        ProjectileDurationBonus = 0f;
+        ProjectileCountBonus = 0;
     }
 }

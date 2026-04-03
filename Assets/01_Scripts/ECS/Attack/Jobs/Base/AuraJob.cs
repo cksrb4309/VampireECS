@@ -1,4 +1,4 @@
-﻿using Unity.Collections;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -21,17 +21,31 @@ public partial struct AuraJob : IJobEntity
         in LocalTransform transform,
         ref AuraData auraData,
         in CombatStatsData playerStatsData,
+        in AuraBaseStatsData auraBaseStatsData,
         in AuraStatsData auraStatsData)
     {
-        auraData.ElapsedTime += DeltaTime * playerStatsData.AttackSpeed * auraStatsData.AttackSpeed;
+        float finalAttackSpeed =
+            auraBaseStatsData.BaseAttackSpeed *
+            (1f + auraStatsData.AttackSpeedBonusRate) *
+            playerStatsData.AttackSpeed;
+
+        auraData.ElapsedTime += DeltaTime * finalAttackSpeed;
 
         if (auraData.ElapsedTime < 1f) return;
 
         float3 center = transform.Position;
         int2 centerCell = SpatialUtility.WorldToCell(center, CellSize);
 
-        float applyDamage = playerStatsData.Damage * auraStatsData.Damage;
-        float radius = auraStatsData.Radius * playerStatsData.AttackRange;
+        float applyDamage =
+            auraBaseStatsData.BaseDamage *
+            (1f + auraStatsData.DamageBonusRate) *
+            playerStatsData.Damage;
+
+        float radius =
+            auraBaseStatsData.BaseRadius *
+            (1f + auraStatsData.RadiusBonusRate) *
+            playerStatsData.AttackRange;
+
         float radiusSq = radius * radius;
 
         int cellRange = (int)math.ceil(radius / CellSize);
@@ -49,15 +63,11 @@ public partial struct AuraJob : IJobEntity
 
                 do
                 {
-                    if (targetEntity == auraEntity) continue; // 자기 자신 제외
-
-                    //if (!TransformLookup.HasComponent(targetEntity)) continue;
-                    //if (!FactionLookup.HasComponent(targetEntity)) continue;
+                    if (targetEntity == auraEntity) continue;
 
                     var targetTransform = TransformLookup[targetEntity];
                     var targetFaction = FactionLookup[targetEntity];
 
-                    // Faction 체크
                     if (targetFaction.Value == auraData.OwnerFaction) continue;
 
                     float3 delta = targetTransform.Position - center;

@@ -19,14 +19,14 @@ MonoBehaviour:
   CurrentTier: -1
   damageValue:
   - Tier: 0
-    MinValue: 2
-    MaxValue: 4
+    MinValue: 0.1
+    MaxValue: 0.2
   - Tier: 1
-    MinValue: 4
-    MaxValue: 6
+    MinValue: 0.2
+    MaxValue: 0.3
   - Tier: 2
-    MinValue: 6
-    MaxValue: 10
+    MinValue: 0.3
+    MaxValue: 0.5
   attackSpeedValue:
   - Tier: 0
     MinValue: 0.1
@@ -39,14 +39,14 @@ MonoBehaviour:
     MaxValue: 0.5
   projectileSpeedValue:
   - Tier: 0
-    MinValue: 5
-    MaxValue: 10
+    MinValue: 0.25
+    MaxValue: 0.5
   - Tier: 1
-    MinValue: 10
-    MaxValue: 15
+    MinValue: 0.5
+    MaxValue: 0.75
   - Tier: 2
-    MinValue: 15
-    MaxValue: 20
+    MinValue: 0.75
+    MaxValue: 1
   projectileDurationValue:
   - Tier: 0
     MinValue: 0.2

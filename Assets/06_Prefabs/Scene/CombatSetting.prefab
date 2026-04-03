@@ -294,6 +294,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cbe66ed719aacc740a839f7a012ff466, type: 2}
   - {fileID: 11400000, guid: ae15b8ff0e73cee4c94d42c450c89071, type: 2}
   - {fileID: 11400000, guid: 617ac377d5174c64ead35432eddf15c5, type: 2}
+  - {fileID: 11400000, guid: 9d4846f68f870ff4ebcd690a52865151, type: 2}
   timePauseController: {fileID: 8068566589912051305}
   ui: {fileID: 1857997491631140879}
   dummyConfig: {fileID: 11400000, guid: cf0c572e979c4d440b3476bcea0a7fc1, type: 2}
@@ -486,6 +487,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c4b63d42ec704d34ea29b2fe7b561394, type: 2}
   - {fileID: 11400000, guid: cbe66ed719aacc740a839f7a012ff466, type: 2}
   - {fileID: 11400000, guid: 2c8f5876e68e8194994dd0de8e1b3ec1, type: 2}
+  - {fileID: 11400000, guid: 9d4846f68f870ff4ebcd690a52865151, type: 2}
   generator: {fileID: 1887635051483157362}
 --- !u!1 &2476542463654371727
 GameObject:

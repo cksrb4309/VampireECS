@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcaf91f0e39feac4a9c76cb20c8cfcb7, type: 3}
+  m_Name: BlackHoleStatsConfig
+  m_EditorClassIdentifier: Assembly-CSharp::BlackHoleStatsConfig
+  MaxStack: 200
+  Icon: {fileID: 0}
+  IsStackable: 1
+  prerequisitesAbilities: []
+  CurrentTier: -1
+  damageValue:
+  - Tier: 0
+    MinValue: 0.5
+    MaxValue: 1
+  - Tier: 1
+    MinValue: 1
+    MaxValue: 2
+  - Tier: 2
+    MinValue: 2
+    MaxValue: 3.5
+  attackSpeedValue:
+  - Tier: 0
+    MinValue: 0.05
+    MaxValue: 0.1
+  - Tier: 1
+    MinValue: 0.1
+    MaxValue: 0.2
+  - Tier: 2
+    MinValue: 0.2
+    MaxValue: 0.3
+  acquireRadiusValue:
+  - Tier: 0
+    MinValue: 1
+    MaxValue: 2
+  - Tier: 1
+    MinValue: 2
+    MaxValue: 3
+  - Tier: 2
+    MinValue: 3
+    MaxValue: 5
+  radiusValue:
+  - Tier: 0
+    MinValue: 0.25
+    MaxValue: 0.5
+  - Tier: 1
+    MinValue: 0.5
+    MaxValue: 0.75
+  - Tier: 2
+    MinValue: 0.75
+    MaxValue: 1.25
+  durationValue:
+  - Tier: 0
+    MinValue: 0.25
+    MaxValue: 0.5
+  - Tier: 1
+    MinValue: 0.5
+    MaxValue: 0.75
+  - Tier: 2
+    MinValue: 0.75
+    MaxValue: 1
+  tickIntervalValue:
+  - Tier: 0
+    MinValue: -0.02
+    MaxValue: -0.01
+  - Tier: 1
+    MinValue: -0.04
+    MaxValue: -0.02
+  - Tier: 2
+    MinValue: -0.08
+    MaxValue: -0.04
+  pullStrengthValue:
+  - Tier: 0
+    MinValue: 0.5
+    MaxValue: 1
+  - Tier: 1
+    MinValue: 1
+    MaxValue: 2
+  - Tier: 2
+    MinValue: 2
+    MaxValue: 3

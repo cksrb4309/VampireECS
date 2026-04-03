@@ -8,6 +8,8 @@ using Unity.Transforms;
 [UpdateAfter(typeof(SpatialPartitionBuildSystem))]
 public partial struct MeteorStrikeCastSystem : ISystem
 {
+    private const float BurstWindowFraction = 0.5f;
+
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<MeteorStrikeData>();
@@ -92,6 +94,8 @@ public partial struct MeteorStrikeCastSystem : ISystem
         ref EntityCommandBuffer ecb)
     {
         float acquireRadius = meteorStats.AcquireRadius * combatStats.AttackRange;
+        float effectiveAttackSpeed = math.max(0.0001f, meteorStats.AttackSpeed * combatStats.AttackSpeed);
+        float attackInterval = 1f / effectiveAttackSpeed;
 
         Entity target = FindNearestTarget(
             sourceEntity,
@@ -112,10 +116,15 @@ public partial struct MeteorStrikeCastSystem : ISystem
         int meteorCount = math.max(1, meteorStats.MeteorCount);
         float impactRadius = meteorStats.ImpactRadius * combatStats.AttackRange;
         float scatterRadius = meteorStats.ScatterRadius * combatStats.AttackRange;
+        float baseDelay = math.max(0.05f, meteorStats.ImpactDelay);
+        float burstWindow = attackInterval * BurstWindowFraction;
+        float burstStepDelay = CalculateBurstStepDelay(meteorCount, burstWindow);
 
         for (int meteorIndex = 0; meteorIndex < meteorCount; meteorIndex++)
         {
             float3 impactPosition = targetPosition;
+            float impactDelayOffset = burstStepDelay * meteorIndex;
+            float totalImpactDelay = baseDelay + impactDelayOffset;
 
             if (meteorCount > 1 && scatterRadius > 0f)
             {
@@ -130,7 +139,7 @@ public partial struct MeteorStrikeCastSystem : ISystem
                 Position = impactPosition,
                 Damage = meteorStats.Damage * combatStats.Damage,
                 Radius = impactRadius,
-                RemainingDelay = math.max(0.05f, meteorStats.ImpactDelay),
+                RemainingDelay = totalImpactDelay,
                 OwnerFaction = ownerFaction
             });
 
@@ -139,9 +148,19 @@ public partial struct MeteorStrikeCastSystem : ISystem
             {
                 Position = impactPosition,
                 Radius = impactRadius,
-                Duration = math.max(0.05f, meteorStats.ImpactDelay)
+                Duration = totalImpactDelay
             });
         }
+    }
+
+    private static float CalculateBurstStepDelay(int meteorCount, float burstWindow)
+    {
+        if (meteorCount <= 1 || burstWindow <= 0f)
+        {
+            return 0f;
+        }
+
+        return burstWindow / (meteorCount - 1);
     }
 
     private static Entity FindNearestTarget(

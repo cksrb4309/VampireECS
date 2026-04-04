@@ -86,6 +86,13 @@ This project often has active manual tuning in scenes, prefabs, VFX, and Scripta
 - If serialized assets are already dirty and your task does not require them, leave them alone.
 - Assume scene, prefab, and data asset edits can conflict with ongoing manual editor work.
 
+## Git Workflow
+
+- Do not implement new feature or fix work directly on `develop` unless the user explicitly asks for it.
+- Start feature or fix work from a short-lived branch prefixed with `codex/`.
+- Keep each branch focused on one logical change so it can be validated and merged back to `develop` cleanly.
+- Validate on the working branch before asking for or performing the merge back to `develop`.
+
 ## Default Request Interpretation
 
 Do not require the user to restate the full harness template every time.

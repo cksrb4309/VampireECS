@@ -12,6 +12,7 @@ Unity 6 기반의 3D 뱀서라이크 전투 수직 슬라이스 프로젝트입�
 - 주 공격 계열
   - `Shooter`
   - `Aura`
+  - `Boomerang`
   - `Chain Lightning`
   - `Meteor Strike`
   - `Black Hole`

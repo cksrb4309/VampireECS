@@ -20,9 +20,11 @@ public static class BatchValidationRunner
         CombatSettingPrefabPath,
         "Assets/00_Core/ProjectSetting/InputSystem_Actions.inputactions",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/AuraStatsConfig.asset",
+        "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/BoomerangStatsConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/CombatStatsConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/ShooterStatsConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockAuraConfig.asset",
+        "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockBoomerangConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockShooterConfig.asset",
     };
 

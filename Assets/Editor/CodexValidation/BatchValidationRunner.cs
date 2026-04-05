@@ -25,12 +25,14 @@ public static class BatchValidationRunner
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/ChainLightningStatsConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/CombatStatsConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/MeteorStrikeStatsConfig.asset",
+        "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/OrbitStatsConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Stats/ShooterStatsConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockAuraConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockBlackHoleConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockBoomerangConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockChainLightningConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockMeteorStrikeConfig.asset",
+        "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockOrbitConfig.asset",
         "Assets/09_Data/ScriptableObject/Config_ScriptableObject/Unlock/UnlockShooterConfig.asset",
     };
 

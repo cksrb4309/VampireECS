@@ -6403,6 +6403,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2137956184}
     m_Modifications:
+    - target: {fileID: 822392929976716073, guid: a90c315f8722d634192c4917e3799882, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5205964366080210407, guid: a90c315f8722d634192c4917e3799882, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6532,6 +6536,10 @@ PrefabInstance:
     - target: {fileID: 5627046032937031401, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
       propertyPath: m_Name
       value: CombatSetting
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627046032937031401, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

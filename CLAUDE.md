@@ -33,7 +33,7 @@ Assets/
 │   ├── Ability/                     unlocks, stat configs, reward application
 │   ├── Core/                        managers, DI lifetime scope, shared utilities
 │   ├── ECS/
-│   │   ├── Attack/                  shooter, aura, boomerang, chain lightning, meteor strike, black hole
+│   │   ├── Attack/                  shooter, aura, boomerang, orbit, chain lightning, meteor strike, black hole
 │   │   ├── Combat/                  health, damage, death
 │   │   ├── Common/                  spatial partitioning and helpers
 │   │   ├── Enemy/                   spawning and follow logic
@@ -68,6 +68,7 @@ Representative attack components:
 - `ShooterData`, `ShooterBaseStatsData`, `ShooterStatsData`, `ShooterCanFireData`
 - `AuraData`, `AuraBaseStatsData`, `AuraStatsData`, `AuraVFXID`
 - `BoomerangData`, `BoomerangBaseStatsData`, `BoomerangStatsData`, `BoomerangProjectileData`
+- `OrbitData`, `OrbitBaseStatsData`, `OrbitStatsData`, `OrbitProjectileData`, `OrbitRecentHitData`
 - `ChainLightningData`, `ChainLightningBaseStatsData`, `ChainLightningStatsData`
 - `MeteorStrikeData`, `MeteorStrikeBaseStatsData`, `MeteorStrikeStatsData`, `MeteorStrikePendingData`
 - `BlackHoleData`, `BlackHoleBaseStatsData`, `BlackHoleStatsData`, `BlackHoleFieldData`
@@ -84,6 +85,9 @@ Key attack systems:
 - `BoomerangCastSystem`
 - `BoomerangMoveSystem`
 - `BoomerangHitSystem`
+- `OrbitCastSystem`
+- `OrbitMoveSystem`
+- `OrbitHitSystem`
 - `ChainLightningSystem`
 - `MeteorStrikeCastSystem`
 - `MeteorStrikeImpactSystem`
@@ -124,6 +128,7 @@ Current attack families:
 - Shooter
 - Aura
 - Boomerang
+- Orbit
 - Chain Lightning
 - Meteor Strike
 - Black Hole

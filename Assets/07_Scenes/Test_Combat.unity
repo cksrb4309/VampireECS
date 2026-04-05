@@ -6477,22 +6477,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1601875329616931071, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
-      propertyPath: m_Padding.m_Top
-      value: 216
+    - target: {fileID: 1396672966821097805, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
+      propertyPath: abilities.Array.size
+      value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 1601875329616931071, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
-      propertyPath: m_Padding.m_Left
-      value: 192
-      objectReference: {fileID: 0}
-    - target: {fileID: 1601875329616931071, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
-      propertyPath: m_Padding.m_Right
-      value: 192
-      objectReference: {fileID: 0}
-    - target: {fileID: 1601875329616931071, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
-      propertyPath: m_Padding.m_Bottom
-      value: 216
-      objectReference: {fileID: 0}
+    - target: {fileID: 1396672966821097805, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
+      propertyPath: 'abilities.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: c4b63d42ec704d34ea29b2fe7b561394, type: 2}
+    - target: {fileID: 1396672966821097805, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
+      propertyPath: 'abilities.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f88c1ee117228e94781e586a640aa70a, type: 2}
+    - target: {fileID: 1396672966821097805, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
+      propertyPath: 'abilities.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 412d1580b49b74d45b3231f1b32a3569, type: 2}
     - target: {fileID: 2139223400041120052, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6536,10 +6536,6 @@ PrefabInstance:
     - target: {fileID: 5627046032937031401, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
       propertyPath: m_Name
       value: CombatSetting
-      objectReference: {fileID: 0}
-    - target: {fileID: 5627046032937031401, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

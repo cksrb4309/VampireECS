@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7219189e03549984fb5f583b8e5b06d1, type: 3}
+  m_Name: UnlockOrbitConfig
+  m_EditorClassIdentifier: Assembly-CSharp::UnlockOrbitConfig
+  MaxStack: 1
+  Icon: {fileID: 21300000, guid: 88881326ce4858f4d907d7f08dc84045, type: 3}
+  IsStackable: 0
+  prerequisitesAbilities:
+  - {fileID: 11400000, guid: 697f316584981c841872aa8f6cfaaa9f, type: 2}
+  CurrentTier: -1
+  fixedTier: 2
+  description: "\uC8FC\uC704\uB97C \uD68C\uC804\uD558\uB294 \uD22C\uC0AC\uCCB4\uB97C
+    \uC0DD\uC131\uD569\uB2C8\uB2E4"
+  baseDamage: 12
+  baseAttackSpeed: 0.25
+  baseOrbitSpeed: 2
+  baseOrbitRadius: 3
+  baseHitRadius: 0.8
+  baseProjectileCount: 2
+  baseHitCooldown: 0.5

@@ -6,7 +6,6 @@ public class BoomerangStatsConfig : AbilityStatsConfig<BoomerangStatsData>
     [SerializeField] private TierValue<float>[] damageValue;
     [SerializeField] private TierValue<float>[] attackSpeedValue;
     [SerializeField] private TierValue<float>[] speedValue;
-    [SerializeField] private TierValue<float>[] returnSpeedValue;
     [SerializeField] private TierValue<float>[] maxDistanceValue;
     [SerializeField] private TierValue<float>[] hitRadiusValue;
     [SerializeField] private TierValue<int>[] projectileCountValue;
@@ -26,9 +25,6 @@ public class BoomerangStatsConfig : AbilityStatsConfig<BoomerangStatsData>
 
             case BoomerangStatType.Speed:
                 return $"부메랑 비행 속도 <v>{(addValue.SpeedBonusRate * 100f).ToString("F0")}%</v> 증가";
-
-            case BoomerangStatType.ReturnSpeed:
-                return $"부메랑 복귀 속도 <v>{(addValue.ReturnSpeedBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case BoomerangStatType.MaxDistance:
                 return $"부메랑 비행 거리 <v>{addValue.MaxDistanceBonus.ToString("F1")}</v> 증가";
@@ -69,10 +65,6 @@ public class BoomerangStatsConfig : AbilityStatsConfig<BoomerangStatsData>
                 addValue.SpeedBonusRate = speedValue[(int)tier].GetRandomValue();
                 break;
 
-            case BoomerangStatType.ReturnSpeed:
-                addValue.ReturnSpeedBonusRate = returnSpeedValue[(int)tier].GetRandomValue();
-                break;
-
             case BoomerangStatType.MaxDistance:
                 addValue.MaxDistanceBonus = maxDistanceValue[(int)tier].GetRandomValue();
                 break;
@@ -96,7 +88,6 @@ public class BoomerangStatsConfig : AbilityStatsConfig<BoomerangStatsData>
         Damage,
         AttackSpeed,
         Speed,
-        ReturnSpeed,
         MaxDistance,
         HitRadius,
         ProjectileCount,

@@ -99,13 +99,8 @@ public partial struct BoomerangCastSystem : ISystem
             boomerangBaseStats.BaseSpeed *
             (1f + boomerangStats.SpeedBonusRate);
 
-        float finalReturnSpeed =
-            boomerangBaseStats.BaseReturnSpeed *
-            (1f + boomerangStats.ReturnSpeedBonusRate);
-
-        float finalReturnAcceleration =
-            boomerangBaseStats.BaseReturnAcceleration *
-            (1f + boomerangStats.ReturnSpeedBonusRate);
+        float finalReturnSpeed = boomerangBaseStats.BaseReturnSpeed;
+        float finalReturnAcceleration = boomerangBaseStats.BaseReturnAcceleration;
 
         float finalMaxDistance =
             math.max(0.5f, (boomerangBaseStats.BaseMaxDistance + boomerangStats.MaxDistanceBonus) * combatStats.AttackRange);

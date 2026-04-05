@@ -7,9 +7,9 @@ public class UnlockBoomerangConfig : UnlockAbilityConfig
     [SerializeField] private float baseDamage = 15f;
     [SerializeField] private float baseAttackSpeed = 0.75f;
     [SerializeField] private float baseSpeed = 12f;
-    [SerializeField] private float baseReturnSpeed = 16f;
+    [SerializeField] private float baseReturnSpeed = 67.5f;
     [SerializeField] private float baseReturnAcceleration = 20f;
-    [SerializeField] private float baseMaxDistance = 9f;
+    [SerializeField] private float baseMaxDistance = 11f;
     [SerializeField] private float baseHitRadius = 0.9f;
     [SerializeField] private int baseProjectileCount = 1;
     [SerializeField] private float baseHitCooldown = 0.2f;

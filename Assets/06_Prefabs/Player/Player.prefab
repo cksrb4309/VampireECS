@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a25099ac1e8e1144ba8ef0d153e3223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAuthoring
-  MaxSpeed: 50
+  MaxSpeed: 16.666667
   Acceleration: 200
   Deceleration: 200
   RotationSpeed: 13

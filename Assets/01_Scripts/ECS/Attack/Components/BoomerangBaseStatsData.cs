@@ -6,6 +6,7 @@ public struct BoomerangBaseStatsData : IComponentData
     public float BaseAttackSpeed;
     public float BaseSpeed;
     public float BaseReturnSpeed;
+    public float BaseReturnAcceleration;
     public float BaseMaxDistance;
     public float BaseHitRadius;
     public int BaseProjectileCount;

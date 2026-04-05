@@ -8,7 +8,8 @@ public class UnlockBoomerangConfig : UnlockAbilityConfig
     [SerializeField] private float baseAttackSpeed = 0.75f;
     [SerializeField] private float baseSpeed = 12f;
     [SerializeField] private float baseReturnSpeed = 16f;
-    [SerializeField] private float baseMaxDistance = 6f;
+    [SerializeField] private float baseReturnAcceleration = 20f;
+    [SerializeField] private float baseMaxDistance = 9f;
     [SerializeField] private float baseHitRadius = 0.9f;
     [SerializeField] private int baseProjectileCount = 1;
     [SerializeField] private float baseHitCooldown = 0.2f;
@@ -19,7 +20,7 @@ public class UnlockBoomerangConfig : UnlockAbilityConfig
 
         await EntityUtility.AddOrSetComponentToSingletonAsync<PlayerTag, BoomerangData>(new BoomerangData
         {
-            ProjectilePrefab = prefabLibrary.ShooterProjectilePrefab,
+            ProjectilePrefab = prefabLibrary.BoomerangProjectilePrefab,
             MuzzleOffset = float3.zero,
             OwnerFaction = Faction.Player,
             MuzzleDistance = 1.5f,
@@ -32,6 +33,7 @@ public class UnlockBoomerangConfig : UnlockAbilityConfig
             BaseAttackSpeed = baseAttackSpeed,
             BaseSpeed = baseSpeed,
             BaseReturnSpeed = baseReturnSpeed,
+            BaseReturnAcceleration = baseReturnAcceleration,
             BaseMaxDistance = baseMaxDistance,
             BaseHitRadius = baseHitRadius,
             BaseProjectileCount = baseProjectileCount,

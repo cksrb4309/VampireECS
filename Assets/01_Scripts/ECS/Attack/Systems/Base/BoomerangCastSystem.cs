@@ -5,9 +5,11 @@ using Unity.Transforms;
 
 [UpdateInGroup(typeof(DamageSetupSystemGroup))]
 [UpdateAfter(typeof(BlackHoleCastSystem))]
+[UpdateAfter(typeof(ProjectileSpawnSystem))]
 public partial struct BoomerangCastSystem : ISystem
 {
     private const float MaxSpreadAngleRadians = 0.7853982f;
+    private const float DefaultSpinSpeedRadians = 14f;
 
     public void OnCreate(ref SystemState state)
     {
@@ -18,6 +20,8 @@ public partial struct BoomerangCastSystem : ISystem
 
     public void OnUpdate(ref SystemState state)
     {
+        state.Dependency.Complete();
+
         float deltaTime = SystemAPI.Time.DeltaTime * SystemAPI.GetSingleton<GameTimeScale>().Value;
         ComponentLookup<ShooterData> shooterLookup = SystemAPI.GetComponentLookup<ShooterData>(true);
 
@@ -99,6 +103,10 @@ public partial struct BoomerangCastSystem : ISystem
             boomerangBaseStats.BaseReturnSpeed *
             (1f + boomerangStats.ReturnSpeedBonusRate);
 
+        float finalReturnAcceleration =
+            boomerangBaseStats.BaseReturnAcceleration *
+            (1f + boomerangStats.ReturnSpeedBonusRate);
+
         float finalMaxDistance =
             math.max(0.5f, (boomerangBaseStats.BaseMaxDistance + boomerangStats.MaxDistanceBonus) * combatStats.AttackRange);
 
@@ -134,11 +142,15 @@ public partial struct BoomerangCastSystem : ISystem
                 Direction = castDirection,
                 Speed = finalSpeed,
                 ReturnSpeed = finalReturnSpeed,
+                ReturnAcceleration = finalReturnAcceleration,
+                CurrentReturnSpeed = finalSpeed,
                 Damage = finalDamage,
                 MaxDistance = finalMaxDistance,
                 HitRadius = finalHitRadius,
                 HitCooldown = finalHitCooldown,
                 DistanceTraveled = 0f,
+                SpinAngle = 0f,
+                SpinSpeed = (i & 1) == 0 ? DefaultSpinSpeedRadians : -DefaultSpinSpeedRadians,
                 IsReturning = false
             });
             ecb.AddBuffer<BoomerangRecentHitData>(boomerangProjectile);

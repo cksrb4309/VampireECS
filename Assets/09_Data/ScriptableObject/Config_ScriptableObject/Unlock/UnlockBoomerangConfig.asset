@@ -26,7 +26,8 @@ MonoBehaviour:
   baseAttackSpeed: 0.75
   baseSpeed: 12
   baseReturnSpeed: 16
-  baseMaxDistance: 6
+  baseReturnAcceleration: 20
+  baseMaxDistance: 9
   baseHitRadius: 0.9
   baseProjectileCount: 1
   baseHitCooldown: 0.2

@@ -30,6 +30,7 @@ public partial struct BoomerangMoveSystem : ISystem
             ref BoomerangProjectileData projectile = ref projectileRW.ValueRW;
 
             TickRecentHits(deltaTime, recentHits);
+            projectile.SpinAngle += projectile.SpinSpeed * deltaTime;
 
             if (projectile.OwnerEntity == Entity.Null || !transformLookup.HasComponent(projectile.OwnerEntity))
             {
@@ -42,7 +43,11 @@ public partial struct BoomerangMoveSystem : ISystem
                 float3 ownerPosition = transformLookup[projectile.OwnerEntity].Position;
                 float3 toOwner = ownerPosition - transform.Position;
                 float distanceToOwner = math.length(toOwner);
-                float moveDistance = projectile.ReturnSpeed * deltaTime;
+                projectile.CurrentReturnSpeed = math.min(
+                    projectile.ReturnSpeed,
+                    projectile.CurrentReturnSpeed + projectile.ReturnAcceleration * deltaTime);
+
+                float moveDistance = projectile.CurrentReturnSpeed * deltaTime;
                 float catchDistance = math.max(0.5f, projectile.HitRadius);
 
                 if (distanceToOwner <= math.max(catchDistance, moveDistance))
@@ -53,14 +58,14 @@ public partial struct BoomerangMoveSystem : ISystem
 
                 float3 returnDirection = math.normalize(toOwner);
                 transform.Position += returnDirection * moveDistance;
-                transform.Rotation = quaternion.LookRotationSafe(returnDirection, math.up());
                 projectile.Direction = returnDirection;
+                transform.Rotation = GetVisualRotation(returnDirection, projectile.SpinAngle);
             }
             else
             {
                 float moveDistance = projectile.Speed * deltaTime;
                 transform.Position += projectile.Direction * moveDistance;
-                transform.Rotation = quaternion.LookRotationSafe(projectile.Direction, math.up());
+                transform.Rotation = GetVisualRotation(projectile.Direction, projectile.SpinAngle);
                 projectile.DistanceTraveled += moveDistance;
 
                 if (projectile.DistanceTraveled >= projectile.MaxDistance)
@@ -89,5 +94,12 @@ public partial struct BoomerangMoveSystem : ISystem
 
             recentHits[i] = recentHit;
         }
+    }
+
+    private static quaternion GetVisualRotation(float3 direction, float spinAngle)
+    {
+        quaternion facingRotation = quaternion.LookRotationSafe(direction, math.up());
+        quaternion spinRotation = quaternion.RotateY(spinAngle);
+        return math.mul(facingRotation, spinRotation);
     }
 }

@@ -12,7 +12,8 @@ The primary goal is not content volume. The primary goal is to keep the combat-g
 - performance-sensitive paths remain Burst/job friendly
 
 Read [README.md](C:\Users\rlack\Desktop\git\VampireECS\README.md) first, then use [CLAUDE.md](C:\Users\rlack\Desktop\git\VampireECS\CLAUDE.md) as architecture context.
-Use [CodexPromptTemplates.md](C:\Users\rlack\Desktop\git\VampireECS\docs\CodexPromptTemplates.md) when writing task prompts for this repo.
+Use [docs/CodexPromptTemplates.md](C:\Users\rlack\Desktop\git\VampireECS\docs\CodexPromptTemplates.md) for Codex task prompts.
+Use [docs/AgentPromptTemplates.md](C:\Users\rlack\Desktop\git\VampireECS\docs\AgentPromptTemplates.md) for Claude Code task prompts.
 
 ## Repo Map
 
@@ -89,7 +90,8 @@ This project often has active manual tuning in scenes, prefabs, VFX, and Scripta
 ## Git Workflow
 
 - Do not implement new feature or fix work directly on `develop` unless the user explicitly asks for it.
-- Start feature or fix work from a short-lived branch prefixed with `codex/`.
+- Codex: start feature or fix work from a branch prefixed with `codex/`.
+- Claude Code: start feature or fix work from a branch prefixed with `claude/`. Claude Code may also use a git worktree (`--worktree` flag) which creates an isolated branch automatically.
 - Keep each branch focused on one logical change so it can be validated and merged back to `develop` cleanly.
 - Validate on the working branch before asking for or performing the merge back to `develop`.
 

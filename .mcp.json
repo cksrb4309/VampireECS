@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "unity": {
+      "type": "sse",
+      "url": "http://localhost:9979"
+    }
+  }
+}

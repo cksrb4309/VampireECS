@@ -146,6 +146,8 @@ tools/                           Unity 배치 검증 스크립트
   - 코드 구조와 시스템 맥락
 - [docs/CodexPromptTemplates.md](docs/CodexPromptTemplates.md)
   - Codex 요청 템플릿과 짧은 요청 해석 기준
+- [docs/AgentPromptTemplates.md](docs/AgentPromptTemplates.md)
+  - Claude Code 요청 템플릿과 짧은 요청 해석 기준
 
 ### 배치 검증
 
@@ -184,10 +186,40 @@ tools\validate-unity.cmd
 - 씬, 프리팹, VFX, ScriptableObject 튜닝은 여전히 수동 확인 비중이 높습니다.
 - 게임 오버, 메타 진행, 장기 콘텐츠 루프는 본격 구현 전입니다.
 
+## Claude Code 설정
+
+이 저장소는 Claude Code와 함께 사용할 수 있도록 설정되어 있습니다.
+
+### Unity MCP 서버
+
+`.mcp.json`이 프로젝트 루트에 있으며, 로컬 Unity MCP 서버(`http://localhost:9979`)에 연결합니다.
+Claude Code를 열기 전에 Unity 에디터에서 MCP 서버를 먼저 실행해야 합니다.
+
+### 워크트리 브랜치 규칙
+
+Claude Code는 작업 시 `claude/` 접두사를 붙인 브랜치를 사용합니다.
+
+```
+claude/<작업명>   예) claude/hardcore-roentgen
+```
+
+`--worktree` 플래그로 실행할 경우 격리된 임시 worktree가 자동 생성됩니다.
+
+### 새 대화 시작 방법
+
+`CLAUDE.md`와 `AGENTS.md`가 자동으로 로드되므로 프로젝트 구조를 재설명할 필요가 없습니다.
+
+```text
+[기능/버그]를 수정해줘. AGENTS.md 규칙 따르고,
+수정은 [허용 범위]에서만 해줘.
+Unity 에디터 열려 있으면 검증 메뉴 알려줘.
+```
+
 ## 문서
 
 - 프로젝트 개요: [README.md](README.md)
 - 작업 규칙: [AGENTS.md](AGENTS.md)
 - 코드 컨텍스트: [CLAUDE.md](CLAUDE.md)
-- 프롬프트 템플릿: [docs/CodexPromptTemplates.md](docs/CodexPromptTemplates.md)
+- Codex 프롬프트 템플릿: [docs/CodexPromptTemplates.md](docs/CodexPromptTemplates.md)
+- Claude Code 프롬프트 템플릿: [docs/AgentPromptTemplates.md](docs/AgentPromptTemplates.md)
 - 기획 초안: [docs/GAME_DESIGN_DRAFT.md](docs/GAME_DESIGN_DRAFT.md)

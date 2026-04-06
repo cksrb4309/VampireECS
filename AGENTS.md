@@ -91,7 +91,7 @@ This project often has active manual tuning in scenes, prefabs, VFX, and Scripta
 
 - Do not implement new feature or fix work directly on `develop` unless the user explicitly asks for it.
 - Codex: start feature or fix work from a branch prefixed with `codex/`.
-- Claude Code: start feature or fix work from a branch prefixed with `claude/`. Claude Code may also use a git worktree (`--worktree` flag) which creates an isolated branch automatically.
+- Claude Code: start feature or fix work from a branch prefixed with `claude/`.
 - Keep each branch focused on one logical change so it can be validated and merged back to `develop` cleanly.
 - Validate on the working branch before asking for or performing the merge back to `develop`.
 

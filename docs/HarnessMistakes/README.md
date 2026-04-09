@@ -1,57 +1,65 @@
 # Harness Mistakes
 
-이 폴더는 하네스 또는 에이전트 운영 과정에서 드러난 재발 가능한 실수를 기록하는 곳입니다.
+This folder records repeatable agent-operation mistakes in this repository.
 
-목표는 단순 회고가 아니라, 같은 종류의 실수를 다시 저지르지 않도록 운영 규칙과 검증을 강화하는 것입니다.
+The goal is not simple retrospective logging. The goal is to strengthen rules, prompts, and validation so the same class of mistake is less likely to recur.
 
-## 사용 규칙
+## Navigation
 
-- 작업 시작 시에는 먼저 `domains/README.md`를 읽고 primary domain을 고릅니다.
-- 해당 domain 파일이 `Preload extra mistake context: yes`일 때만 관련 category 파일을 추가로 읽습니다.
-- 실수가 확인되면 primary category를 1개 고릅니다.
-- 필요하면 secondary category를 언급할 수 있지만, 실제 기록은 primary category 파일에 남깁니다.
-- 해당 범주 파일의 `Incident Log`에 새 항목을 append합니다.
-- 같은 항목이 반복되면 기존 규칙을 더 강하게 바꾸고, AGENTS/CLAUDE/검증/테스트에도 반영합니다.
+- Root hub: [[docs/HarnessMistakes/README]]
+- Domain index: [[docs/HarnessMistakes/domains/README]]
+- Category index: [[docs/HarnessMistakes/categories/README]]
+
+## Usage Rules
+
+- At task start, read `domains/README.md` first and choose one primary domain.
+- Read only that domain file unless it explicitly says to preload extra category context.
+- When a mistake is confirmed, assign one primary category.
+- If needed, mention secondary categories, but record the incident under the primary category file.
+- Append incidents to the target category file's `Incident Log`.
+- If the same category repeats, strengthen the operating rule and validation, not just the note.
 
 ## Category Index
 
-- `categories/scope-boundary.md`
-  - 허용 범위를 벗어난 수정, unrelated change 훼손, guarded asset 오수정
-- `categories/context-drift.md`
-  - 프로젝트 구조나 현재 상태를 잘못 이해한 경우
-- `categories/validation-gap.md`
-  - 해야 할 검증을 빼먹거나, 약한 검증으로 완료 처리한 경우
-- `categories/behavioral-regression.md`
-  - 최소 게이트는 통과했지만 의도된 동작을 놓친 경우
-- `categories/tooling-automation-gap.md`
-  - 도구/자동화/에디터 상태 이해 부족으로 잘못된 실행 흐름을 안내한 경우
-- `categories/communication-handoff.md`
-  - 사용자에게 물어봐야 할 지점, 수동 실행 요청, 완료 보고 방식이 부정확했던 경우
+- [[docs/HarnessMistakes/categories/scope-boundary]]
+  - out-of-scope edits, unrelated-change damage, guarded-asset mistakes
+- [[docs/HarnessMistakes/categories/context-drift]]
+  - misunderstanding current project structure or state
+- [[docs/HarnessMistakes/categories/validation-gap]]
+  - missing validation or declaring completion on weak validation
+- [[docs/HarnessMistakes/categories/behavioral-regression]]
+  - minimal gate passed, intended behavior still broken
+- [[docs/HarnessMistakes/categories/tooling-automation-gap]]
+  - bad execution flow caused by tool, editor, or automation misunderstanding
+- [[docs/HarnessMistakes/categories/communication-handoff]]
+  - unclear user escalation, handoff, or completion reporting
 
 ## Domain Routing
 
-- `domains/README.md`
-  - 작업 도메인 선택 기준
-- `domains/*.md`
-  - 해당 도메인의 현재 반복 실수 여부와 추가 preload 필요 여부
+- [[docs/HarnessMistakes/domains/README]]
+- [[docs/HarnessMistakes/domains/combat-gameplay]]
+- [[docs/HarnessMistakes/domains/ui-bridge]]
+- [[docs/HarnessMistakes/domains/scene-prefab]]
+- [[docs/HarnessMistakes/domains/data-assets]]
+- [[docs/HarnessMistakes/domains/vfx-presentation]]
+- [[docs/HarnessMistakes/domains/validation-tooling]]
+- [[docs/HarnessMistakes/domains/docs-harness]]
 
 ## Incident Entry Format
 
-각 category 파일에는 아래 형식으로 기록합니다.
-
 ```text
-### YYYY-MM-DD - [짧은 제목]
-- Trigger: 무엇이 실수였는가
-- Impact: 어떤 잘못된 결과가 나왔는가
-- Detection: 어떻게 발견되었는가
-- Rule Change: 어떤 운영 규칙을 바꿨는가
-- Validation Change: 어떤 검증/테스트/체크리스트를 추가했는가
-- Follow-up Files: 어떤 파일들을 같이 수정했는가
+### YYYY-MM-DD - [short title]
+- Trigger:
+- Impact:
+- Detection:
+- Rule Change:
+- Validation Change:
+- Follow-up Files:
 ```
 
-## 분류 우선순위
+## Category Priority
 
-여러 범주가 걸쳐 보이면 이 순서대로 primary를 고릅니다.
+When several categories appear applicable, prefer this order for the primary category:
 
 1. scope-boundary
 2. validation-gap
@@ -59,5 +67,3 @@
 4. behavioral-regression
 5. tooling-automation-gap
 6. communication-handoff
-
-경계가 애매하면 `Rule Change`가 가장 직접적으로 바뀌는 범주를 primary로 고릅니다.

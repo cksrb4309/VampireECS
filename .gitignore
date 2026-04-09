@@ -105,3 +105,5 @@ InitTestScene*.unity*
 # Local harness/tooling workspaces
 /.claude/worktrees/
 /unity-harness-kit/
+/unity-agent-kit/
+/.obsidian/

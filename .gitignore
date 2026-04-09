@@ -102,8 +102,3 @@ InitTestScene*.unity*
 /Assets/Plugins/ExternalAsset/
 /Assets/10_ThirdParty/
 
-# Local harness/tooling workspaces
-/.claude/worktrees/
-/unity-harness-kit/
-/unity-agent-kit/
-/.obsidian/

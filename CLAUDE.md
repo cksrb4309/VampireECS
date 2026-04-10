@@ -5,15 +5,16 @@
 - Genre: 3D vampire-survivor-like action prototype
 - Engine: Unity 6 `6000.3.11f1`
 - Primary architecture: DOTS/ECS for combat state and hot gameplay paths
-- Secondary architecture: MonoBehaviour bridge/presentation layer for input, UI, camera, and runtime visuals
+- Secondary architecture: MonoBehaviour bridge and presentation layers for input, UI, camera, and runtime visuals
 
-This project is not aiming for "everything in ECS".
-The important split is:
+The project is not aiming for everything in ECS. The important split is:
 
 - ECS owns combat state, damage flow, entity simulation, and progression requests
-- bridge/presentation code owns input plumbing, UI, camera, and view-side rendering
+- bridge and presentation code owns input plumbing, UI, camera, and view-side rendering
 
-Use [AGENTS.md](AGENTS.md) for write boundaries and validation rules.
+Use `AGENTS.md` for write boundaries and validation rules.
+Use `docs/project-context.md` for the current system map.
+Use `docs/AgentHandoffs/**` when Codex and Claude Code need a durable handoff.
 
 ## Main Runtime Loop
 
@@ -21,80 +22,72 @@ Use [AGENTS.md](AGENTS.md) for write boundaries and validation rules.
 2. ECS combat systems run movement, targeting, attack generation, and damage flow.
 3. Death and experience systems emit progression events.
 4. UI bridges pause time and present level-up choices.
-5. ability/unlock code applies the chosen reward back into ECS data.
-6. presentation systems consume ECS visual events and spawn or update view objects.
+5. Ability and unlock code apply the chosen reward back into ECS data.
+6. Presentation systems consume ECS visual events and spawn or update view objects.
 
 ## Repo Map
 
-```text
-Assets/
-├── 00_Core/                         project settings and input assets
-├── 01_Scripts/
-│   ├── Ability/                     unlocks, stat configs, reward application
-│   ├── Core/                        managers, DI lifetime scope, shared utilities
-│   ├── ECS/
-│   │   ├── Attack/                  shooter, aura, boomerang, orbit, chain lightning, meteor strike, black hole
-│   │   ├── Combat/                  health, damage, death
-│   │   ├── Common/                  spatial partitioning and helpers
-│   │   ├── Enemy/                   spawning and follow logic
-│   │   ├── Experience/              exp gain and level-up requests
-│   │   ├── Player/                  move and rotation
-│   │   ├── SystemGroups/            deterministic update ordering
-│   │   └── Visual/                  ECS visual events and presentation bridges
-│   ├── Presentation/                runtime VFX/view managers
-│   ├── System/                      time pause, camera, scene systems
-│   └── UI/                          binders, controllers, ECS bridges
-├── 06_Prefabs/                      player, enemy, scene, and effect prefabs
-├── 07_Scenes/                       main test scene
-├── 09_Data/                         ScriptableObject config assets
-├── 99_Tests/                        EditMode test assembly
-└── Editor/CodexValidation/          editor/batch validation code
-tools/                               compile and validation wrappers
-```
+- `Assets/01_Scripts/ECS/**`
+  - combat logic, entity simulation, system groups
+- `Assets/01_Scripts/ECS/Visual/**`
+  - ECS-side visual event components and managed presentation bridge systems
+- `Assets/01_Scripts/Ability/**`
+  - unlock, reward, and stat application logic
+- `Assets/01_Scripts/UI/**`
+  - ECS-to-UI bridge, binders, controllers
+- `Assets/01_Scripts/Presentation/**`
+  - runtime VFX and view managers
+- `Assets/01_Scripts/System/**`
+  - camera, pause, and game-level MonoBehaviour systems
+- `Assets/06_Prefabs/**`
+  - player, enemy, scene, and VFX prefabs
+- `Assets/07_Scenes/Test_Combat.unity`
+  - current main validation scene
+- `Assets/09_Data/**`
+  - ScriptableObject configs for stats and unlocks
+- `Assets/99_Tests/**`
+  - EditMode test assembly and future Unity Test Runner coverage
+- `Assets/Editor/CodexValidation/**`
+  - editor menu entries and batch validation entry points
+- `tools/**`
+  - compile, smoke, and test wrappers
 
 ## Combat Systems
 
 ### Attack
 
-Key runtime patterns:
+Representative attack families:
 
-- each attack has runtime state in `...Data`
-- each attack has per-ability base tuning in `...BaseStatsData`
-- each attack has stackable upgrade data in `...StatsData`
-- all attacks can be affected by shared `CombatStatsData`
+- `Shooter`
+- `Aura`
+- `Boomerang`
+- `Orbit`
+- `Chain Lightning`
+- `Meteor Strike`
+- `Black Hole`
 
-Representative attack components:
+Current stat model:
 
-- `ShooterData`, `ShooterBaseStatsData`, `ShooterStatsData`, `ShooterCanFireData`
-- `AuraData`, `AuraBaseStatsData`, `AuraStatsData`, `AuraVFXID`
-- `BoomerangData`, `BoomerangBaseStatsData`, `BoomerangStatsData`, `BoomerangProjectileData`
-- `OrbitData`, `OrbitBaseStatsData`, `OrbitStatsData`, `OrbitProjectileData`, `OrbitRecentHitData`
-- `ChainLightningData`, `ChainLightningBaseStatsData`, `ChainLightningStatsData`
-- `MeteorStrikeData`, `MeteorStrikeBaseStatsData`, `MeteorStrikeStatsData`, `MeteorStrikePendingData`
-- `BlackHoleData`, `BlackHoleBaseStatsData`, `BlackHoleStatsData`, `BlackHoleFieldData`
-- `ProjectileData`, `FactionData`, `CombatStatsData`
+- `Unlock...Config`
+  - unlock behavior and base tuning values
+- `...BaseStatsData`
+  - baseline runtime performance
+- `...StatsConfig`
+  - stackable upgrade values
+- `...StatsData`
+  - accumulated upgrade bonuses on the player
+- `CombatStatsData`
+  - shared combat-wide multipliers
 
-Key attack systems:
+Typical final-value shape:
 
-- `ProjectileSpawnSystem`
-- `ProjectileMoveSystem`
-- `ProjectileHitDetectionSystem`
-- `AuraSystem`
-- `AuraRenderSystem`
-- `AuraCleanupSystem`
-- `BoomerangCastSystem`
-- `BoomerangMoveSystem`
-- `BoomerangHitSystem`
-- `OrbitCastSystem`
-- `OrbitMoveSystem`
-- `OrbitHitSystem`
-- `ChainLightningSystem`
-- `MeteorStrikeCastSystem`
-- `MeteorStrikeImpactSystem`
-- `BlackHoleCastSystem`
-- `BlackHoleFieldSystem`
+```text
+final = base * (1 + local bonus rate) * combat multiplier
+```
 
-### Combat / Death
+Use additive bonus fields for count, radius, and timer values that should not compound.
+
+### Combat / Death / Progression
 
 - `ApplyDamageSystem`
   - consumes `DamageEventData`
@@ -106,8 +99,12 @@ Key attack systems:
   - emits experience gain
 - `PlayerDeathSystem`
   - handles player death flow
+- `ExperienceSystem`
+  - raises level-up requests
+- `ExperienceBridge`
+  - pauses time and opens the reward UI
 
-### Enemy / Player / Progression
+### Enemy / Player
 
 - `EnemySpawnSystem`
 - `EnemyMoveSystem`
@@ -115,49 +112,6 @@ Key attack systems:
 - `EnemyTeleportSystem`
 - `PlayerMoveSystem`
 - `PlayerRotationSystem`
-- `ExperienceSystem`
-- `ExperienceBridge`
-
-## Ability / Data Model
-
-Ability configs live under `Assets/01_Scripts/Ability/**`.
-Serialized tuning data lives under `Assets/09_Data/**`.
-
-Current attack families:
-
-- Shooter
-- Aura
-- Boomerang
-- Orbit
-- Chain Lightning
-- Meteor Strike
-- Black Hole
-- shared combat stats
-
-Current stat authoring rule:
-
-- `Unlock...Config`
-  - owns unlock behavior and base tuning values
-- `...BaseStatsData`
-  - holds the attack's baseline runtime performance
-- `...StatsConfig`
-  - defines stackable upgrade values
-- `...StatsData`
-  - stores accumulated upgrade bonuses on the player
-
-Typical final-value shape:
-
-```text
-final = base * (1 + local bonus rate) * combat multiplier
-```
-
-Count-like values and some radii/timers still use additive bonus fields where that is more practical than a percentage.
-
-Important rule:
-
-- if behavior needs tuning, prefer aligned config assets over hardcoded values in runtime systems
-- keep unlock asset meaning and stats asset meaning distinct
-- UI descriptions should describe the bonus value semantics, not the final computed value
 
 ## Visual Flow
 
@@ -193,14 +147,13 @@ Current intent:
 
 - ECS decides when a visual should happen
 - presentation code decides how to render it
-- ECS core should not directly own pooled scene objects or VFX lifecycle
+- ECS core does not own pooled scene objects or VFX lifecycle
 
 ## System Group Ordering
 
-Combat order matters.
-The project uses explicit system groups under `Assets/01_Scripts/ECS/SystemGroups/**`.
+Combat order matters. The project uses explicit system groups under `Assets/01_Scripts/ECS/SystemGroups/**`.
 
-The high-level flow is:
+High-level flow:
 
 1. spatial preparation
 2. spatial index build
@@ -218,10 +171,10 @@ Project-specific validation exists in two forms.
 
 ### Batch
 
-- `tools\compile-unity.cmd`
-- `tools\smoke-unity.cmd`
-- `tools\test-editmode.cmd`
-- `tools\validate-unity.cmd`
+- `tools\\compile-unity.cmd`
+- `tools\\smoke-unity.cmd`
+- `tools\\test-editmode.cmd`
+- `tools\\validate-unity.cmd`
 
 ### Editor Menu
 
@@ -229,10 +182,6 @@ Project-specific validation exists in two forms.
 - `Tools/Codex Validation/Run Strict Smoke Validation`
 - `Tools/Codex Validation/Run EditMode Smoke Tests`
 - `Tools/Codex Validation/Run Full Validation`
-
-Validation entry point:
-
-- `Assets/Editor/CodexValidation/BatchValidationRunner.cs`
 
 Current smoke coverage focuses on:
 
@@ -244,7 +193,7 @@ Current smoke coverage focuses on:
 
 ## Guarded Assets
 
-These assets are high-risk because they are frequently tuned in the editor and easy to break:
+Treat these assets as guarded surfaces:
 
 - `Assets/07_Scenes/Test_Combat.unity`
 - `Assets/06_Prefabs/Scene/CombatSetting.prefab`
@@ -252,7 +201,12 @@ These assets are high-risk because they are frequently tuned in the editor and e
 - `Assets/00_Core/ProjectSetting/InputSystem_Actions.inputactions`
 - `ProjectSettings/EditorBuildSettings.asset`
 
-Assume scene, prefab, VFX, and ScriptableObject edits may conflict with ongoing manual work unless the task explicitly allows them.
+## Claude / Codex Tooling
+
+- `harness-version` records the installed kit version.
+- `.mcp.json` wires project-local MCP servers.
+- `.claude/settings.json` defines project-local allow/deny rules.
+- `docs/Obsidian.md`, `docs/RTK.md`, `docs/SubAgents.md`, and `docs/Graphify.md` describe optional companion workflows.
 
 ## Practical Guidance
 

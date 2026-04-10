@@ -1,0 +1,32 @@
+﻿{
+  "permissions": {
+    "allow": [
+      "Bash(tools/*)",
+      "Bash(tools/*.cmd)",
+      "Bash(tools/*.ps1)"
+    ],
+    "deny": [
+      "Edit(Assets/**/*.unity)",
+      "Write(Assets/**/*.unity)",
+      "Edit(Assets/**/*.prefab)",
+      "Write(Assets/**/*.prefab)",
+      "Edit(ProjectSettings/**)",
+      "Write(ProjectSettings/**)",
+      "Edit(Assets/09_Data/ScriptableObject/**)",
+      "Write(Assets/09_Data/ScriptableObject/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File .claude/hooks/guard-assets-check.ps1"
+          }
+        ]
+      }
+    ]
+  }
+}

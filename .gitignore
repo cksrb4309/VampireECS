@@ -102,3 +102,10 @@ InitTestScene*.unity*
 /Assets/Plugins/ExternalAsset/
 /Assets/10_ThirdParty/
 
+# Harness / local agent outputs
+.obsidian/
+graphify-out/
+.graphify_*.json
+**/graphify-out/
+.claude/settings.local.json
+

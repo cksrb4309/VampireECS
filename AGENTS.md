@@ -11,14 +11,18 @@ The primary goal is not content volume. The primary goal is to keep the combat-g
 - data and serialized assets stay consistent
 - performance-sensitive paths remain Burst/job friendly
 
-Read [README.md](C:\Users\rlack\Desktop\git\VampireECS\README.md) first, then use [CLAUDE.md](C:\Users\rlack\Desktop\git\VampireECS\CLAUDE.md) as architecture context.
-Use [docs/CodexPromptTemplates.md](C:\Users\rlack\Desktop\git\VampireECS\docs\CodexPromptTemplates.md) for Codex task prompts.
-Use [docs/AgentPromptTemplates.md](C:\Users\rlack\Desktop\git\VampireECS\docs\AgentPromptTemplates.md) for Claude Code task prompts.
+Read [README.md](README.md) first, then use [CLAUDE.md](CLAUDE.md) as architecture context.
+Use [docs/CodexPromptTemplates.md](docs/CodexPromptTemplates.md) for Codex task prompts.
+Use [docs/AgentPromptTemplates.md](docs/AgentPromptTemplates.md) for Claude Code task prompts.
+Use [docs/project-context.md](docs/project-context.md) for the current runtime/system map.
+Use `harness-version` to identify the installed kit version when needed.
+Use `.mcp.json` and `.claude/settings.json` as the project-local harness and MCP configuration.
+Use `docs/ProjectWiki/**` for durable project notes, `docs/AgentHandoffs/**` for cross-agent handoff notes, and the companion docs `docs/Obsidian.md`, `docs/RTK.md`, `docs/SubAgents.md`, and `docs/Graphify.md` for their respective workflows.
 
 ## Repo Map
 
 - `Assets/01_Scripts/ECS/**`
-  - gameplay-critical ECS systems, components, system groups
+  - gameplay-critical ECS systems, components, and system groups
 - `Assets/01_Scripts/ECS/Visual/**`
   - ECS-side visual event components and presentation bridge systems
 - `Assets/01_Scripts/Ability/**`

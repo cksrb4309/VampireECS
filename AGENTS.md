@@ -15,7 +15,7 @@ Read [README.md](README.md) first, then use [CLAUDE.md](CLAUDE.md) as architectu
 Use [docs/CodexPromptTemplates.md](docs/CodexPromptTemplates.md) for Codex task prompts.
 Use [docs/AgentPromptTemplates.md](docs/AgentPromptTemplates.md) for Claude Code task prompts.
 Use [docs/project-context.md](docs/project-context.md) for the current runtime/system map.
-Use `harness-version` to identify the installed kit version when needed.
+Use `unity-agent-kit/` git HEAD to identify the installed kit version when needed.
 Use `.mcp.json` and `.claude/settings.json` as the project-local harness and MCP configuration.
 Use `docs/ProjectWiki/**` for durable project notes, `docs/AgentHandoffs/**` for cross-agent handoff notes, and the companion docs `docs/Obsidian.md`, `docs/RTK.md`, `docs/SubAgents.md`, and `docs/Graphify.md` for their respective workflows.
 

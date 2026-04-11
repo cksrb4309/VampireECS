@@ -97,18 +97,18 @@
 
 ## 설치 대상
 
-### 0. harness-version
+### 0. unity-agent-kit
 
-프로젝트 루트에 `harness-version` 파일을 설치한다.
+???? ??? `unity-agent-kit/` ??? ????.
 
 ```
-kit-commit: [킷의 현재 git commit hash — git -C [킷경로] rev-parse HEAD 로 확인]
-installed: [오늘 날짜 YYYY-MM-DD]
-kit-path: [킷 절대 경로]
+kit-commit: [git -C unity-agent-kit rev-parse HEAD ? ??]
+installed: [?? ?? YYYY-MM-DD]
+kit-path: [?? ??]
 agent: codex | claude-code
 ```
 
-이 파일은 향후 업데이트 시 이전 버전과 현재 버전을 비교하는 기준점이 된다.
+? ??? ?? ???? ?? ??? ???? ????.
 
 ### 1. AGENTS.md
 

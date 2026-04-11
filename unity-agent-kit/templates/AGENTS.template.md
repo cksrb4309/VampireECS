@@ -22,7 +22,7 @@ Read:
 before making non-trivial edits.
 
 If `docs/Obsidian.md` exists, treat the repository root as the documentation vault and keep harness docs outside `Assets/`.
-If `graphify-out/GRAPH_REPORT.md` exists, read it before broad architecture questions or wide repository exploration.
+If repo-root `graphify-out/GRAPH_REPORT.md` exists, read it before broad architecture questions or wide repository exploration.
 Use `docs/Graphify.md` to decide whether the graph should be refreshed first.
 If the task will produce long shell output, read `docs/RTK.md` before wide Bash-based exploration or log-heavy validation.
 If the session supports delegation and the user has allowed it, read `docs/SubAgents.md` before splitting bounded side tasks.
@@ -67,7 +67,7 @@ Suggested sections:
 
 If the project uses `graphify`:
 
-- use `graphify-out/GRAPH_REPORT.md` for high-level orientation
+- use repo-root `graphify-out/GRAPH_REPORT.md` for high-level orientation
 - use raw source files for implementation decisions
 - treat `docs/Graphify.md` as the refresh manual
 - do not run `graphify codex install` or `graphify claude install` by default in a harness-managed project

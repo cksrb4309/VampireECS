@@ -67,6 +67,6 @@ Treat these as high-risk edit surfaces:
 - Use `docs/project-context.md` for the current runtime/system map.
 - Use `docs/ProjectWiki/index.md` as the root wiki hub if you keep Obsidian-style notes.
 - Keep project-local `.claude/` and `.mcp.json` files in sync with the active harness when the kit changes.
-- `harness-version` records the installed kit version.
+- `unity-agent-kit/` is the installed kit mirror; use its git HEAD when you need the current kit version.
 - `docs/AgentHandoffs/**` is the durable bridge between Codex and Claude Code.
 - `docs/RTK.md`, `docs/SubAgents.md`, and `docs/Graphify.md` describe optional companion workflows.

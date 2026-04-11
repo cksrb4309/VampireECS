@@ -203,7 +203,7 @@ Treat these assets as guarded surfaces:
 
 ## Claude / Codex Tooling
 
-- `harness-version` records the installed kit version.
+- `unity-agent-kit/` is the installed kit mirror; use its git HEAD when you need the current kit version.
 - `.mcp.json` wires project-local MCP servers.
 - `.claude/settings.json` defines project-local allow/deny rules.
 - `docs/Obsidian.md`, `docs/RTK.md`, `docs/SubAgents.md`, and `docs/Graphify.md` describe optional companion workflows.

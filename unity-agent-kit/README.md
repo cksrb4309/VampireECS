@@ -149,8 +149,8 @@
 권장 운영:
 
 1. `graphify`는 프로젝트 루트에서 그래프를 빌드한다.
-2. 결과는 `graphify-out/`에 유지한다.
-3. 에이전트는 `graphify-out/GRAPH_REPORT.md`가 있으면 넓은 구조 질문 전에 먼저 읽는다.
+2. ??? repo-root `graphify-out/`? ????.
+3. ????? repo-root `graphify-out/GRAPH_REPORT.md`? ??? ?? ?? ?? ?? ?? ???.
 4. 그래프 갱신 규칙은 `docs/Graphify.md`에 적는다.
 5. 이 프로젝트는 자동 훅이 아니라 `tools/graphify-refresh.*` 기반의 명시적 갱신을 기본값으로 둔다. 자세한 절차는 `docs/GRAPHIFY_WORKFLOW.md`.
 

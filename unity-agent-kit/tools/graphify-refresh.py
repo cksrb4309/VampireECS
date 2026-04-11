@@ -73,6 +73,7 @@ def main(argv):
     args = parser.parse_args(argv)
 
     root = Path(args.project_root).resolve()
+    repo_root = Path(__file__).resolve().parents[1]
     if not root.exists():
         print(f"[graphify-refresh] Project root not found: {root}")
         return 1
@@ -83,7 +84,7 @@ def main(argv):
         print("[graphify-refresh] graphify is not installed. Install graphify first.")
         return 1
 
-    with tempfile.TemporaryDirectory(prefix=".graphify_tmp_", dir=root) as tmp_dir:
+    with tempfile.TemporaryDirectory(prefix=".graphify_tmp_", dir=repo_root) as tmp_dir:
         tmp_root = Path(tmp_dir)
         tmp_work = tmp_root / "work"
         tmp_out = tmp_root / "graphify-out"
@@ -165,7 +166,7 @@ def main(argv):
             print(f"[graphify-refresh] Missing outputs: {', '.join(missing)}")
             return 1
 
-        final_out = root / "graphify-out"
+        final_out = repo_root / "graphify-out"
         if final_out.exists():
             shutil.rmtree(final_out)
         shutil.copytree(tmp_out, final_out)

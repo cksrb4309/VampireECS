@@ -148,7 +148,7 @@ C# 스크립트, `.asmdef`, 하네스 문서 등 MCP 범위 밖의 파일은 MCP
 
 ### 1단계 — 버전 확인
 
-Unity 프로젝트 루트의 `harness-version` 파일을 읽어 `kit-commit` 값을 확인한다.
+Unity ???? ??? `unity-agent-kit` ??? ???? `git -C unity-agent-kit rev-parse HEAD`? ?? `kit-commit` ?? ????.
 
 ```
 kit-commit: abc1234...
@@ -170,7 +170,7 @@ git -C [킷경로] diff --name-only [kit-commit]..HEAD
 git -C [킷경로] log --oneline [kit-commit]..HEAD
 ```
 
-`harness-version` 파일이 없으면 `git diff --name-only`로 현재 킷 상태의 전체 템플릿 파일을 나열한다.
+`unity-agent-kit` ??? ??? git ?????? ?? ? ??? `git diff --name-only`? ?? ? ??? ?? ??? ??? ????.
 
 ### 3단계 — 변경 내용 분류 및 적용 계획 수립
 

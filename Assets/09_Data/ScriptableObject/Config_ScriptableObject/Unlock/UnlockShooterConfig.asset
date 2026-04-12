@@ -19,4 +19,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4002dcb79fe8e0a468ae7e8dcc0b85c0, type: 2}
   CurrentTier: -1
   fixedTier: 2
+  baseDamage: 20
+  baseAttackSpeed: 5
+  baseProjectileSpeed: 20
+  baseProjectileDuration: 1
+  baseProjectileCount: 1
   description: "\uCEE4\uC11C \uC704\uCE58\uB85C \uC5D0\uB108\uC9C0 \uBCFC\uC744 \uBC1C\uC0AC\uD569\uB2C8\uB2E4"

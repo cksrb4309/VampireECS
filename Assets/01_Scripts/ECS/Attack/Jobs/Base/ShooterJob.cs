@@ -12,18 +12,24 @@ public partial struct ProjectileSpawnJob : IJobEntity
         in LocalTransform transform,
         ref ShooterData shooterData,
         in ShooterCanFireData canfireData,
+        in ShooterBaseStatsData shooterBaseStatsData,
         in ShooterStatsData shooterStatsData,
         in CombatStatsData combatStatsData)
     {
         if (!canfireData.CanFire) return;
 
-        shooterData.ElapsedTime += DeltaTime * shooterStatsData.AttackSpeed * combatStatsData.AttackSpeed;
+        float finalAttackSpeed =
+            shooterBaseStatsData.BaseAttackSpeed *
+            (1f + shooterStatsData.AttackSpeedBonusRate) *
+            combatStatsData.AttackSpeed;
+
+        shooterData.ElapsedTime += DeltaTime * finalAttackSpeed;
 
         if (shooterData.ElapsedTime < 1f) return;
 
         #region 투사체 발사
 
-        int count = shooterStatsData.ProjectileCount;
+        int count = math.max(1, shooterBaseStatsData.BaseProjectileCount + shooterStatsData.ProjectileCountBonus);
         float maxAngle = math.radians(90f);
 
         // 투사체 수에 따라 전체 퍼짐 각도를 점점 넓히되, 90도에 수렴
@@ -63,9 +69,14 @@ public partial struct ProjectileSpawnJob : IJobEntity
                 ECB.SetComponent(index, projectile, new ProjectileData
                 {
                     Direction = rotatedDir,
-                    Speed = shooterStatsData.ProjectileSpeed,
-                    Damage = shooterStatsData.Damage * combatStatsData.Damage,
-                    Duration = shooterStatsData.ProjectileDuration,
+                    Speed =
+                        shooterBaseStatsData.BaseProjectileSpeed *
+                        (1f + shooterStatsData.ProjectileSpeedBonusRate),
+                    Damage =
+                        shooterBaseStatsData.BaseDamage *
+                        (1f + shooterStatsData.DamageBonusRate) *
+                        combatStatsData.Damage,
+                    Duration = math.max(0.05f, shooterBaseStatsData.BaseProjectileDuration + shooterStatsData.ProjectileDurationBonus),
                     OwnerFaction = shooterData.OwnerFaction
                 });
             }

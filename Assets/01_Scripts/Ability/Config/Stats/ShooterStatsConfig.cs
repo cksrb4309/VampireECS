@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "ShooterStatsConfig", menuName = "Config/Stats/ShooterStatsConfig")]
 public class ShooterStatsConfig : AbilityStatsConfig<ShooterStatsData>
@@ -16,24 +16,25 @@ public class ShooterStatsConfig : AbilityStatsConfig<ShooterStatsData>
         switch (dataType)
         {
             case ShooterStatDataType.Damage:
-                return $"에너지볼 공격력 <v>{(addValue.Damage * 5f).ToString("F0")}%</v> 증가";
+                return $"에너지볼 공격력 <v>{(addValue.DamageBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case ShooterStatDataType.AttackSpeed:
-                return $"에너지볼 공격 속도 <v>{(addValue.AttackSpeed * 100f).ToString("F0")}%</v> 증가";
+                return $"에너지볼 공격 속도 <v>{(addValue.AttackSpeedBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case ShooterStatDataType.ProjectileSpeed:
-                return $"에너지볼 속도 <v>{(addValue.ProjectileSpeed * 5f).ToString("F0")}%</v> 증가";
+                return $"에너지볼 속도 <v>{(addValue.ProjectileSpeedBonusRate * 100f).ToString("F0")}%</v> 증가";
 
             case ShooterStatDataType.ProjectileDuration:
-                return $"에너지볼 지속시간 <v>{addValue.ProjectileDuration.ToString("F1")}</v>초 증가";
+                return $"에너지볼 지속시간 <v>{addValue.ProjectileDurationBonus.ToString("F1")}</v>초 증가";
 
             case ShooterStatDataType.ProjectileCount:
-                return $"에너지볼 개수 <v>{addValue.ProjectileCount}</v>개 증가";
+                return $"에너지볼 개수 <v>{addValue.ProjectileCountBonus}</v>개 증가";
 
             default:
                 return string.Empty;
         }
     }
+
     public override void ApplyTier(Tier tier)
     {
         CurrentTier = tier;
@@ -45,21 +46,27 @@ public class ShooterStatsConfig : AbilityStatsConfig<ShooterStatsData>
         switch (dataType)
         {
             case ShooterStatDataType.Damage:
-                addValue.Damage = damageValue[(int)tier].GetRandomValue(); break;
+                addValue.DamageBonusRate = damageValue[(int)tier].GetRandomValue();
+                break;
 
             case ShooterStatDataType.AttackSpeed:
-                addValue.AttackSpeed = attackSpeedValue[(int)tier].GetRandomValue(); break;
+                addValue.AttackSpeedBonusRate = attackSpeedValue[(int)tier].GetRandomValue();
+                break;
 
             case ShooterStatDataType.ProjectileSpeed:
-                addValue.ProjectileSpeed = projectileSpeedValue[(int)tier].GetRandomValue(); break;
+                addValue.ProjectileSpeedBonusRate = projectileSpeedValue[(int)tier].GetRandomValue();
+                break;
 
             case ShooterStatDataType.ProjectileDuration:
-                addValue.ProjectileDuration = projectileDurationValue[(int)tier].GetRandomValue(); break;
+                addValue.ProjectileDurationBonus = projectileDurationValue[(int)tier].GetRandomValue();
+                break;
 
             case ShooterStatDataType.ProjectileCount:
-                addValue.ProjectileCount = projectileCountValue[(int)tier].GetRandomValue(); break;
+                addValue.ProjectileCountBonus = projectileCountValue[(int)tier].GetRandomValue();
+                break;
         }
     }
+
     enum ShooterStatDataType
     {
         Damage,

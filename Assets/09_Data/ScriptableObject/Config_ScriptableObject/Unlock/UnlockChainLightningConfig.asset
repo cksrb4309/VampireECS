@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d2c2e2ddadba7243ab714ec8772b077, type: 3}
+  m_Name: UnlockChainLightningConfig
+  m_EditorClassIdentifier: Assembly-CSharp::UnlockChainLightningConfig
+  MaxStack: 1
+  Icon: {fileID: 21300000, guid: 41cef25565da4ac45b69bdb7a1b7adf6, type: 3}
+  IsStackable: 0
+  prerequisitesAbilities:
+  - {fileID: 11400000, guid: 8ab9d797290dd4a4f9265a281020b71c, type: 2}
+  CurrentTier: -1
+  fixedTier: 2
+  description: "\uC5F0\uC1C4 \uBC88\uAC1C \uB2A5\uB825"
+  baseDamage: 15
+  baseAttackSpeed: 1
+  baseAcquireRadius: 8
+  baseJumpRadius: 5
+  baseMaxTargets: 3
+  baseDamageMultiplierPerJump: 0.85

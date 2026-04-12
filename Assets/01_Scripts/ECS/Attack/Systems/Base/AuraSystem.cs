@@ -7,6 +7,8 @@ public partial struct AuraSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<AuraData>();
+        state.RequireForUpdate<AuraBaseStatsData>();
+        state.RequireForUpdate<AuraStatsData>();
         state.RequireForUpdate<SpatialIndex>();
     }   
     public void OnUpdate(ref SystemState state)

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 745219506388657458}
   - component: {fileID: 7465250548487390859}
   - component: {fileID: 822392929976716073}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DamageTextVfxBatchEmitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,3 +139,4 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0

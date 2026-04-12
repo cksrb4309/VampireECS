@@ -1,6 +1,7 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ShooterAuthoring : MonoBehaviour
 {
@@ -13,19 +14,24 @@ public class ShooterAuthoring : MonoBehaviour
     public float MuzzleDistance;
 
     [FoldoutGroup("Shooter Stats")]
-    public float Damage = 10f;
+    [FormerlySerializedAs("Damage")]
+    public float BaseDamage = 20f;
 
     [FoldoutGroup("Shooter Stats")]
-    public float AttackSpeed = 1f;
+    [FormerlySerializedAs("AttackSpeed")]
+    public float BaseAttackSpeed = 5f;
 
     [FoldoutGroup("Shooter Stats")]
-    public float Speed = 1f;
+    [FormerlySerializedAs("Speed")]
+    public float BaseProjectileSpeed = 20f;
 
     [FoldoutGroup("Shooter Stats")]
-    public int Count = 1;
+    [FormerlySerializedAs("Count")]
+    public int BaseProjectileCount = 1;
 
     [FoldoutGroup("Shooter Stats")]
-    public float Duration = 1f;
+    [FormerlySerializedAs("Duration")]
+    public float BaseProjectileDuration = 1f;
 
     public bool StartCanFire;
     public class ShooterBaker : Baker<ShooterAuthoring>
@@ -44,13 +50,21 @@ public class ShooterAuthoring : MonoBehaviour
                 ElapsedTime = 0f,
                 OwnerFaction = authoring.OwnerFaction
             });
+            AddComponent(entity, new ShooterBaseStatsData
+            {
+                BaseDamage = authoring.BaseDamage,
+                BaseAttackSpeed = authoring.BaseAttackSpeed,
+                BaseProjectileSpeed = authoring.BaseProjectileSpeed,
+                BaseProjectileCount = authoring.BaseProjectileCount,
+                BaseProjectileDuration = authoring.BaseProjectileDuration
+            });
             AddComponent(entity, new ShooterStatsData
             {
-                Damage = authoring.Damage,
-                AttackSpeed = authoring.AttackSpeed,
-                ProjectileSpeed = authoring.Speed,
-                ProjectileCount = authoring.Count,
-                ProjectileDuration = authoring.Duration
+                DamageBonusRate = 0f,
+                AttackSpeedBonusRate = 0f,
+                ProjectileSpeedBonusRate = 0f,
+                ProjectileCountBonus = 0,
+                ProjectileDurationBonus = 0f
             });
             AddComponent(entity, new ShooterCanFireData
             {

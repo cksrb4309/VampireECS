@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad1410f943513734190d85fd54c1f359, type: 3}
   m_Name: AuraStatsConfig
   m_EditorClassIdentifier: Assembly-CSharp::AuraStatsConfig
-  MaxStack: 100
+  MaxStack: 200
   Icon: {fileID: 0}
   IsStackable: 1
   prerequisitesAbilities: []
   CurrentTier: 0
   damageValue:
   - Tier: 0
-    MinValue: 2.5
-    MaxValue: 5
+    MinValue: 0.25
+    MaxValue: 0.5
   - Tier: 1
-    MinValue: 5
-    MaxValue: 7.5
+    MinValue: 0.5
+    MaxValue: 0.75
   - Tier: 2
-    MinValue: 7.5
-    MaxValue: 10
+    MinValue: 0.75
+    MaxValue: 1
   attackSpeedValue:
   - Tier: 0
     MinValue: 0.1
@@ -39,11 +39,11 @@ MonoBehaviour:
     MaxValue: 0.5
   radiusValue:
   - Tier: 0
-    MinValue: 2.5
-    MaxValue: 5
+    MinValue: 0.25
+    MaxValue: 0.5
   - Tier: 1
-    MinValue: 5
-    MaxValue: 7.5
+    MinValue: 0.5
+    MaxValue: 0.75
   - Tier: 2
-    MinValue: 7.5
-    MaxValue: 10
+    MinValue: 0.75
+    MaxValue: 1

@@ -149,6 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilityPrefabLibraryAuthoring
   ShooterProjectilePrefab: {fileID: 6152799522437821885, guid: ea60191aa349f10459bd7d5cead54e95, type: 3}
+  BoomerangProjectilePrefab: {fileID: 6845730342315731494, guid: a2fe841ceb8db8c4390dde29a23f0d1d, type: 3}
+  OrbitProjectilePrefab: {fileID: 6152799522437821885, guid: 3a7eec376788e4b4e811c86814687955, type: 3}
 --- !u!4 &845228427
 Transform:
   m_ObjectHideFlags: 0
@@ -276,7 +278,7 @@ MonoBehaviour:
     StartTime: 5
   SpawnInterval: 0.1
   Radius: 100
-  BatchCount: 3
+  BatchCount: 6
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

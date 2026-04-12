@@ -4,6 +4,8 @@ using UnityEngine;
 public class AbilityPrefabLibraryAuthoring : MonoBehaviour
 {
     public GameObject ShooterProjectilePrefab;
+    public GameObject BoomerangProjectilePrefab;
+    public GameObject OrbitProjectilePrefab;
 
     public class AbilityPrefabLibraryBaker : Baker<AbilityPrefabLibraryAuthoring>
     {
@@ -13,7 +15,9 @@ public class AbilityPrefabLibraryAuthoring : MonoBehaviour
 
             AddComponent(entity, new AbilityPrefabLibrary
             {
-                ShooterProjectilePrefab = GetEntity(authoring.ShooterProjectilePrefab, TransformUsageFlags.Dynamic)
+                ShooterProjectilePrefab = GetEntity(authoring.ShooterProjectilePrefab, TransformUsageFlags.Dynamic),
+                BoomerangProjectilePrefab = GetEntity(authoring.BoomerangProjectilePrefab, TransformUsageFlags.Dynamic),
+                OrbitProjectilePrefab = GetEntity(authoring.OrbitProjectilePrefab, TransformUsageFlags.Dynamic)
             });
         }
     }

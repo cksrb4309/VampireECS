@@ -1,16 +1,18 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+
 public static class EventBus<TMessage>
 {
     // 내부 델리게이트(멀티캐스트)
     private static Action<TMessage> _handlers;
 
-    [RuntimeInitializeOnLoadMethod]
-    private static void InitializeOnLoad()
+    static EventBus()
     {
-        _handlers = null;
+        EventBusRuntimeRegistry.Register(UnsubscribeAll);
     }
+
     public static IDisposable Subscribe(Action<TMessage> handler)
     {
         if (handler == null) throw new ArgumentNullException(nameof(handler));
@@ -21,6 +23,7 @@ public static class EventBus<TMessage>
 
         return new Subscription(() => Unsubscribe(handler));
     }
+
     public static void SubscribeOnce(Action<TMessage> handler)
     {
         if (handler == null) throw new ArgumentNullException(nameof(handler));
@@ -35,12 +38,14 @@ public static class EventBus<TMessage>
 
         Subscribe(wrapper);
     }
+
     public static void Unsubscribe(Action<TMessage> handler)
     {
         if (handler == null) return;
 
         _handlers -= handler;
     }
+
     public static void Publish(TMessage msg)
     {
         Action<TMessage> snapshot;
@@ -49,10 +54,12 @@ public static class EventBus<TMessage>
 
         snapshot?.Invoke(msg);
     }
+
     public static void UnsubscribeAll()
     {
         _handlers = null;
     }
+
     private sealed class Subscription : IDisposable
     {
         private Action _disposeAction;
@@ -62,6 +69,7 @@ public static class EventBus<TMessage>
         {
             _disposeAction = disposeAction ?? throw new ArgumentNullException(nameof(disposeAction));
         }
+
         public void Dispose()
         {
             if (Interlocked.Exchange(ref _disposed, 1) == 0)
@@ -69,6 +77,30 @@ public static class EventBus<TMessage>
                 try { _disposeAction(); }
                 finally { _disposeAction = null; }
             }
+        }
+    }
+}
+
+internal static class EventBusRuntimeRegistry
+{
+    private static readonly List<Action> resetActions = new();
+
+    internal static void Register(Action resetAction)
+    {
+        if (resetAction == null)
+        {
+            return;
+        }
+
+        resetActions.Add(resetAction);
+    }
+
+    [RuntimeInitializeOnLoadMethod]
+    private static void InitializeOnLoad()
+    {
+        for (int i = 0; i < resetActions.Count; i++)
+        {
+            resetActions[i]?.Invoke();
         }
     }
 }

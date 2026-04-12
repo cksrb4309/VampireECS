@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a16fdd5411b1f964abf5fa0b35c8c3eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAuthoring
-  Speed: 20
+  Speed: 10
   ExperienceAmount: 2
 --- !u!114 &3386691065903465003
 MonoBehaviour:
@@ -70,14 +70,13 @@ MonoBehaviour:
   OwnerFaction: 2
   ProjectilePrefab: {fileID: 6152799522437821885, guid: 0adc6836e6e42534fa5f6948635c8b5c, type: 3}
   MuzzleOffset: {x: 0, y: 0, z: 0}
-  Count: 1
   MuzzleDistance: 2
-  Damage: 5
-  FireRate: 0.1
-  Speed: 30
-  Duration: 1
+  BaseDamage: 5
+  BaseAttackSpeed: 5
+  BaseProjectileSpeed: 30
+  BaseProjectileCount: 1
+  BaseProjectileDuration: 1
   StartCanFire: 1
-  UseShooterStats: 1
 --- !u!114 &8415646082041460163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,6 +389,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &4476551268119020166
 MeshFilter:

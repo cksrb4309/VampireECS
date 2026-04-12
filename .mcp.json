@@ -1,0 +1,8 @@
+﻿{
+  "mcpServers": {
+    "unity-parser": {
+      "command": "node",
+      "args": ["C:/Users/rlack/Desktop/git/unity-prefab-parser-mcp/dist/index.js"]
+    }
+  }
+}

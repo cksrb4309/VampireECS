@@ -101,3 +101,15 @@ InitTestScene*.unity*
 # 외부 에셋(Plugins/ExternalAsset)은 깃에 포함하지 않음
 /Assets/Plugins/ExternalAsset/
 /Assets/10_ThirdParty/
+
+# Harness / local agent outputs
+.obsidian/
+graphify-out/
+.graphify_*.json
+**/graphify-out/
+.claude/settings.local.json
+**/.claude/settings.local.json
+
+# Python local caches
+**/__pycache__/
+*.pyc

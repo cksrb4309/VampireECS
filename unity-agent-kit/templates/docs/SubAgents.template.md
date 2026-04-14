@@ -1,100 +1,100 @@
-# Sub-Agents
+# 서브 에이전트
 
-This document defines how to use internal sub-agents or delegated parallel work in this project.
+이 문서는 이 프로젝트에서 내부 서브 에이전트 또는 병렬 위임 작업을 사용하는 방법을 정의한다.
 
-It is not the same as cross-agent handoff:
+cross-agent handoff와는 다르다:
 
-- `docs/AgentHandoffs/**` is for top-level handoff between Codex and Claude Code
-- `docs/SubAgents.md` is for internal delegation rules within one working session
+- `docs/AgentHandoffs/**` — Codex와 Claude Code 사이의 최상위 handoff용
+- `docs/SubAgents.md` — 하나의 작업 세션 내 내부 위임 규칙용
 
-## Activation Rule
+## 활성화 조건
 
-Use this document only when:
+이 문서는 아래 두 조건이 모두 충족될 때만 사용한다:
 
-- the current platform/session supports delegation, and
-- the user has allowed sub-agent or parallel work
+- 현재 플랫폼/세션이 delegation을 지원하고,
+- 사용자가 서브 에이전트 또는 병렬 작업을 허용했을 때
 
-If either condition is false, ignore this document and continue with a single main agent.
+둘 중 하나라도 충족되지 않으면 이 문서를 무시하고 단일 메인 에이전트로 진행한다.
 
-## Main Agent Responsibility
+## 메인 에이전트 책임
 
-The main agent keeps ownership of:
+메인 에이전트는 아래 항목의 소유권을 유지한다:
 
-- the critical path
-- ambiguous design decisions
-- guarded serialized assets
-- final code integration
-- final validation
-- the final report to the user
+- critical path
+- 모호한 설계 결정
+- guarded serialized asset
+- 최종 코드 통합
+- 최종 검증
+- 사용자에 대한 최종 보고
 
-Sub-agents assist the main agent. They do not replace it.
+서브 에이전트는 메인 에이전트를 보조한다. 대체하지 않는다.
 
-## Good Delegation Targets
+## 위임 적합 대상
 
-Prefer sub-agents for:
+아래 작업에 서브 에이전트를 우선 사용한다:
 
-- read-only codebase exploration
-- tracing a narrow subsystem or file cluster
-- build/test/log failure triage
-- documentation, wiki, or summary drafting
-- bounded code changes with a clearly disjoint write scope
+- read-only 코드베이스 탐색
+- 좁은 서브시스템 또는 파일 클러스터 추적
+- 빌드/테스트/로그 실패 triage
+- 문서, 위키, 요약 초안 작성
+- 소유권이 명확히 분리된 bounded 코드 변경
 
-Examples:
+예시:
 
-- one sub-agent maps a combat system flow
-- one sub-agent checks failing test output
-- one sub-agent drafts ProjectWiki updates
+- 서브 에이전트 1이 전투 시스템 흐름을 파악
+- 서브 에이전트 2가 실패한 테스트 출력을 확인
+- 서브 에이전트 3이 ProjectWiki 갱신 초안 작성
 
-## Bad Delegation Targets
+## 위임 부적합 대상
 
-Do not use sub-agents by default for:
+아래 작업에는 서브 에이전트를 기본적으로 사용하지 않는다:
 
-- urgent blocking work needed for the very next step
-- overlapping file edits
-- the same module under active main-agent editing
-- `.unity`, `.prefab`, ScriptableObject, or other guarded serialized assets
-- broad refactors without explicit ownership
+- 바로 다음 단계를 막는 urgent blocking 작업
+- 파일 편집 영역이 겹치는 작업
+- 메인 에이전트가 현재 수정 중인 같은 모듈
+- `.unity`, `.prefab`, ScriptableObject, 그 밖의 guarded serialized asset 수정
+- 명시적 소유권 없는 광범위한 리팩토링
 
-## Ownership Rule
+## 소유권 규칙
 
-Every delegated code task must have explicit ownership.
+위임하는 코드 작업에는 반드시 명시적 소유권이 있어야 한다.
 
-Before delegating, define:
+위임 전에 아래를 정의한다:
 
-- the exact file or folder scope
-- whether it is read-only or write-enabled
-- the expected output
+- 정확한 파일 또는 폴더 범위
+- read-only인지 write-enabled인지
+- 기대 출력물
 
-One file area should have one writer at a time.
+한 파일 영역에는 동시에 작성자가 하나여야 한다.
 
-If ownership becomes ambiguous, keep the work on the main agent.
+소유권이 모호해지면 메인 에이전트에서 작업을 유지한다.
 
-## Integration Rule
+## 통합 규칙
 
-When a sub-agent returns:
+서브 에이전트가 결과를 반환하면:
 
-1. Review the result quickly.
-2. Integrate or refine it on the main path.
-3. Run the same project validation gates you would have run without delegation.
+1. 결과를 빠르게 검토한다.
+2. 메인 경로에서 통합하거나 보완한다.
+3. delegation 없이 진행했을 때와 동일한 프로젝트 검증 게이트를 실행한다.
 
-Sub-agent output is not considered done until the main agent validates it.
+서브 에이전트 출력은 메인 에이전트가 검증을 완료한 뒤에야 완료로 간주한다.
 
-## Handoff Separation
+## Handoff 분리
 
-Do not use `docs/AgentHandoffs/**` to store internal sub-agent notes by default.
+`docs/AgentHandoffs/**`를 내부 서브 에이전트 노트 저장소로 사용하지 않는다.
 
-Use `docs/AgentHandoffs/**` only when:
+`docs/AgentHandoffs/**`는 아래 경우에만 사용한다:
 
-- Codex is handing work to Claude Code, or
-- Claude Code is handing work to Codex
+- Codex가 Claude Code에게 작업을 넘길 때, 또는
+- Claude Code가 Codex에게 작업을 넘길 때
 
-If a sub-agent discovers lasting project knowledge, put the durable part in `docs/ProjectWiki/**` instead.
+서브 에이전트가 장기 프로젝트 지식을 발견하면, 지속되는 부분은 `docs/ProjectWiki/**`에 저장한다.
 
-## Reporting Rule
+## 보고 규칙
 
-If sub-agents were used during a task, report:
+작업 중 서브 에이전트를 사용했으면 아래를 보고한다:
 
-- whether delegation was enabled
-- which bounded tasks were delegated
-- the owned scope of each sub-agent
-- whether any result required manual integration or follow-up validation
+- delegation 활성화 여부
+- 위임된 bounded 작업 목록
+- 각 서브 에이전트의 소유 범위
+- 수동 통합이나 후속 검증이 필요했던 결과

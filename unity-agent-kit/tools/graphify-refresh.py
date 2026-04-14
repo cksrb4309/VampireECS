@@ -70,10 +70,14 @@ def _ensure_manifest(out_dir, root, files):
 def main(argv):
     parser = argparse.ArgumentParser(description="Explicit graphify refresh workflow.")
     parser.add_argument("project_root", nargs="?", default=".", help="Project root (default: .)")
+    parser.add_argument(
+        "--obsidian",
+        action="store_true",
+        help="Also generate an Obsidian vault under graphify-out/obsidian",
+    )
     args = parser.parse_args(argv)
 
     root = Path(args.project_root).resolve()
-    repo_root = Path(__file__).resolve().parents[1]
     if not root.exists():
         print(f"[graphify-refresh] Project root not found: {root}")
         return 1
@@ -84,7 +88,7 @@ def main(argv):
         print("[graphify-refresh] graphify is not installed. Install graphify first.")
         return 1
 
-    with tempfile.TemporaryDirectory(prefix=".graphify_tmp_", dir=repo_root) as tmp_dir:
+    with tempfile.TemporaryDirectory(prefix=".graphify_tmp_", dir=root) as tmp_dir:
         tmp_root = Path(tmp_dir)
         tmp_work = tmp_root / "work"
         tmp_out = tmp_root / "graphify-out"
@@ -151,6 +155,8 @@ def main(argv):
             analysis=analysis,
             report=report,
             output_dir=tmp_out,
+            obsidian=args.obsidian,
+            obsidian_dir=(tmp_out / "obsidian"),
         )
 
         required = [
@@ -159,6 +165,8 @@ def main(argv):
             tmp_out / "graph.html",
             tmp_out / "manifest.json",
         ]
+        if args.obsidian:
+            required.append(tmp_out / "obsidian")
         _ensure_manifest(tmp_out, root, required)
 
         missing = [p.name for p in required if not p.exists()]
@@ -166,7 +174,7 @@ def main(argv):
             print(f"[graphify-refresh] Missing outputs: {', '.join(missing)}")
             return 1
 
-        final_out = repo_root / "graphify-out"
+        final_out = root / "graphify-out"
         if final_out.exists():
             shutil.rmtree(final_out)
         shutil.copytree(tmp_out, final_out)

@@ -1,4 +1,4 @@
-# Codex Prompt Templates For {{PROJECT_NAME}}
+# {{PROJECT_NAME}} Codex 프롬프트 템플릿
 
 이 파일은 레거시 호환용 템플릿입니다.
 
@@ -7,42 +7,42 @@
 
 운영 중 실수가 확정되면 `docs/HarnessMistakes/README.md`를 기준으로 범주를 고르고 해당 category 파일을 갱신하세요.
 
-## Why This Exists
+## 이 파일의 목적
 
-In this project, the prompt is not the harness by itself.
+이 프로젝트에서 프롬프트 단독으로 하네스가 작동하지 않는다.
 
-The harness works when these pieces are combined:
+하네스는 아래 조각들이 합쳐질 때 작동한다:
 
-- your task request
+- 작업 요청
 - `AGENTS.md`
-- automated validation
-- task-specific tests or acceptance checks
+- 자동화된 검증
+- 작업별 테스트 또는 완료 조건 확인
 
-You do not need to write the full template for every request.
+매번 전체 템플릿을 작성할 필요는 없다.
 
-If you say something short like:
+아래처럼 짧게 요청해도:
 
 ```text
 이 기능이 가끔 안 돼.
 ```
 
-Codex should still expand that into:
+Codex는 이를 아래 항목으로 확장해서 처리한다:
 
-- task goal
-- likely safe edit scope
-- completion condition
-- matching validation path
+- 작업 목표
+- 안전한 수정 범위 추론
+- 완료 조건
+- 일치하는 검증 경로
 
-Use the full template only when you want tighter control.
+더 세밀하게 제어하고 싶을 때만 전체 템플릿을 사용한다.
 
-If you ask to inspect Claude Code work, Codex should:
+Claude Code 작업 확인을 요청하면 Codex는:
 
-- check only `docs/AgentHandoffs/pending/claude-to-codex/` first
-- read only unread notes that match the current task
-- move understood notes to `docs/AgentHandoffs/consumed/claude-to-codex/`
-- avoid rereading `consumed/**` unless you explicitly ask
+- `docs/AgentHandoffs/pending/claude-to-codex/`만 먼저 확인한다
+- 현재 작업과 관련된 unread 노트만 읽는다
+- 이해한 노트는 `docs/AgentHandoffs/consumed/claude-to-codex/`로 이동한다
+- 사용자가 명시적으로 요청하지 않는 한 `consumed/**`를 다시 읽지 않는다
 
-## Base Template
+## 기본 템플릿
 
 ```text
 작업 목표:
@@ -79,23 +79,23 @@ If you ask to inspect Claude Code work, Codex should:
 - 남은 리스크나 수동 확인 항목
 ```
 
-## Template 1: Code-Only Task
+## 템플릿 1: 코드 전용 작업
 
-Use this when the task should stay in runtime code and tests.
+런타임 코드와 테스트 안에서만 작업해야 할 때 사용한다.
 
-## Template 2: Code Plus Data Task
+## 템플릿 2: 코드 + 데이터 작업
 
-Use this when ScriptableObject or config asset edits are part of the request.
+ScriptableObject 또는 config asset 편집이 포함될 때 사용한다.
 
-## Template 3: Scene Or Prefab Task
+## 템플릿 3: 씬 또는 프리팹 작업
 
-Use this only when you intentionally allow guarded serialized assets.
+guarded serialized asset을 의도적으로 허용할 때만 사용한다.
 
-## Template 4: Investigation First
+## 템플릿 4: 조사 우선
 
-Use this when you want analysis only and no code changes yet.
+분석만 원하고 아직 코드 변경은 원하지 않을 때 사용한다.
 
-## Template 5: Claude Code Handoff Check
+## 템플릿 5: Claude Code Handoff 확인
 
 ```text
 Claude Code 작업 내역 확인해줘.
@@ -106,7 +106,7 @@ unread handoff note가 있으면 관련된 것만 읽어줘.
 없으면 handoff가 없다고만 알려주고 다른 handoff 파일은 읽지 마.
 ```
 
-## One-Line Shortcut
+## 한 줄 단축 요청
 
 ```text
 [기능/버그]를 수정해줘. 관련 파일 전부 읽고 분석한 다음 수정해. AGENTS.md 규칙을 따르고, 수정은 [허용 범위] 안에서만 해줘. 완료 조건은 [조건]이고, 검증은 가능한 자동으로 수행해줘. Unity 에디터가 열려 있으면 내가 실행할 메뉴와 기대 결과를 같이 알려줘.

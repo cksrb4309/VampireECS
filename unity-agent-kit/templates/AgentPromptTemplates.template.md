@@ -1,68 +1,80 @@
-# Agent Prompt Templates For {{PROJECT_NAME}}
+# {{PROJECT_NAME}} 에이전트 프롬프트 템플릿
 
-## Why This Exists
+## 이 파일의 목적
 
-In this project, the prompt is not the harness by itself.
+이 프로젝트에서 프롬프트 단독으로 하네스가 작동하지 않는다.
 
-The harness works when these pieces are combined:
+하네스는 아래 조각들이 합쳐질 때 작동한다:
 
-- your task request
+- 작업 요청
 - `AGENTS.md`
-- automated validation
-- task-specific tests or acceptance checks
+- 자동화된 검증
+- 작업별 테스트 또는 완료 조건 확인
 
-This file can be used by both Codex and Claude Code.
+이 파일은 Codex와 Claude Code 모두 참조할 수 있다.
 
-You do not need to write the full template for every request.
+매번 전체 템플릿을 작성할 필요는 없다.
 
-If you say something short like:
+아래처럼 짧게 요청해도:
 
 ```text
 이 기능이 가끔 안 돼.
 ```
 
-the agent should still expand that into:
+에이전트는 이를 아래 항목으로 확장해서 처리한다:
 
-- task goal
-- likely safe edit scope
-- completion condition
-- matching validation path
+- 작업 목표
+- 안전한 수정 범위 추론
+- 완료 조건
+- 일치하는 검증 경로
 
-Use the full template only when you want tighter control.
+더 세밀하게 제어하고 싶을 때만 전체 템플릿을 사용한다.
 
-If a confirmed mistake happens during operation, the agent should:
+운영 중 실수가 확정되면 에이전트는:
 
-- keep the current primary domain
-- classify it using `docs/HarnessMistakes/README.md`
-- update the matching domain file
-- update the matching category file
+- 현재 primary domain을 유지한다
+- `docs/HarnessMistakes/README.md`를 사용해서 분류한다
+- 해당 domain 파일을 갱신한다
+- 해당 category 파일을 갱신한다
 
-If you ask to inspect the other agent's work, the agent should:
+다른 에이전트의 작업 확인을 요청하면 에이전트는:
 
-- check only the matching `docs/AgentHandoffs/pending/**` folder first
-- avoid reading consumed handoff files by default
-- move any understood pending note into `docs/AgentHandoffs/consumed/**`
+- 해당 `docs/AgentHandoffs/pending/**` 폴더만 먼저 확인한다
+- consumed handoff 파일은 기본적으로 읽지 않는다
+- 이해한 pending 노트는 `docs/AgentHandoffs/consumed/**`로 이동한다
 
-If the task is expected to produce long shell output, the agent should:
+긴 shell 출력이 예상되는 작업이면 에이전트는:
 
-- check `docs/RTK.md` first
-- prefer RTK-compressed shell workflows where available
-- avoid treating RTK as a replacement for raw file reads or structured search tools
+- `docs/RTK.md`를 먼저 확인한다
+- 가능하면 RTK 압축 shell 워크플로를 우선 사용한다
+- RTK를 raw file 읽기나 구조화된 검색 도구의 대체재로 취급하지 않는다
 
-If the project uses Obsidian-friendly docs, the agent should:
+Shell/Bash를 사용할 때는:
 
-- keep documentation notes in the project root docs tree, not under `Assets/`
-- use `docs/ProjectWiki/index.md` as the main hub note
-- add `[[wiki links]]` only where they materially improve navigation
+- 위험한 명령은 훅이 막는다는 전제를 둔다
+  - 예: `rm`, `Remove-Item -Recurse`, `git reset --hard`, `git clean -fdx`
+- 길고 지저분한 출력이 예상되면 RTK를 우선 쓴다
+- 안전하고 명시적인 검증 명령은 그대로 허용한다
 
-If delegation is allowed in the current session, the agent should:
+코드 탐색이 포함된 작업이면 에이전트는:
 
-- check `docs/SubAgents.md` before spawning any sub-agent
-- keep the main agent on the critical path
-- delegate only bounded side tasks with clear ownership
-- avoid delegating overlapping write scopes or guarded serialized asset edits
+- `graphify-out/GRAPH_REPORT.md`를 넓은 코드베이스 읽기 전에 먼저 읽는다
+- graphify 쿼리로 파일 범위를 좁힌다
 
-## Base Template
+Obsidian 친화적 문서를 사용하는 프로젝트라면 에이전트는:
+
+- 문서 노트를 `Assets/` 아래가 아닌 프로젝트 루트 docs 트리에 유지한다
+- `docs/ProjectWiki/index.md`를 메인 허브 노트로 사용한다
+- 탐색이 실질적으로 개선될 때만 `[[wiki link]]`를 추가한다
+
+현재 세션에서 delegation이 허용된 경우 에이전트는:
+
+- bounded side task를 분리하기 전에 `docs/SubAgents.md`를 확인한다
+- 메인 에이전트가 critical path를 담당한다
+- 소유권이 명확한 bounded side task만 위임한다
+- 소유권이 겹치는 수정이나 guarded serialized asset 편집은 위임하지 않는다
+
+## 기본 템플릿
 
 ```text
 작업 목표:
@@ -99,23 +111,23 @@ If delegation is allowed in the current session, the agent should:
 - 남은 리스크나 수동 확인 항목
 ```
 
-## Template 1: Code-Only Task
+## 템플릿 1: 코드 전용 작업
 
-Use this when the task should stay in runtime code and tests.
+런타임 코드와 테스트 안에서만 작업해야 할 때 사용한다.
 
-## Template 2: Code Plus Data Task
+## 템플릿 2: 코드 + 데이터 작업
 
-Use this when ScriptableObject or config asset edits are part of the request.
+ScriptableObject 또는 config asset 편집이 포함될 때 사용한다.
 
-## Template 3: Scene Or Prefab Task
+## 템플릿 3: 씬 또는 프리팹 작업
 
-Use this only when you intentionally allow guarded serialized assets.
+guarded serialized asset을 의도적으로 허용할 때만 사용한다.
 
-## Template 4: Investigation First
+## 템플릿 4: 조사 우선
 
-Use this when you want analysis only and no code changes yet.
+분석만 원하고 아직 코드 변경은 원하지 않을 때 사용한다.
 
-Use this template when the task is unclear and you want the agent to gather context before acting.
+작업이 불명확하고 실행 전에 에이전트가 컨텍스트를 먼저 파악하길 원할 때 사용한다.
 
 ```text
 작업 목표:
@@ -129,8 +141,8 @@ Use this template when the task is unclear and you want the agent to gather cont
 - 계획을 내가 승인하면 그 때 실행에 들어가.
 ```
 
-이 방식을 **Reverse Prompting**이라고 부른다.
-일반적인 "푸시 프롬프팅"(내가 정보를 넣어주는 방식) 대신,
+이 방식을 **역방향 프롬프팅**이라고 부른다.
+일반적인 "정방향 프롬프팅"(내가 정보를 넣어주는 방식) 대신,
 에이전트가 목표를 파악한 뒤 스스로 필요한 컨텍스트를 수집한다.
 
 짧은 요청에도 이 방식을 쓰면 잘못된 가정으로 시작하는 것을 막을 수 있다.
@@ -142,7 +154,7 @@ Use this template when the task is unclear and you want the agent to gather cont
 한 번에 하나씩 물어봐.
 ```
 
-## Template 5: Harness Update
+## 템플릿 5: 하네스 업데이트
 
 하네스 킷을 최신 버전으로 업데이트할 때 사용한다.
 
@@ -151,10 +163,10 @@ Use this template when the task is unclear and you want the agent to gather cont
 킷 경로: [unity-agent-kit 폴더 경로]
 ```
 
-에이전트는 `FOR_CLAUDE_CODE.md`의 "하네스 업데이트 워크플로"를 따른다.
+에이전트는 `FOR_CLAUDE_CODE.md`의 업데이트 절차를 따른다.
 변경 계획을 먼저 제시하고 승인받은 뒤 실행한다.
 
-## Template 6: Cross-Agent Handoff Check
+## 템플릿 6: Cross-Agent Handoff 확인
 
 다른 에이전트가 남긴 unread 작업 내역만 확인하고 싶을 때 사용한다.
 
@@ -176,15 +188,15 @@ unread handoff note가 있으면 관련된 것만 읽어줘.
 없으면 handoff note가 없다고만 알려주고 다른 handoff 파일은 읽지 마.
 ```
 
-## One-Line Shortcut
+## 한 줄 단축 요청
 
 ```text
 [기능/버그]를 수정해줘. 관련 파일 전부 읽고 분석한 다음 수정해. AGENTS.md 규칙을 따르고, 수정은 [허용 범위] 안에서만 해줘. 완료 조건은 [조건]이고, 검증은 가능한 자동으로 수행해줘. Unity 에디터가 열려 있으면 내가 실행할 메뉴와 기대 결과를 같이 알려줘.
 ```
 
-## Template 7: Delegation Allowed
+## 템플릿 7: Delegation 허용
 
-Use this when you want the agent to split bounded side tasks in parallel.
+에이전트가 bounded side task를 병렬로 분리하길 원할 때 사용한다.
 
 ```text
 이 작업은 delegation을 허용할게.

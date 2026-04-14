@@ -1,6 +1,6 @@
 # Unity Agent Kit
 
-이 폴더는 어떤 Unity 프로젝트에든 `하네스 적용 스타터 팩`처럼 복사해 넣을 수 있게 만든 재사용 킷입니다.
+이 폴더는 어떤 Unity 프로젝트에든 `에이전트 적용 스타터 팩`처럼 복사해 넣을 수 있게 만든 재사용 킷입니다.
 
 목표는 사용자가 긴 설명을 다시 쓰지 않아도, 이 폴더를 읽은 Codex 또는 Claude Code가 해당 프로젝트에 맞는:
 
@@ -12,8 +12,9 @@
 - `docs/SubAgents.md`
 - `docs/HarnessMistakes/**`
 - `docs/AgentHandoffs/**`
-- optional `docs/Graphify.md`
+- `docs/Graphify.md`
 - `.claude/**`
+- `.codex/**`
 - `.mcp.json`
 - `.claude/claude-desktop-config.md`
 - `tools/*`
@@ -21,8 +22,6 @@
 - 필요 시 `Assets/99_Tests/*`
 
 를 설치하거나 갱신하도록 만드는 것입니다.
-
-기존 프로젝트가 이미 `docs/CodexPromptTemplates.md` 또는 `Assets/Editor/CodexValidation/*` 같은 Codex 전용 이름을 쓰고 있다면, 무조건 이름을 바꾸지 말고 현재 프로젝트 관성을 존중해 유지하거나 점진적으로 옮기면 됩니다.
 
 ## 권장 사용 흐름
 
@@ -42,7 +41,7 @@
   - Codex 첫 요청문
 - [START_HERE_CLAUDE_CODE.md](C:\Users\rlack\Desktop\노션\unity-agent-kit\START_HERE_CLAUDE_CODE.md)
   - Claude Code 첫 요청문
-- [HARNESS_INSTALL_SPEC.md](C:\Users\rlack\Desktop\노션\unity-agent-kit\HARNESS_INSTALL_SPEC.md)
+- [AGENT_KIT_INSTALL_SPEC.md](C:\Users\rlack\Desktop\노션\unity-agent-kit\AGENT_KIT_INSTALL_SPEC.md)
   - 공용 설치 규격
 - [FOR_CODEX.md](C:\Users\rlack\Desktop\노션\unity-agent-kit\FOR_CODEX.md)
   - Codex 전용 해석 지침
@@ -53,13 +52,13 @@
 - `templates/docs/SubAgents.template.md`
   - 서브 에이전트 / 병렬 위임 운영 문서
 - `templates/docs/Graphify.template.md`
-  - 선택적 구조 이해용 knowledge graph 운영 문서
+  - 구조 이해용 knowledge graph 운영 문서 (필수)
 
 ## 이 폴더 안의 역할
 
 - `START_HERE.md`
   - 전체 사용 개요와 에이전트별 시작 파일 안내
-- `HARNESS_INSTALL_SPEC.md`
+- `AGENT_KIT_INSTALL_SPEC.md`
   - 두 에이전트가 공통으로 따라야 하는 실제 설치 절차
 - `FOR_CODEX.md`
   - Codex가 공용 설치 규격을 어떻게 적용할지에 대한 보조 지침
@@ -71,6 +70,8 @@
   - 프로젝트 구조를 빠르게 읽기 위한 보조 스캔 스크립트
 - `scripts/merge-claude-desktop-config.ps1`
   - Claude Desktop 전역 설정 파일의 `mcpServers`를 안전하게 merge하는 보조 스크립트
+- [THIRD_PARTY_NOTICES.md](C:\Users\rlack\Desktop\노션\unity-agent-kit\THIRD_PARTY_NOTICES.md)
+  - 외부 도구 참조와 라이선스/고지 범위 정리
 
 ## Obsidian-Friendly Default
 
@@ -134,9 +135,9 @@
 - 같은 파일/같은 serialized asset 영역을 여러 에이전트가 동시에 수정하게 두지 않는다.
 - `docs/AgentHandoffs/**`는 Codex와 Claude Code 사이 handoff용이고, 내부 sub-agent 결과 저장소로 남용하지 않는다.
 
-## Optional: Graphify
+## Graphify
 
-이 킷은 `graphify`를 하네스의 대체재가 아니라 선택적 구조 이해 계층으로 다룬다.
+이 킷은 `graphify`를 하네스의 대체재가 아니라 구조 이해 계층으로 다룬다. 모든 프로젝트에 기본 설치한다.
 
 - 추천 용도:
   - 큰 Unity 프로젝트의 코드/문서 관계 파악
@@ -149,8 +150,8 @@
 권장 운영:
 
 1. `graphify`는 프로젝트 루트에서 그래프를 빌드한다.
-2. ??? repo-root `graphify-out/`? ????.
-3. ????? repo-root `graphify-out/GRAPH_REPORT.md`? ??? ?? ?? ?? ?? ?? ???.
+2. 결과는 `graphify-out/`에 유지한다.
+3. 에이전트는 `graphify-out/GRAPH_REPORT.md`가 있으면 넓은 구조 질문 전에 먼저 읽는다.
 4. 그래프 갱신 규칙은 `docs/Graphify.md`에 적는다.
 5. 이 프로젝트는 자동 훅이 아니라 `tools/graphify-refresh.*` 기반의 명시적 갱신을 기본값으로 둔다. 자세한 절차는 `docs/GRAPHIFY_WORKFLOW.md`.
 
@@ -170,12 +171,16 @@
 - Codex와 Claude Code를 같이 쓰는 프로젝트라면 `docs/AgentHandoffs/pending/**`와 `consumed/**`를 통해 서로의 작업 내역을 짧게 넘기고, 읽은 note는 이동시켜 재독을 막습니다.
 - sub-agent를 쓰는 경우에도 메인 에이전트가 ownership과 최종 검증 책임을 유지합니다.
 - 공유 프로젝트 기본값에서는 `.claude/settings.json`, `.claude/hooks/**`, `.mcp.json`, `.claude/unity-cli.md`도 함께 설치합니다.
+- Codex companion도 함께 준비합니다: 프로젝트 로컬 `.codex/hooks.json`, `.codex/hooks/guard-assets-check.ps1`, 전역 병합용 `.codex/config.template.toml`.
+- Codex 실제 활성 설정은 여전히 `~/.codex/config.toml`이므로, `.codex/config.template.toml`은 프로젝트에 복사만 하고 자동 적용하지 않습니다.
+- 필요하면 `scripts/merge-codex-config.ps1`로 `~/.codex/config.toml`에 필요한 블록만 병합합니다.
 - Claude Desktop을 같이 쓰면 전역 설정 파일의 `mcpServers`도 companion 대상으로 취급하고, 기존 설정을 보존한 채 merge합니다.
+- Unity Editor 조작 계층은 `unity-cli`만 표준으로 사용합니다. `Unity-MCP` 계열 에디터 조작 구현체는 이 킷의 공식 대상에 포함하지 않습니다.
 - RTK는 기본 문서화 대상이지만 필수 런타임 의존성은 아닙니다. 미설치여도 하네스는 동작하고, 설치되어 있으면 shell-heavy 작업에서 토큰 절감 계층으로만 작동합니다.
 
 ## 설치 후에도 남는 역할
 
-하네스를 한 번 적용한 뒤에는 이 폴더를 남겨둬도 되고 지워도 됩니다.
+에이전트 스타터 킷을 한 번 적용한 뒤에는 이 폴더를 남겨둬도 되고 지워도 됩니다.
 
 - 남겨두는 경우
   - 이후 다른 Codex 또는 Claude Code 스레드가 다시 읽고 갱신 작업을 하기 쉽습니다.

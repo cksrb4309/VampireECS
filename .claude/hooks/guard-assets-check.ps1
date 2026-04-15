@@ -1,50 +1,33 @@
 # guard-assets-check.ps1
-# PreToolUse hook: Unity guarded asset 편집 차단
-# unity-agent-kit이 설치한 파일 — 프로젝트별 가드 경로는 아래 $guardedPatterns에 추가한다.
+# PreToolUse hook: block edits to guarded Unity assets
+# Only inspects file_path — does not scan file content or new_string
 
 param()
 
-$stdin = [Console]::In.ReadToEnd()
-if (-not $stdin) { exit 0 }
+$raw = [Console]::In.ReadToEnd()
+if ([string]::IsNullOrWhiteSpace($raw)) { exit 0 }
 
 try {
-    $data = $stdin | ConvertFrom-Json
+    $payload = $raw | ConvertFrom-Json
 } catch {
     exit 0
 }
 
-$toolName = $data.tool_name
-if ($toolName -notin @("Edit", "Write")) { exit 0 }
+$filePath = $payload.tool_input.file_path
+if ([string]::IsNullOrWhiteSpace($filePath)) { exit 0 }
 
-$filePath = $data.tool_input.file_path
-if (-not $filePath) { exit 0 }
-
-# 기본 가드 패턴 — 프로젝트별 패턴을 아래에 추가한다
-# 예: '[/\\]Configs[/\\].*\.asset$'
 $guardedPatterns = @(
-    '\.unity$',
-    '\.prefab$',
-    '[/\\]ProjectSettings[/\\]'
+    '(?i)\.unity$',
+    '(?i)\.prefab$',
+    '(?i)[/\\]ProjectSettings[/\\]'
 )
 
 foreach ($pattern in $guardedPatterns) {
     if ($filePath -match $pattern) {
-        $msg = @"
-[HARNESS] GUARDED ASSET BLOCKED
-파일: $filePath
-
-이 경로는 기본값으로 수정 금지(guarded asset)입니다.
-  - .unity  씬 파일
-  - .prefab 프리팹 파일
-  - ProjectSettings/**
-
-수정이 필요하면:
-  1. AGENTS.md의 high-risk assets 항목을 확인한다.
-  2. 사용자에게 명시적 허가를 요청한다.
-  3. 허가 후 .claude/settings.json의 해당 deny 항목을 일시적으로 제거한다.
-"@
-        Write-Host $msg
-        exit 1
+        Write-Host "[HARNESS] GUARDED ASSET BLOCKED: $filePath"
+        Write-Host "This path is read-only by default (.unity / .prefab / ProjectSettings)."
+        Write-Host "To edit: check AGENTS.md high-risk assets and request explicit user approval."
+        exit 2
     }
 }
 

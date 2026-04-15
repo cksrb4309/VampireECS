@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: BoomerangStatsConfig
   m_EditorClassIdentifier: Assembly-CSharp::BoomerangStatsConfig
   MaxStack: 200
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 5800fe1c2b91cf24a84d54ec8d9e89fc, type: 3}
   IsStackable: 1
   prerequisitesAbilities: []
-  CurrentTier: -1
+  CurrentTier: 1
   damageValue:
   - Tier: 0
     MinValue: 0.15

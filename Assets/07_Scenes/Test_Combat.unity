@@ -6479,20 +6479,24 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1396672966821097805, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
       propertyPath: abilities.Array.size
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1396672966821097805, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
       propertyPath: 'abilities.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: c4b63d42ec704d34ea29b2fe7b561394, type: 2}
+      objectReference: {fileID: 11400000, guid: 617ac377d5174c64ead35432eddf15c5, type: 2}
     - target: {fileID: 1396672966821097805, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
       propertyPath: 'abilities.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: f88c1ee117228e94781e586a640aa70a, type: 2}
+      objectReference: {fileID: 11400000, guid: 412d1580b49b74d45b3231f1b32a3569, type: 2}
     - target: {fileID: 1396672966821097805, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
       propertyPath: 'abilities.Array.data[3]'
       value: 
       objectReference: {fileID: 11400000, guid: 412d1580b49b74d45b3231f1b32a3569, type: 2}
+    - target: {fileID: 1887635051483157362, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
+      propertyPath: rewardCandidates.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2139223400041120052, guid: fdc75d69fa6291144ba4cc34c1ee4493, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

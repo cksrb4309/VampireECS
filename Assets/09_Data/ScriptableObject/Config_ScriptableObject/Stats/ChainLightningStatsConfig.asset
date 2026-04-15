@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChainLightningStatsConfig
   m_EditorClassIdentifier: Assembly-CSharp::ChainLightningStatsConfig
   MaxStack: 200
-  Icon: {fileID: 21300000, guid: a0c26202f60934649b7ef5151164d5f2, type: 3}
+  Icon: {fileID: 21300000, guid: 494f938288d4b2e4da9dc94fcdcf1bb3, type: 3}
   IsStackable: 1
   prerequisitesAbilities: []
   CurrentTier: -1

@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 public class LineChainLightningView : MonoBehaviour
 {
     private readonly List<Vector3> pointBuffer = new(32);
-
+    
     private LineRenderer lineRenderer;
 
     private float duration;

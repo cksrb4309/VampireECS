@@ -30,10 +30,10 @@ public partial struct ChainLightningSystem : ISystem
         ComponentLookup<DeadTag> deadLookup = SystemAPI.GetComponentLookup<DeadTag>(true);
 
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        NativeList<Entity> candidates = new NativeList<Entity>(Allocator.Temp);
-        NativeList<Entity> hitTargets = new NativeList<Entity>(Allocator.Temp);
+        NativeList<Entity> targetCandidates = new NativeList<Entity>(Allocator.Temp);
+        NativeList<Entity> chainedTargets = new NativeList<Entity>(Allocator.Temp);
 
-        foreach (var (transformRO, chainRW, combatStatsRO, chainBaseStatsRO, chainStatsRO, sourceEntity) in
+        foreach (var (transformRO, chainStateRW, combatStatsRO, baseStatsRO, bonusStatsRO, sourceEntity) in
             SystemAPI.Query<
                 RefRO<LocalTransform>,
                 RefRW<ChainLightningData>,
@@ -42,23 +42,24 @@ public partial struct ChainLightningSystem : ISystem
                 RefRO<ChainLightningStatsData>>()
             .WithEntityAccess())
         {
-            ref ChainLightningData chainData = ref chainRW.ValueRW;
+            ref ChainLightningData chainState = ref chainStateRW.ValueRW;
             ref readonly CombatStatsData combatStats = ref combatStatsRO.ValueRO;
-            ref readonly ChainLightningBaseStatsData chainBaseStats = ref chainBaseStatsRO.ValueRO;
-            ref readonly ChainLightningStatsData chainStats = ref chainStatsRO.ValueRO;
+            ref readonly ChainLightningBaseStatsData baseStats = ref baseStatsRO.ValueRO;
+            ref readonly ChainLightningStatsData bonusStats = ref bonusStatsRO.ValueRO;
 
+            // 기본값, 개별 보정, 공통 전투 배율을 조합해 최종 공격 속도를 계산한다.
             float finalAttackSpeed =
-                chainBaseStats.BaseAttackSpeed *
-                (1f + chainStats.AttackSpeedBonusRate) *
+                baseStats.BaseAttackSpeed *
+                (1f + bonusStats.AttackSpeedBonusRate) *
                 combatStats.AttackSpeed;
 
-            chainData.ElapsedTime += deltaTime * finalAttackSpeed;
+            chainState.ElapsedTime += deltaTime * finalAttackSpeed;
 
-            if (chainData.ElapsedTime < 1f)
+            if (chainState.ElapsedTime < 1f)
                 continue;
 
-            int castCount = (int)chainData.ElapsedTime;
-            chainData.ElapsedTime %= 1f;
+            int castCount = (int)chainState.ElapsedTime;
+            chainState.ElapsedTime %= 1f;
 
             float3 sourcePosition = transformRO.ValueRO.Position;
 
@@ -67,109 +68,112 @@ public partial struct ChainLightningSystem : ISystem
                 ExecuteChain(
                     sourceEntity,
                     sourcePosition,
-                    chainData.OwnerFaction,
-                    chainBaseStats,
-                    chainStats,
+                    chainState.OwnerFaction,
+                    baseStats,
+                    bonusStats,
                     combatStats,
                     spatialIndex,
                     transformLookup,
                     factionLookup,
                     healthLookup,
                     deadLookup,
-                    ref candidates,
-                    ref hitTargets,
+                    ref targetCandidates,
+                    ref chainedTargets,
                     ref ecb);
             }
         }
 
         ecb.Playback(state.EntityManager);
         ecb.Dispose();
-        candidates.Dispose();
-        hitTargets.Dispose();
+        targetCandidates.Dispose();
+        chainedTargets.Dispose();
     }
 
     private static void ExecuteChain(
         Entity sourceEntity,
         float3 sourcePosition,
         Faction ownerFaction,
-        in ChainLightningBaseStatsData chainBaseStats,
-        in ChainLightningStatsData chainStats,
+        in ChainLightningBaseStatsData baseStats,
+        in ChainLightningStatsData bonusStats,
         in CombatStatsData combatStats,
         in SpatialIndex spatialIndex,
         in ComponentLookup<LocalTransform> transformLookup,
         in ComponentLookup<FactionData> factionLookup,
         in ComponentLookup<HealthData> healthLookup,
         in ComponentLookup<DeadTag> deadLookup,
-        ref NativeList<Entity> candidates,
-        ref NativeList<Entity> hitTargets,
+        ref NativeList<Entity> targetCandidates,
+        ref NativeList<Entity> chainedTargets,
         ref EntityCommandBuffer ecb)
     {
-        float acquireRadius = (chainBaseStats.BaseAcquireRadius + chainStats.AcquireRadiusBonus) * combatStats.AttackRange;
-        float jumpRadius = (chainBaseStats.BaseJumpRadius + chainStats.JumpRadiusBonus) * combatStats.AttackRange;
-        int maxTargets = math.max(1, chainBaseStats.BaseMaxTargets + chainStats.MaxTargetsBonus);
-        float jumpDamageMultiplier = math.max(0f, chainBaseStats.BaseDamageMultiplierPerJump + chainStats.DamageMultiplierPerJumpBonus);
-        candidates.Clear();
-        hitTargets.Clear();
-        FixedList512Bytes<ChainLightningSegment> segments = default;
+        // 첫 타깃 탐색과 이후 점프 탐색은 서로 다른 반경 보정값을 사용한다.
+        float firstTargetSearchRadius = (baseStats.BaseAcquireRadius + bonusStats.AcquireRadiusBonus) * combatStats.AttackRange;
+        float nextTargetSearchRadius = (baseStats.BaseJumpRadius + bonusStats.JumpRadiusBonus) * combatStats.AttackRange;
+        int maxChainTargets = math.max(1, baseStats.BaseMaxTargets + bonusStats.MaxTargetsBonus);
+        float damageMultiplierPerJump = math.max(0f, baseStats.BaseDamageMultiplierPerJump + bonusStats.DamageMultiplierPerJumpBonus);
+        targetCandidates.Clear();
+        chainedTargets.Clear();
+        FixedList512Bytes<ChainLightningSegment> visualSegments = default;
 
-        Entity currentSource = sourceEntity;
-        float3 currentPosition = sourcePosition;
+        Entity currentSourceEntity = sourceEntity;
+        float3 currentSourcePosition = sourcePosition;
         bool firstHop = true;
 
-        for (int hopIndex = 0; hopIndex < maxTargets; hopIndex++)
+        for (int hopIndex = 0; hopIndex < maxChainTargets; hopIndex++)
         {
-            float searchRadius = firstHop ? acquireRadius : jumpRadius;
+            float searchRadius = firstHop ? firstTargetSearchRadius : nextTargetSearchRadius;
 
-            Entity nextTarget = FindNearestTarget(
-                currentSource,
-                currentPosition,
+            Entity targetEntity = FindNearestTarget(
+                currentSourceEntity,
+                currentSourcePosition,
                 searchRadius,
                 ownerFaction,
-                hitTargets,
+                chainedTargets,
                 spatialIndex,
                 transformLookup,
                 factionLookup,
                 healthLookup,
                 deadLookup,
-                ref candidates);
+                ref targetCandidates);
 
-            if (nextTarget == Entity.Null)
+            if (targetEntity == Entity.Null)
                 break;
 
-            float damageMultiplier = math.pow(jumpDamageMultiplier, hopIndex);
+            float hopDamageMultiplier = math.pow(damageMultiplierPerJump, hopIndex);
             float finalDamage =
-                chainBaseStats.BaseDamage *
-                (1f + chainStats.DamageBonusRate) *
+                baseStats.BaseDamage *
+                (1f + bonusStats.DamageBonusRate) *
                 combatStats.Damage *
-                damageMultiplier;
+                hopDamageMultiplier;
 
+            // 전투 결과는 DamageEvent로 발행해 데미지 적용 시스템이 공통 처리한다.
             Entity damageEventEntity = ecb.CreateEntity();
             ecb.AddComponent(damageEventEntity, new DamageEventData
             {
-                Target = nextTarget,
+                Target = targetEntity,
                 Damage = finalDamage
             });
 
-            float3 nextPosition = transformLookup[nextTarget].Position;
+            float3 targetPosition = transformLookup[targetEntity].Position;
 
-            segments.Add(new ChainLightningSegment
+            visualSegments.Add(new ChainLightningSegment
             {
-                From = currentPosition,
-                To = nextPosition
+                From = currentSourcePosition,
+                To = targetPosition
             });
 
-            hitTargets.Add(nextTarget);
-            currentSource = nextTarget;
-            currentPosition = nextPosition;
+            chainedTargets.Add(targetEntity);
+            currentSourceEntity = targetEntity;
+            currentSourcePosition = targetPosition;
             firstHop = false;
         }
 
-        if (segments.Length > 0)
+        if (visualSegments.Length > 0)
         {
+            // 연출은 VisualEvent로 분리해 Presentation 계층에서 소비한다.
             Entity visualEventEntity = ecb.CreateEntity();
             ecb.AddComponent(visualEventEntity, new ChainLightningVisualEvent
             {
-                Segments = segments,
+                Segments = visualSegments,
                 Duration = 0.12f
             });
         }

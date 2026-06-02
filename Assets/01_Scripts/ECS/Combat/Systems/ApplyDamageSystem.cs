@@ -12,18 +12,20 @@ public partial struct ApplyDamageSystem : ISystem
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
-        foreach (var (damageEventDataRO, eventEntity) in
+        foreach (var (damageEventRO, damageEventEntity) in
                  SystemAPI.Query<RefRO<DamageEventData>>().WithEntityAccess())
         {
-            ref readonly DamageEventData damageEvent = ref damageEventDataRO.ValueRO;
+            ref readonly DamageEventData damageEvent = ref damageEventRO.ValueRO;
             Entity target = damageEvent.Target;
 
+            // 이미 사라진 타깃의 이벤트는 소비만 하고 후속 이벤트를 만들지 않는다.
             if (!SystemAPI.Exists(target) || !SystemAPI.HasComponent<HealthData>(target))
             {
-                ecb.DestroyEntity(eventEntity);
+                ecb.DestroyEntity(damageEventEntity);
                 continue;
             }
 
+            // 데미지 표시는 별도 이벤트로 발행해 전투 처리와 연출을 분리한다.
             Entity damageTextEventEntity = ecb.CreateEntity();
             ecb.AddComponent(damageTextEventEntity, new DamageTextEvent
             {
@@ -38,7 +40,7 @@ public partial struct ApplyDamageSystem : ISystem
 
             if (health.Current <= 0)
             {
-                ecb.DestroyEntity(eventEntity);
+                ecb.DestroyEntity(damageEventEntity);
                 continue;
             }
 
@@ -47,7 +49,7 @@ public partial struct ApplyDamageSystem : ISystem
             if (health.Current <= 0 && !SystemAPI.HasComponent<DeadTag>(target))
                 ecb.AddComponent<DeadTag>(target);
 
-            ecb.DestroyEntity(eventEntity);
+            ecb.DestroyEntity(damageEventEntity);
         }
 
         ecb.Playback(state.EntityManager);
